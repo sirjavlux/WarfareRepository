@@ -17,6 +17,7 @@ public class Main extends JavaPlugin implements Listener {
 	@Override
 	public void onEnable() {
 		Bukkit.getPluginManager().registerEvents(this, this);
+		Bukkit.getPluginManager().registerEvents(new DamageListener(), this);
 		
 		System.out.println(Color.GREEN + "Warfare successfully enabled!" + Color.RESET);
 	}
