@@ -28,7 +28,6 @@ public class FileManager {
                 outputStream.write(bytes, 0, read);
             }
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
             if (inputStream != null) {
@@ -40,7 +39,6 @@ public class FileManager {
             }
             if (outputStream != null) {
                 try {
-                    // outputStream.flush();
                     outputStream.close();
                 } catch (IOException e) {
                     e.printStackTrace();

@@ -1,0 +1,16 @@
+name: sniper
+#valid types are BoltAction, SemiAuto, Auto
+type: BoltAction
+material: WOODEN_PICKAXE
+smoke-enabled: false
+damage: 4.0
+#use & for color codes
+#valid placeholders are [ammo]
+lore:
+    - test1
+    - test2
+    - [ammo]
+display-name: "&e&lSniper"
+loaded-by-default: true
+barrel-ammo-cap: 6
+require-mag: false
