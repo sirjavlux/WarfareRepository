@@ -1,5 +1,7 @@
 package com.coding.sirjavlux.core;
 
+import java.io.File;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -14,10 +16,26 @@ import com.coding.sirjavlux.utils.Color;
 
 public class Main extends JavaPlugin implements Listener {
 	
+	private static Main instance;
+	
 	@Override
 	public void onEnable() {
+		//load preset weapons and such if first launch
+		File config = new File("plugins/" + this.getName() + "/config.yml");
+		if (!config.exists()) {
+			System.out.println("Preloading weapons and configs.");
+			
+			this.saveDefaultConfig();
+		}
+		
+		//load listeners
 		Bukkit.getPluginManager().registerEvents(this, this);
 		Bukkit.getPluginManager().registerEvents(new DamageListener(), this);
+		
+		//load weapon files
+		Manager.loadWeaponConfigs();
+		
+		instance = this;
 		
 		System.out.println(Color.GREEN + "Warfare successfully enabled!" + Color.RESET);
 	}
@@ -39,5 +57,9 @@ public class Main extends JavaPlugin implements Listener {
         Player p = e.getPlayer();
         e.setCancelled(true);
 		ProjectileManager.fireProjectile(p);
+	}
+	
+	public static Main getInstance() {
+		return instance;
 	}
 }

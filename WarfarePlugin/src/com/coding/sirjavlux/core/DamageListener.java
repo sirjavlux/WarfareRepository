@@ -1,10 +1,11 @@
 package com.coding.sirjavlux.core;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Skeleton;
+import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -25,9 +26,8 @@ public class DamageListener implements Listener {
 					LivingEntity damaged = (LivingEntity) e.getEntity();
 					double damage = Double.parseDouble(data[1]);
 					
-					BodyPart part = damaged instanceof Player ? getHitBodyPart(ptile.getLocation(), damaged.getLocation(), pDir) : BodyPart.Chest;
-					
-					getHitBodyPart(ptile.getLocation(), damaged.getLocation(), pDir); //temporary
+					//get other body part then chest if zombie, player or skeleton
+					BodyPart part = damaged instanceof Player || damaged instanceof Skeleton || damaged instanceof Zombie ? getHitBodyPart(ptile.getLocation(), damaged.getLocation(), pDir) : BodyPart.Chest;
 					
 					System.out.println("damage " + damage * Double.parseDouble(part.toString()));
 					e.setDamage(damage * Double.parseDouble(part.toString()));

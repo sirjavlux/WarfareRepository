@@ -16,7 +16,7 @@ public class ProjectileManager {
 		World w = eP.getWorld();
 		ItemStack item = new ItemStack(Material.STONE);
 		
-		Projectile ptile = new Projectile(w, eP, CraftItemStack.asNMSCopy(item), 3, 0.1);
+		Projectile ptile = new Projectile(w, eP, CraftItemStack.asNMSCopy(item), 1, 0.1);
 		CustomEntitySnowballRegistry.spawnEntity(ptile, w);
 	}
 	
