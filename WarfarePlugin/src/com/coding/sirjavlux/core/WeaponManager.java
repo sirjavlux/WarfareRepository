@@ -1,7 +1,6 @@
 package com.coding.sirjavlux.core;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 
 import org.bukkit.configuration.file.FileConfiguration;
@@ -13,30 +12,33 @@ import org.bukkit.plugin.Plugin;
 
 import com.coding.sirjavlux.types.Magazine;
 import com.coding.sirjavlux.types.Weapon;
+import com.coding.sirjavlux.utils.FileManager;
 
 import net.minecraft.server.v1_15_R1.NBTTagCompound;
 
-public class Manager extends Main {
+public class WeaponManager extends Main {
 
 	private static HashMap<String, Weapon> weaponStored = new HashMap<>();
 	private static HashMap<String, Magazine> magazineStored = new HashMap<>();
 	
 	protected static void loadWeaponConfigs() {
 		Plugin plugin = Main.getPlugin(Main.class);
-		File weaponsFile = new File(plugin.getDataFolder() + File.pathSeparator + "weapons");
-		if (weaponsFile.exists()) {
-			System.out.println("exists");
-		} 
+		File weaponsFile = new File(plugin.getDataFolder() + "/weapons");
+		
 		//if not existing create and preload weapons
-		else {
+		if (!weaponsFile.exists()) {
 			System.out.println("Loading weapon presets.");
-			File auto = new File(plugin.getDataFolder() + File.pathSeparator + "weapons" + File.pathSeparator + "auto_weapon.yml");
-			FileConfiguration autoConf = YamlConfiguration.loadConfiguration(auto);
-			try {
-				autoConf.save(weaponsFile);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			weaponsFile.mkdir();
+			
+			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/weapons/auto_weapon.yml", "auto_weapon.yml");
+		}
+		
+		//loop trough files
+		for (File file : weaponsFile.listFiles()) {
+			FileConfiguration conf = YamlConfiguration.loadConfiguration(file);
+			
+			String name = conf.contains("name") ? conf.getString("name") : null; if (name == null) continue;
+			
 		}
 	}
 	

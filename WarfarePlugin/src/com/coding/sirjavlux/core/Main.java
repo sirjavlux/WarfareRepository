@@ -33,7 +33,7 @@ public class Main extends JavaPlugin implements Listener {
 		Bukkit.getPluginManager().registerEvents(new DamageListener(), this);
 		
 		//load weapon files
-		Manager.loadWeaponConfigs();
+		WeaponManager.loadWeaponConfigs();
 		
 		instance = this;
 		
