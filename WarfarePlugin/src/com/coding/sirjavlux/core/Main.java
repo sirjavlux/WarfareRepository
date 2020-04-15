@@ -21,6 +21,7 @@ public class Main extends JavaPlugin implements Listener {
 	@Override
 	public void onEnable() {
 		//load preset weapons and such if first launch
+		String test;
 		File config = new File("plugins/" + this.getName() + "/config.yml");
 		if (!config.exists()) {
 			System.out.println("Preloading weapons and configs.");
