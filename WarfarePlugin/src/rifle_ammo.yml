@@ -1,0 +1,11 @@
+name: rifleammo
+display-name: "&eRifle-Ammo &75.45x39"
+lore: 
+    - "&7This ammo is usable for weapons"
+    - "&7and magazines using the "
+    - "&7caliber 5.45x39!"
+#This is used to load magazines and weapons with the matching caliber
+caliber: "5.45x39"
+material: STONE
+damage: 2
+armor-penetration: 0.2

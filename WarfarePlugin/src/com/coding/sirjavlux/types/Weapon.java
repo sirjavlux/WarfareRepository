@@ -18,8 +18,9 @@ public class Weapon {
 	private boolean loadedByDefault; 
 	private boolean reqMag;
 	private int barrelAmmoCap;
+	private String caliber;
 	
-	public Weapon (WeaponType type, Material mat, Magazine[] magReq, String name, double[] smokeOffset, boolean smokeEnabled, double smokeIntensity, double damage, String[] lore, String displayName, Magazine defaultMag, boolean loadedByDefault, boolean reqMag, int barrelAmmoCap) {
+	public Weapon (WeaponType type, Material mat, Magazine[] magReq, String name, double[] smokeOffset, boolean smokeEnabled, double smokeIntensity, double damage, String[] lore, String displayName, Magazine defaultMag, boolean loadedByDefault, boolean reqMag, int barrelAmmoCap, String caliber) {
 		this.type = type;
 		this.mat = mat;
 		this.magReq = magReq;
@@ -34,6 +35,7 @@ public class Weapon {
 		this.loadedByDefault = loadedByDefault;
 		this.reqMag = reqMag;
 		this.barrelAmmoCap = barrelAmmoCap;
+		this.caliber = caliber;
 	}
 	
 	public WeaponType getType() { return type; }
@@ -50,4 +52,5 @@ public class Weapon {
 	public boolean isLoadedByDefault() { return loadedByDefault; }
 	public boolean requiresMagazine() { return reqMag; }
 	public int getBarrelAmmoCap() { return barrelAmmoCap; }
+	public String getCaliber() { return caliber; }
 }

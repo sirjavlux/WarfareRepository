@@ -1,7 +1,5 @@
 package com.coding.sirjavlux.core;
 
-import java.io.File;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -20,21 +18,15 @@ public class Main extends JavaPlugin implements Listener {
 	
 	@Override
 	public void onEnable() {
-		//load preset weapons and such if first launch
-		String test;
-		File config = new File("plugins/" + this.getName() + "/config.yml");
-		if (!config.exists()) {
-			System.out.println("Preloading weapons and configs.");
-			
-			this.saveDefaultConfig();
-		}
+		//create config if first launch
+		this.saveDefaultConfig();
 		
 		//load listeners
 		Bukkit.getPluginManager().registerEvents(this, this);
 		Bukkit.getPluginManager().registerEvents(new DamageListener(), this);
 		
 		//load weapon files
-		WeaponManager.loadWeaponConfigs();
+		WeaponLoader.loadFiles();
 		
 		instance = this;
 		
