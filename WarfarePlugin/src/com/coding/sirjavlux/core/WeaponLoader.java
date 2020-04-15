@@ -184,7 +184,8 @@ public class WeaponLoader extends WeaponManager{
 				preLoadAmmo = WeaponManager.getStoredAmmo(preLoadAmmoStr);
 			}
 			if (preLoadAmmo != null) {
-				if (preLoadAmmo.getCaliber() != caliber) {
+				if (!preLoadAmmo.getCaliber().equalsIgnoreCase(caliber)) {
+					System.out.println(preLoadAmmo.getCaliber() + " | " + caliber);
 					System.out.println(Color.RED + "The pre load ammunition " + preLoadAmmoStr + " in The weapon " + name + " didn't have the same caliber as the weapon " + caliber + "!" + Color.RESET);
 					continue;
 				}
@@ -248,9 +249,20 @@ public class WeaponLoader extends WeaponManager{
 				System.out.println(Color.RED + "Add this to config 'ammo-capasity: <amount>'" + Color.RESET);
 				continue;
 			}
+			//display name
+			String displayName = conf.contains("display-name") ? conf.getString("display-name") : "&cDisplay name not set!";
+			//lore
+			List<String> loreList = conf.contains("lore") ? conf.getStringList("lore") : new ArrayList<String>();
+			if (loreList.isEmpty()) {
+				loreList.add("&cLore not set!");
+				loreList.add("&cAdd 'lore: - something'");
+				loreList.add("&cin the ammunition file");
+			}
+			String[] lore = new String[loreList.size()];
+			lore = loreList.toArray(lore);
 			
 			//add mag to map
-			Magazine mag = new Magazine(caliber, ammoCap, name, mat);
+			Magazine mag = new Magazine(caliber, ammoCap, name, mat, displayName, lore);
 			WeaponManager.magazineStored.put(name, mag);
 			
 			badMags.remove(file.getName());

@@ -9,6 +9,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.coding.sirjavlux.commands.CommandManager;
 import com.coding.sirjavlux.projectiles.ProjectileManager;
 import com.coding.sirjavlux.utils.Color;
 
@@ -24,6 +25,10 @@ public class Main extends JavaPlugin implements Listener {
 		//load listeners
 		Bukkit.getPluginManager().registerEvents(this, this);
 		Bukkit.getPluginManager().registerEvents(new DamageListener(), this);
+		Bukkit.getPluginManager().registerEvents(new WeaponUseListener(), this);
+		
+		//commands
+		this.getCommand("wf").setExecutor(new CommandManager());
 		
 		//load weapon files
 		WeaponLoader.loadFiles();

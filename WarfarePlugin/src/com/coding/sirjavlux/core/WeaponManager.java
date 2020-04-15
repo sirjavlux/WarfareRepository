@@ -1,8 +1,12 @@
 package com.coding.sirjavlux.core;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -11,6 +15,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import com.coding.sirjavlux.types.Ammo;
 import com.coding.sirjavlux.types.Magazine;
 import com.coding.sirjavlux.types.Weapon;
+import com.coding.sirjavlux.utils.inventoryHandler;
 
 import net.minecraft.server.v1_15_R1.NBTTagCompound;
 
@@ -101,6 +106,7 @@ public class WeaponManager {
 		tagComp.setInt("barrelAmmo", weapon.isLoadedByDefault() ? (weapon.getBarrelAmmoCap() > 1 ? weapon.getBarrelAmmoCap() : 1) : 0);
 		tagComp.setString("magRounds", magazineRounds == null ? "" : magazineRounds.toString());
 		tagComp.setString("barrelRounds", barrelRounds.toString());
+		tagComp.setString("uuid", UUID.randomUUID().toString());
 		NMSItem.setTag(tagComp);
 		wItem = CraftItemStack.asBukkitCopy(NMSItem);
 		
@@ -108,7 +114,7 @@ public class WeaponManager {
 		updateItem(wItem);
 		
 		//give item
-		p.getInventory().addItem(wItem);
+		inventoryHandler.giveToPlayer(p, wItem, p.getLocation());
 	}
 	
 	public static void givePlayerMagazine(Player p, Magazine mag, String magRounds) {
@@ -119,17 +125,64 @@ public class WeaponManager {
 		NBTTagCompound tagComp = NMSItem.hasTag() ? NMSItem.getTag() : new NBTTagCompound();
 		tagComp.setString("name", mag.getName());
 		tagComp.setString("rounds", magRounds);
+		tagComp.setString("uuid", UUID.randomUUID().toString());
 		NMSItem.setTag(tagComp);
 		magItem = CraftItemStack.asBukkitCopy(NMSItem);
 		
 		//give item
-		p.getInventory().addItem(magItem);
+		inventoryHandler.giveToPlayer(p, magItem, p.getLocation());
 	}
 	
 	public static void updateItem(ItemStack item) {
+		//weapon item
 		if (isWeapon(item)) {
 			ItemMeta meta = item.getItemMeta();
 			
+			//get nbt tag and item
+			net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(item);
+			NBTTagCompound tagComp = NMSItem.getTag();
+			Weapon weapon = getStoredWeapon(tagComp.getString("name"));
+			int magAmmo = tagComp.getInt("magAmmo");
+			
+			//displayName
+			String displayName = weapon.getDisplayName();
+			displayName = ChatColor.translateAlternateColorCodes('&', displayName.replaceAll("[ammo]", String.valueOf(magAmmo)));
+			meta.setDisplayName(displayName);
+			
+			//lore
+			String[] lore = weapon.getLore();
+			List<String> loreList = new ArrayList<>();
+			for (int i = 0; i < lore.length; i++) {
+				loreList.add(ChatColor.translateAlternateColorCodes('&', lore[i].replaceAll("[ammo]", String.valueOf(magAmmo))));
+			}
+			meta.setLore(loreList);
+			
+			item.setItemMeta(meta);
+		} 
+		//magazine item
+		else if (isMagazine(item)) {
+			ItemMeta meta = item.getItemMeta();
+			
+			//get nbt tag and item
+			net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(item);
+			NBTTagCompound tagComp = NMSItem.getTag();
+			Magazine mag = getStoredMagazine(tagComp.getString("name"));
+			int ammo = tagComp.getString("rounds").split(",").length;
+			
+			//displayName
+			String displayName = mag.getDisplayName();
+			displayName = ChatColor.translateAlternateColorCodes('&', displayName.replaceAll("[ammo]", String.valueOf(ammo)));
+			meta.setDisplayName(displayName);
+			
+			//lore
+			String[] lore = mag.getLore();
+			List<String> loreList = new ArrayList<>();
+			for (int i = 0; i < lore.length; i++) {
+				loreList.add(ChatColor.translateAlternateColorCodes('&', lore[i].replaceAll("[ammo]", String.valueOf(ammo))));
+			}
+			meta.setLore(loreList);
+			
+			item.setItemMeta(meta);
 		}
 	}
 	
@@ -229,6 +282,42 @@ public class WeaponManager {
 			}
 			NMSItem.setTag(tagComp);
 			item = CraftItemStack.asBukkitCopy(NMSItem);
+			updateItem(item);
 		}
+	}
+	
+	private static boolean magazineMatching(Magazine tryMag, Magazine[] mags) {
+		boolean works = false;
+		for (Magazine mag : mags) {
+			if (mag.getName().equals(tryMag.getName())) works = true;
+		}
+		return works;
+	}
+	
+	public static void loadMagazine(ItemStack mag, ItemStack item, Player p) {
+		//remove mag from inventory
+		mag.setType(Material.AIR);
+		
+		//get nbt tag and item
+		net.minecraft.server.v1_15_R1.ItemStack NMSMag = CraftItemStack.asNMSCopy(mag);
+		NBTTagCompound tagCompM = NMSMag.getTag();
+		Magazine magazine = getStoredMagazine(tagCompM.getString("name"));
+		
+		net.minecraft.server.v1_15_R1.ItemStack NMSWeapon = CraftItemStack.asNMSCopy(item);
+		NBTTagCompound tagCompW = NMSMag.getTag();
+		Weapon weapon = getStoredWeapon(tagCompW.getString("name"));
+		
+		//check if usable mag
+		if (magazineMatching(magazine, weapon.getMagazineRequired())) {
+			//set new tags on weapon
+			String magRounds = tagCompM.getString("rounds");
+			tagCompW.setString("mag", magazine.getName());
+			tagCompW.setString("magRounds", magRounds);
+			tagCompW.setInt("magAmmo", magRounds.split(",").length);
+			
+			NMSWeapon.setTag(tagCompW);
+			item = CraftItemStack.asBukkitCopy(NMSWeapon);
+		}
+		updateItem(item);
 	}
 }
