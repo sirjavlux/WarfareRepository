@@ -11,12 +11,12 @@ import net.minecraft.server.v1_15_R1.World;
 
 public class ProjectileManager {
 
-	public static void fireProjectile(Player p) {
+	public static void fireProjectile(Player p, double speed, double damage) {
 		EntityPlayer eP = ((CraftPlayer) p).getHandle();
 		World w = eP.getWorld();
 		ItemStack item = new ItemStack(Material.STONE);
 		
-		Projectile ptile = new Projectile(w, eP, CraftItemStack.asNMSCopy(item), 1, 0.1);
+		Projectile ptile = new Projectile(w, eP, CraftItemStack.asNMSCopy(item), speed, damage);
 		CustomEntitySnowballRegistry.spawnEntity(ptile, w);
 	}
 	

@@ -22,7 +22,7 @@ public class CommandManager implements CommandExecutor {
 			}
 			String command = args[0].toUpperCase();
 			switch (command) {
-			case "give": GiveCommand.execute(sender, cmd, label, args);
+			case "GIVE": GiveCommand.execute(sender, cmd, label, args);
 				break;
 			default: sender.sendMessage(ChatColor.GRAY + "The entered command " + ChatColor.RED + input + ChatColor.GRAY + " wasn't valid, try wf for help.");
 				break;

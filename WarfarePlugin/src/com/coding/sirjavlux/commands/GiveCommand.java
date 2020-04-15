@@ -1,12 +1,103 @@
 package com.coding.sirjavlux.commands;
 
+import java.util.Arrays;
+import java.util.stream.Stream;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import com.coding.sirjavlux.core.WeaponManager;
+import com.coding.sirjavlux.types.Ammo;
+import com.coding.sirjavlux.types.Magazine;
+import com.coding.sirjavlux.types.Weapon;
+import com.coding.sirjavlux.utils.Color;
+import com.coding.sirjavlux.utils.StringHandler;
 
 public class GiveCommand extends CommandManager {
-
-	protected static void execute(CommandSender sender, Command cmd, String label, String[] args) {
-		
+	
+	protected static enum types {
+		AMMO,
+		WEAPON,
+		MAGAZINE
 	}
-
+	
+	protected static void execute(CommandSender sender, Command cmd, String label, String[] args) {
+		//data
+		Player target = null;
+		String type = null;
+		String name = null;
+		String amountStr = null;
+		int amount = 1;
+		
+		//give (player) <type> <name> (amount)
+		if (args.length < 3) {
+			sender.sendMessage(ChatColor.GRAY + "Invalid args please use 'give (player) <type> <name> (amount)'");
+			return;
+		}
+		else if (Bukkit.getPlayer(args[1]) == null && !(sender instanceof Player)) {
+			sender.sendMessage(Color.RED + "The player " + args[1] + " wasn't valid!" + Color.RESET);
+			return;
+		}
+		//if player is valid
+		else if (Bukkit.getPlayer(args[1]) != null) {
+			if (args.length < 4) {
+				sender.sendMessage(ChatColor.GRAY + "Invalid args please use 'give (player) <type> <name> (amount)'");
+				return;
+			}
+			target = Bukkit.getPlayer(args[1]);
+			type = args[2].toUpperCase();
+			name = args[3];
+			amountStr = args.length > 4 ? args[4] : "1";
+		} 
+		//if giving to yourself
+		else {
+			target = (Player) sender;
+			type = args[1].toUpperCase();
+			name = args[2];
+			amountStr = args.length > 3 ? args[3] : "1";
+		}
+		
+		if (!StringHandler.isNumber(amountStr)) {
+			sender.sendMessage(ChatColor.GRAY + "The entered number " + ChatColor.RED + amountStr + ChatColor.GRAY + " wasn't a valid number!");
+			return;
+		} else {
+			amount = Integer.parseInt(amountStr);
+		}
+		final String typeCheck = type;
+		Stream<types> stream = Arrays.stream(types.values());
+		boolean typeValid = stream.anyMatch(str -> str.toString().equalsIgnoreCase(typeCheck));
+		if (!typeValid) {
+			sender.sendMessage(ChatColor.GRAY + "The entered type " + ChatColor.RED + args[2] + ChatColor.GRAY + " wasn't valid, valid types are ammo, weapon, magazine");
+			return;
+		}
+		switch (types.valueOf(type)) {
+		case WEAPON:
+			if (!WeaponManager.isWeapon(name)) {
+				sender.sendMessage(ChatColor.GRAY + "The entered weapon name " + ChatColor.RED + name + ChatColor.GRAY + " wasn't valid!");
+				return;
+			}
+			Weapon weapon = WeaponManager.getStoredWeapon(name);
+			WeaponManager.givePlayerWeapon(target, weapon);
+			break;
+		case MAGAZINE:
+			if (!WeaponManager.isMagazine(name)) {
+				sender.sendMessage(ChatColor.GRAY + "The entered magazine name " + ChatColor.RED + name + ChatColor.GRAY + " wasn't valid!");
+				return;
+			}
+			Magazine magazine = WeaponManager.getStoredMagazine(name);
+			WeaponManager.givePlayerMagazine(target, magazine);
+			break;
+		case AMMO:
+			if (!WeaponManager.isAmmunition(name)) {
+				sender.sendMessage(ChatColor.GRAY + "The entered ammunition name " + ChatColor.RED + name + ChatColor.GRAY + " wasn't valid!");
+				return;
+			}
+			Ammo ammo = WeaponManager.getStoredAmmo(name);
+			WeaponManager.giveAmmo(target, ammo, amount);
+			break;
+		}
+	}
 }

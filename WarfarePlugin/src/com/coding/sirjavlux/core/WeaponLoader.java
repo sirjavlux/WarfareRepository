@@ -185,7 +185,7 @@ public class WeaponLoader extends WeaponManager{
 			}
 			if (preLoadAmmo != null) {
 				if (!preLoadAmmo.getCaliber().equalsIgnoreCase(caliber)) {
-					System.out.println(preLoadAmmo.getCaliber() + " | " + caliber);
+					System.out.println("Preload ammo caliber " + preLoadAmmo.getCaliber() + " | weapon caliber " + caliber);
 					System.out.println(Color.RED + "The pre load ammunition " + preLoadAmmoStr + " in The weapon " + name + " didn't have the same caliber as the weapon " + caliber + "!" + Color.RESET);
 					continue;
 				}
@@ -328,9 +328,13 @@ public class WeaponLoader extends WeaponManager{
 			lore = loreList.toArray(lore);
 			//display name
 			String displayName = conf.contains("display-name") ? conf.getString("display-name") : "&cDisplay name not set!";
+			//bullet speed
+			double speed = conf.contains("speed") ? conf.getDouble("speed") : 3;
+			//stack size
+			int maxStackSize = conf.contains("max-stack-size") ? conf.getInt("max-stack-size") : 64;
 			
 			//add ammunition to map
-			Ammo ammo = new Ammo(name, caliber, mat, damage, armorPen, lore, displayName);
+			Ammo ammo = new Ammo(name, caliber, mat, damage, armorPen, lore, displayName, speed, maxStackSize);
 			WeaponManager.ammoStored.put(name, ammo);
 			
 			badAmmo.remove(file.getName());

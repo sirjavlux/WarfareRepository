@@ -37,6 +37,20 @@ public class WeaponManager {
 		if (ammoStored.containsKey(name)) return true; else return false;
 	}
 	
+	public static boolean isAmmunition(ItemStack item) {
+		boolean ammo = false;
+		net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(item);
+		if (NMSItem.hasTag()) {
+			NBTTagCompound tagComp = NMSItem.getTag();
+			if (tagComp.hasKey("name")) {
+				if (ammoStored.containsKey(tagComp.getString("name"))) {
+					ammo = true;
+				}
+			}
+		}
+		return ammo;
+	}
+	
 	public static Magazine getStoredMagazine(String name) {
 		return magazineStored.get(name);
 	}
@@ -81,6 +95,10 @@ public class WeaponManager {
 		return weapon;
 	}
 	
+	public static boolean isWeapon(String name) {
+		if (weaponStored.containsKey(name)) return true; else return false;
+	}
+	
 	public static void givePlayerWeapon(Player p, Weapon weapon) {
 		ItemStack wItem = new ItemStack(weapon.getMat());
 		
@@ -99,7 +117,7 @@ public class WeaponManager {
 		net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(wItem);
 		NBTTagCompound tagComp = NMSItem.hasTag() ? NMSItem.getTag() : new NBTTagCompound();
 		tagComp.setString("name", weapon.getName());
-		tagComp.setString("mag", weapon.isLoadedByDefault() ? weapon.getDefaultMagazine().getName() : "none");
+		tagComp.setString("mag", weapon.isLoadedByDefault() && weapon.requiresMagazine() ? weapon.getDefaultMagazine().getName() : "none");
 		tagComp.setInt("magAmmo", weapon.isLoadedByDefault() && weapon.requiresMagazine() ? weapon.getDefaultMagazine().getAmmoCapasity() : 0);
 		tagComp.setBoolean("reqMag", weapon.requiresMagazine());
 		tagComp.setInt("barrelAmmoCap", weapon.getBarrelAmmoCap());
@@ -111,7 +129,7 @@ public class WeaponManager {
 		wItem = CraftItemStack.asBukkitCopy(NMSItem);
 		
 		//update display data of item
-		updateItem(wItem);
+		updateItem(wItem, p, 0);
 		
 		//give item
 		inventoryHandler.giveToPlayer(p, wItem, p.getLocation());
@@ -129,11 +147,57 @@ public class WeaponManager {
 		NMSItem.setTag(tagComp);
 		magItem = CraftItemStack.asBukkitCopy(NMSItem);
 		
+		//update display data of item
+		updateItem(magItem, p, 0);
+		
 		//give item
 		inventoryHandler.giveToPlayer(p, magItem, p.getLocation());
 	}
 	
-	public static void updateItem(ItemStack item) {
+	public static void givePlayerMagazine(Player p, Magazine mag) {
+		ItemStack magItem = new ItemStack(mag.getMaterial());
+		
+		//add nms tags
+		net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(magItem);
+		NBTTagCompound tagComp = NMSItem.hasTag() ? NMSItem.getTag() : new NBTTagCompound();
+		tagComp.setString("name", mag.getName());
+		tagComp.setString("rounds", "");
+		tagComp.setString("uuid", UUID.randomUUID().toString());
+		NMSItem.setTag(tagComp);
+		magItem = CraftItemStack.asBukkitCopy(NMSItem);
+		
+		//update display data of item
+		updateItem(magItem, p, 0);
+		
+		//give item
+		inventoryHandler.giveToPlayer(p, magItem, p.getLocation());
+	}
+	
+	public static void giveAmmo(Player p, Ammo ammo, int amount) {
+		ItemStack ammoItem = new ItemStack(ammo.getMaterial());
+		int maxStack = ammo.getMaxStackSize();
+		
+		//add nms tags
+		net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(ammoItem);
+		NBTTagCompound tagComp = NMSItem.hasTag() ? NMSItem.getTag() : new NBTTagCompound();
+		tagComp.setString("name", ammo.getName());
+		tagComp.setString("uuid", UUID.randomUUID().toString());
+		NMSItem.setTag(tagComp);
+		ammoItem = CraftItemStack.asBukkitCopy(NMSItem);
+		
+		//update display data of item
+		updateItem(ammoItem, p, 0);
+		
+		//give item
+		while (amount > 0) {
+			int amountToAdd = amount > maxStack ? maxStack : amount;
+			amount -= amountToAdd;
+			ammoItem.setAmount(amountToAdd);
+			inventoryHandler.giveToPlayer(p, ammoItem, p.getLocation());
+		}
+	}
+	
+	public static void updateItem(ItemStack item, Player p, int slot) {
 		//weapon item
 		if (isWeapon(item)) {
 			ItemMeta meta = item.getItemMeta();
@@ -142,22 +206,33 @@ public class WeaponManager {
 			net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(item);
 			NBTTagCompound tagComp = NMSItem.getTag();
 			Weapon weapon = getStoredWeapon(tagComp.getString("name"));
-			int magAmmo = tagComp.getInt("magAmmo");
+			int magAmmo = tagComp.getBoolean("reqMag") ? tagComp.getInt("magAmmo") : tagComp.getInt("barrelAmmo");
+			int maxAmmo = tagComp.getBoolean("magReq") ? 0 : tagComp.getInt("barrelAmmoCap");
+			String magName = tagComp.getString("mag");
+			if (isMagazine(magName)) {
+				Magazine mag = getStoredMagazine(magName);
+				maxAmmo = mag.getAmmoCapasity();
+			}
 			
 			//displayName
 			String displayName = weapon.getDisplayName();
-			displayName = ChatColor.translateAlternateColorCodes('&', displayName.replaceAll("[ammo]", String.valueOf(magAmmo)));
+			displayName = ChatColor.translateAlternateColorCodes('&', displayName.replaceAll("%ammo%", String.valueOf(magAmmo))
+					.replaceAll("%max-ammo%", String.valueOf(maxAmmo)));
 			meta.setDisplayName(displayName);
 			
 			//lore
 			String[] lore = weapon.getLore();
 			List<String> loreList = new ArrayList<>();
 			for (int i = 0; i < lore.length; i++) {
-				loreList.add(ChatColor.translateAlternateColorCodes('&', lore[i].replaceAll("[ammo]", String.valueOf(magAmmo))));
+				loreList.add(ChatColor.translateAlternateColorCodes('&', lore[i].replaceAll("%ammo%", String.valueOf(magAmmo))
+						.replaceAll("%max-ammo%", String.valueOf(maxAmmo))));
 			}
 			meta.setLore(loreList);
 			
 			item.setItemMeta(meta);
+			
+			//update item
+			p.getInventory().setItem(slot, item);
 		} 
 		//magazine item
 		else if (isMagazine(item)) {
@@ -168,17 +243,44 @@ public class WeaponManager {
 			NBTTagCompound tagComp = NMSItem.getTag();
 			Magazine mag = getStoredMagazine(tagComp.getString("name"));
 			int ammo = tagComp.getString("rounds").split(",").length;
+			int maxAmmo =  mag.getAmmoCapasity();
 			
 			//displayName
 			String displayName = mag.getDisplayName();
-			displayName = ChatColor.translateAlternateColorCodes('&', displayName.replaceAll("[ammo]", String.valueOf(ammo)));
+			displayName = ChatColor.translateAlternateColorCodes('&', displayName.replaceAll("%ammo%", String.valueOf(ammo))
+					.replaceAll("%max-ammo%", String.valueOf(maxAmmo)));
 			meta.setDisplayName(displayName);
 			
 			//lore
 			String[] lore = mag.getLore();
 			List<String> loreList = new ArrayList<>();
 			for (int i = 0; i < lore.length; i++) {
-				loreList.add(ChatColor.translateAlternateColorCodes('&', lore[i].replaceAll("[ammo]", String.valueOf(ammo))));
+				loreList.add(ChatColor.translateAlternateColorCodes('&', lore[i].replaceAll("%ammo%", String.valueOf(ammo))
+						.replaceAll("%max-ammo%", String.valueOf(maxAmmo))));
+			}
+			meta.setLore(loreList);
+			
+			item.setItemMeta(meta);
+		}
+		//ammo
+		else if (isAmmunition(item)) {
+			ItemMeta meta = item.getItemMeta();
+			
+			//get nbt tag and item
+			net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(item);
+			NBTTagCompound tagComp = NMSItem.getTag();
+			Ammo ammo = getStoredAmmo(tagComp.getString("name"));
+			
+			//displayName
+			String displayName = ammo.getDisplayName();
+			displayName = ChatColor.translateAlternateColorCodes('&', displayName);
+			meta.setDisplayName(displayName);
+			
+			//lore
+			String[] lore = ammo.getLore();
+			List<String> loreList = new ArrayList<>();
+			for (int i = 0; i < lore.length; i++) {
+				loreList.add(ChatColor.translateAlternateColorCodes('&', lore[i]));
 			}
 			meta.setLore(loreList);
 			
@@ -186,7 +288,7 @@ public class WeaponManager {
 		}
 	}
 	
-	public static void reduceAmmo(int amount, ItemStack item) {
+	public static void reduceAmmo(int amount, ItemStack item, Player p) {
 		//if reducing weapon ammo
 		if (isWeapon(item)) {
 			//get nbt tag and item
@@ -252,7 +354,7 @@ public class WeaponManager {
 			NMSItem.setTag(tagComp);
 			item = CraftItemStack.asBukkitCopy(NMSItem);
 			//update item displays
-			updateItem(item);
+			updateItem(item, p, p.getInventory().getHeldItemSlot());
 		} 
 		//if reducing magazine ammo
 		else if (isMagazine(item)) {
@@ -282,7 +384,7 @@ public class WeaponManager {
 			}
 			NMSItem.setTag(tagComp);
 			item = CraftItemStack.asBukkitCopy(NMSItem);
-			updateItem(item);
+			updateItem(item, p, 0);
 		}
 	}
 	
@@ -294,7 +396,7 @@ public class WeaponManager {
 		return works;
 	}
 	
-	public static void loadMagazine(ItemStack mag, ItemStack item, Player p) {
+	public static void loadMagazine(ItemStack mag, ItemStack item, Player p, int slot) {
 		//remove mag from inventory
 		mag.setType(Material.AIR);
 		
@@ -318,6 +420,6 @@ public class WeaponManager {
 			NMSWeapon.setTag(tagCompW);
 			item = CraftItemStack.asBukkitCopy(NMSWeapon);
 		}
-		updateItem(item);
+		updateItem(item, p, slot);
 	}
 }

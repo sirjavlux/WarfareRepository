@@ -9,3 +9,4 @@ caliber: "5.45x39"
 material: STONE
 damage: 2
 armor-penetration: 0.2
+max-stack-size: 20
