@@ -2,9 +2,11 @@ package com.coding.sirjavlux.core;
 
 import java.util.HashMap;
 
+import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import com.coding.sirjavlux.types.Ammo;
 import com.coding.sirjavlux.types.Magazine;
@@ -22,12 +24,34 @@ public class WeaponManager {
 	 * WEAPON MANAGEMENT
 	 */////////////////////////
 	
+	public static Ammo getStoredAmmo(String name) {
+		return ammoStored.get(name);
+	}
+	
+	public static boolean isAmmunition(String name) {
+		if (ammoStored.containsKey(name)) return true; else return false;
+	}
+	
 	public static Magazine getStoredMagazine(String name) {
 		return magazineStored.get(name);
 	}
 	
 	public static boolean isMagazine(String name) {
 		if (magazineStored.containsKey(name)) return true; else return false;
+	}
+	
+	public static boolean isMagazine(ItemStack item) {
+		boolean mag = false;
+		net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(item);
+		if (NMSItem.hasTag()) {
+			NBTTagCompound tagComp = NMSItem.getTag();
+			if (tagComp.hasKey("name")) {
+				if (magazineStored.containsKey(tagComp.getString("name"))) {
+					mag = true;
+				}
+			}
+		}
+		return mag;
 	}
 	
 	public static Weapon getStoredWeapon(String name) {
@@ -55,6 +79,17 @@ public class WeaponManager {
 	public static void givePlayerWeapon(Player p, Weapon weapon) {
 		ItemStack wItem = new ItemStack(weapon.getMat());
 		
+		//generate ammo slots in barrel and magazine
+		Ammo preLoadRounds = weapon.getPreLoadAmmo();
+		String roundName = preLoadRounds.getName();
+		StringBuilder barrelRounds = new StringBuilder(roundName);
+		for (int i = 1; i < weapon.getBarrelAmmoCap(); i++) barrelRounds.append("," + roundName);
+		StringBuilder magazineRounds = null;
+		if (weapon.requiresMagazine()) {
+			magazineRounds = new StringBuilder(roundName);
+			for (int i = 1; i < weapon.getDefaultMagazine().getAmmoCapasity(); i++) barrelRounds.append("," + roundName);	
+		}
+		
 		//add nms tags
 		net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(wItem);
 		NBTTagCompound tagComp = NMSItem.hasTag() ? NMSItem.getTag() : new NBTTagCompound();
@@ -64,22 +99,44 @@ public class WeaponManager {
 		tagComp.setBoolean("reqMag", weapon.requiresMagazine());
 		tagComp.setInt("barrelAmmoCap", weapon.getBarrelAmmoCap());
 		tagComp.setInt("barrelAmmo", weapon.isLoadedByDefault() ? (weapon.getBarrelAmmoCap() > 1 ? weapon.getBarrelAmmoCap() : 1) : 0);
+		tagComp.setString("magRounds", magazineRounds == null ? "" : magazineRounds.toString());
+		tagComp.setString("barrelRounds", barrelRounds.toString());
 		NMSItem.setTag(tagComp);
 		wItem = CraftItemStack.asBukkitCopy(NMSItem);
 		
 		//update display data of item
 		updateItem(wItem);
+		
+		//give item
+		p.getInventory().addItem(wItem);
+	}
+	
+	public static void givePlayerMagazine(Player p, Magazine mag, String magRounds) {
+		ItemStack magItem = new ItemStack(mag.getMaterial());
+		
+		//add nms tags
+		net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(magItem);
+		NBTTagCompound tagComp = NMSItem.hasTag() ? NMSItem.getTag() : new NBTTagCompound();
+		tagComp.setString("name", mag.getName());
+		tagComp.setString("rounds", magRounds);
+		NMSItem.setTag(tagComp);
+		magItem = CraftItemStack.asBukkitCopy(NMSItem);
+		
+		//give item
+		p.getInventory().addItem(magItem);
 	}
 	
 	public static void updateItem(ItemStack item) {
 		if (isWeapon(item)) {
-			//ItemMeta meta = item.getItemMeta();
+			ItemMeta meta = item.getItemMeta();
+			
 		}
 	}
 	
 	public static void reduceAmmo(int amount, ItemStack item) {
+		//if reducing weapon ammo
 		if (isWeapon(item)) {
-			
+			//get nbt tag and item
 			net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(item);
 			NBTTagCompound tagComp = NMSItem.getTag();
 			Weapon weapon = getStoredWeapon(tagComp.getString("name"));
@@ -92,9 +149,50 @@ public class WeaponManager {
 			} 
 			//if requires magazine
 			else {
-				int ammo = tagComp.getInt("magAmmo");
-				ammo -= ammo - amount < 0 ? ammo : amount;
-				tagComp.setInt("magAmmo", ammo);
+				int magAmmo = tagComp.getInt("magAmmo");
+				int barrelAmmo = tagComp.getInt("barrelAmmo");
+				int barrelAmmoCap = tagComp.getInt("barrelAmmoCap");
+				int barrelAmmoReduction = barrelAmmoCap > amount ? amount : barrelAmmoCap;
+				String magRounds = tagComp.getString("magRounds");
+				String barrelRounds = tagComp.getString("barrelRounds");
+				
+				//change bullets in weapon and mag
+				//remove bullets from barrel
+				int count = 0;
+				for (int i = 0; i < amount; i++) {
+					if (!barrelRounds.isEmpty()) {
+						String lastBulletInBarrel = barrelRounds.contains(",") ? barrelRounds.substring(barrelRounds.lastIndexOf(",")) : barrelRounds;
+						barrelRounds = barrelRounds.substring(0, barrelRounds.length() - lastBulletInBarrel.length());
+						count++;
+					}
+				}
+				//remove bullets from mag and add to barrel
+				if (magAmmo > 0) {
+					for (int i = 0; i < count; i++) {
+						//remove bullets from mag
+						if (!magRounds.isEmpty()) {
+							String lastBulletInMag = magRounds.contains(",") ? magRounds.substring(magRounds.lastIndexOf(",")) : magRounds;
+							magRounds = magRounds.substring(0, magRounds.length() - lastBulletInMag.length());
+							//add removed bullet to barrel
+							barrelRounds = (lastBulletInMag.indexOf(0) == ',' ? lastBulletInMag.replace(",", "") : lastBulletInMag) + barrelRounds;
+						}
+					}
+				}
+				
+				//change ammo number
+				magAmmo = magAmmo - barrelAmmoReduction;
+				if (magAmmo < 0) {
+					barrelAmmo -= magAmmo * -1;
+					barrelAmmo = barrelAmmo < 0 ? 0 : barrelAmmo;
+					magAmmo = 0;
+				} else {
+					
+				}
+				
+				tagComp.setString("magRounds", magRounds);
+				tagComp.setString("barrelRounds", barrelRounds);
+				tagComp.setInt("magAmmo", magAmmo);
+				tagComp.setInt("barrelAmmo", barrelAmmo);
 			}
 			
 			//set new tag
@@ -102,6 +200,35 @@ public class WeaponManager {
 			item = CraftItemStack.asBukkitCopy(NMSItem);
 			//update item displays
 			updateItem(item);
+		} 
+		//if reducing magazine ammo
+		else if (isMagazine(item)) {
+			
+		}
+	}
+	
+	public static void unloadMagazine(ItemStack item, Player p) {
+		if (isWeapon(item)) {
+			//get nbt tag and item
+			net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(item);
+			NBTTagCompound tagComp = NMSItem.getTag();
+			
+			String magStr = tagComp.getString("mag");
+			if (magStr != "none") {
+				//if invalid magazine remove
+				if (!isMagazine(magStr)) {
+					p.sendMessage(ChatColor.RED + "Unloaded magazine have been removed from the files and is therefore not given back to you.");
+				} 
+				//if valid magazine
+				else {
+					givePlayerMagazine(p, getMagazine(magStr), tagComp.getString("magRounds"));
+					tagComp.setString("magRounds", "");
+					tagComp.setInt("magAmmo", 0);
+				}
+				tagComp.setString("mag", "none");
+			}
+			NMSItem.setTag(tagComp);
+			item = CraftItemStack.asBukkitCopy(NMSItem);
 		}
 	}
 }

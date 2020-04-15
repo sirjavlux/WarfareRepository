@@ -167,9 +167,31 @@ public class WeaponLoader extends WeaponManager{
 				System.out.println(Color.RED + "Add this to config for use of magazines 'magazine-required: <- mag1>'" + Color.RESET);
 				continue;
 			}
-					
+			//fire rate
+			double fireRate = conf.contains("fire-rate") ? conf.getDouble("fire-rate") : 1;
+			//preload ammo
+			String preLoadAmmoStr = conf.contains("pre-load-ammo") ? conf.getString("pre-load-ammo") : null;
+			Ammo preLoadAmmo = null;
+			if (loadedByDefault) {
+				if (preLoadAmmoStr == null) {
+					System.out.println(Color.RED + "The weapon " + name + " didn't have any pre load ammo selected!" + Color.RESET);
+					System.out.println(Color.RED + "Add this to config 'pre-load-ammo: <ammo-name>'" + Color.RESET);
+					continue;
+				} else if (!WeaponManager.isAmmunition(preLoadAmmoStr)) {
+					System.out.println(Color.RED + "The pre load ammunition " + preLoadAmmoStr + " in The weapon " + name + " didn't exist!" + Color.RESET);
+					continue;
+				}
+				preLoadAmmo = WeaponManager.getStoredAmmo(preLoadAmmoStr);
+			}
+			if (preLoadAmmo != null) {
+				if (preLoadAmmo.getCaliber() != caliber) {
+					System.out.println(Color.RED + "The pre load ammunition " + preLoadAmmoStr + " in The weapon " + name + " didn't have the same caliber as the weapon " + caliber + "!" + Color.RESET);
+					continue;
+				}
+			}
+			
 			//create weapon
-			Weapon weapon = new Weapon(type, mat, magReq, name, smokeOffset, smokeEnabled, smokeIntensity, damage, lore, displayName, defaultMag, loadedByDefault, reqMag, barrelAmmoCap, caliber);
+			Weapon weapon = new Weapon(type, mat, magReq, name, smokeOffset, smokeEnabled, smokeIntensity, damage, lore, displayName, defaultMag, loadedByDefault, reqMag, barrelAmmoCap, caliber, fireRate, preLoadAmmo);
 			weaponStored.put(name, weapon);
 			badWeapons.remove(file.getName());
 			goodWeapons.add(file.getName());
