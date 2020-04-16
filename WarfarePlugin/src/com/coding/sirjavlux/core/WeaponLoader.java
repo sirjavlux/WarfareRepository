@@ -332,9 +332,15 @@ public class WeaponLoader extends WeaponManager{
 			double speed = conf.contains("speed") ? conf.getDouble("speed") : 3;
 			//stack size
 			int maxStackSize = conf.contains("max-stack-size") ? conf.getInt("max-stack-size") : 64;
+			//shoot material
+			String sMatS = conf.contains("material") ? conf.getString("material") : null;
+			Material shootMat = mat;
+			if (Material.valueOf(sMatS.toUpperCase()) != null) {
+				shootMat = Material.valueOf(sMatS.toUpperCase());
+			}
 			
 			//add ammunition to map
-			Ammo ammo = new Ammo(name, caliber, mat, damage, armorPen, lore, displayName, speed, maxStackSize);
+			Ammo ammo = new Ammo(name, caliber, mat, damage, armorPen, lore, displayName, speed, maxStackSize, shootMat);
 			WeaponManager.ammoStored.put(name, ammo);
 			
 			badAmmo.remove(file.getName());

@@ -125,11 +125,28 @@ public class WeaponManager {
 		tagComp.setString("magRounds", magazineRounds == null ? "" : magazineRounds.toString());
 		tagComp.setString("barrelRounds", barrelRounds.toString());
 		tagComp.setString("uuid", UUID.randomUUID().toString());
+		
+		//attributes
+		/*
+		NBTTagList modifiers = new NBTTagList();
+		NBTTagCompound speed = new NBTTagCompound();
+		speed.setString("AttributeName", "generic.attackSpeed");
+		speed.setString("Name", "generic.attackSpeed");
+        speed.setDouble("Amount", weapon.getFireRate());
+        speed.setInt("Operation", 0);
+        speed.setInt("UUIDLeast", 894654);
+        speed.setInt("UUIDMost", 2872);
+        speed.setString("Slot", "mainhand");
+		
+        modifiers.add(speed);
+        tagComp.set("AttributeModifiers", modifiers);
+        */
+		//set tags
 		NMSItem.setTag(tagComp);
 		wItem = CraftItemStack.asBukkitCopy(NMSItem);
 		
 		//update display data of item
-		updateItem(wItem, p, 0);
+		updateWeaponItem(wItem, p, 0);
 		
 		//give item
 		inventoryHandler.giveToPlayer(p, wItem, p.getLocation());
@@ -148,7 +165,7 @@ public class WeaponManager {
 		magItem = CraftItemStack.asBukkitCopy(NMSItem);
 		
 		//update display data of item
-		updateItem(magItem, p, 0);
+		updateMagAmmoItem(magItem, p);
 		
 		//give item
 		inventoryHandler.giveToPlayer(p, magItem, p.getLocation());
@@ -167,7 +184,7 @@ public class WeaponManager {
 		magItem = CraftItemStack.asBukkitCopy(NMSItem);
 		
 		//update display data of item
-		updateItem(magItem, p, 0);
+		updateMagAmmoItem(magItem, p);
 		
 		//give item
 		inventoryHandler.giveToPlayer(p, magItem, p.getLocation());
@@ -186,7 +203,7 @@ public class WeaponManager {
 		ammoItem = CraftItemStack.asBukkitCopy(NMSItem);
 		
 		//update display data of item
-		updateItem(ammoItem, p, 0);
+		updateMagAmmoItem(ammoItem, p);
 		
 		//give item
 		while (amount > 0) {
@@ -197,7 +214,7 @@ public class WeaponManager {
 		}
 	}
 	
-	public static void updateItem(ItemStack item, Player p, int slot) {
+	public static void updateWeaponItem(ItemStack item, Player p, int slot) {
 		//weapon item
 		if (isWeapon(item)) {
 			ItemMeta meta = item.getItemMeta();
@@ -234,8 +251,11 @@ public class WeaponManager {
 			//update item
 			p.getInventory().setItem(slot, item);
 		} 
+	}
+	
+	public static void updateMagAmmoItem(ItemStack item, Player p) {
 		//magazine item
-		else if (isMagazine(item)) {
+		if (isMagazine(item)) {
 			ItemMeta meta = item.getItemMeta();
 			
 			//get nbt tag and item
@@ -354,7 +374,7 @@ public class WeaponManager {
 			NMSItem.setTag(tagComp);
 			item = CraftItemStack.asBukkitCopy(NMSItem);
 			//update item displays
-			updateItem(item, p, p.getInventory().getHeldItemSlot());
+			updateWeaponItem(item, p, p.getInventory().getHeldItemSlot());
 		} 
 		//if reducing magazine ammo
 		else if (isMagazine(item)) {
@@ -362,7 +382,7 @@ public class WeaponManager {
 		}
 	}
 	
-	public static void unloadMagazine(ItemStack item, Player p) {
+	public static void unloadMagazine(ItemStack item, Player p, int slot) {
 		if (isWeapon(item)) {
 			//get nbt tag and item
 			net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(item);
@@ -384,7 +404,7 @@ public class WeaponManager {
 			}
 			NMSItem.setTag(tagComp);
 			item = CraftItemStack.asBukkitCopy(NMSItem);
-			updateItem(item, p, 0);
+			updateWeaponItem(item, p, slot);
 		}
 	}
 	
@@ -420,6 +440,6 @@ public class WeaponManager {
 			NMSWeapon.setTag(tagCompW);
 			item = CraftItemStack.asBukkitCopy(NMSWeapon);
 		}
-		updateItem(item, p, slot);
+		updateWeaponItem(item, p, slot);
 	}
 }

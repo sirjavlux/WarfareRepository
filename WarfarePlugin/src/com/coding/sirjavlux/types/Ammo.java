@@ -13,7 +13,9 @@ public class Ammo {
 	private String displayName;
 	private double speed;
 	private int maxStackSize;
-	public Ammo(String name, String cal, Material mat, double damage, double armorPen, String[] lore, String displayName, double speed, int maxStackSize) {
+	private Material shootMat;
+	
+	public Ammo(String name, String cal, Material mat, double damage, double armorPen, String[] lore, String displayName, double speed, int maxStackSize, Material shootMat) {
 		this.name = name;
 		this.cal = cal;
 		this.mat = mat;
@@ -23,6 +25,7 @@ public class Ammo {
 		this.displayName = displayName;
 		this.speed = speed;
 		this.maxStackSize = maxStackSize;
+		this.shootMat = shootMat;
 	}
 	
 	public String getName() { return name; }
@@ -34,4 +37,5 @@ public class Ammo {
 	public String getDisplayName() { return displayName; }
 	public double getSpeed() { return speed; }
 	public int getMaxStackSize() { return maxStackSize; }
+	public Material getShootMaterial() { return shootMat; }
 }

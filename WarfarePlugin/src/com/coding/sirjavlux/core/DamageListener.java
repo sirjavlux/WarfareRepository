@@ -8,7 +8,7 @@ import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Zombie;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.util.Vector;
 
 import com.coding.sirjavlux.projectiles.BodyPart;
@@ -16,21 +16,22 @@ import com.coding.sirjavlux.projectiles.BodyPart;
 public class DamageListener implements Listener {
 	
 	@EventHandler
-	public void playerDamagePlayerEvent(EntityDamageByEntityEvent e) {
-		if (e.getDamager() instanceof Projectile) {
-			Projectile ptile = (Projectile) e.getDamager();
+	public void projectileHitEvent(ProjectileHitEvent e) {
+		if (e.getEntity().getShooter() instanceof Player && e.getHitEntity() != null) {
+			Projectile ptile = e.getEntity();
+			Player shooter = (Player) ptile.getShooter();
 			if (ptile.getCustomName() != null) {
 				String[] data = ptile.getCustomName().split(",");
 				if (data[0].equalsIgnoreCase("projectile")) {
 					Vector pDir = ptile.getLocation().getDirection();
-					LivingEntity damaged = (LivingEntity) e.getEntity();
+					LivingEntity damaged = (LivingEntity) e.getHitEntity();
 					double damage = Double.parseDouble(data[1]);
 					
 					//get other body part then chest if zombie, player or skeleton
 					BodyPart part = damaged instanceof Player || damaged instanceof Skeleton || damaged instanceof Zombie ? getHitBodyPart(ptile.getLocation(), damaged.getLocation(), pDir) : BodyPart.Chest;
 					
 					System.out.println("damage " + damage * Double.parseDouble(part.toString()));
-					e.setDamage(damage * Double.parseDouble(part.toString()));
+					damaged.damage((damage * Double.parseDouble(part.toString())), shooter);
 				}
 			}
 		}

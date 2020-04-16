@@ -13,13 +13,12 @@ public class inventoryHandler {
 	    if (hasEmptySlot(p, item)) {
 	    	int amountOfItemInIv = getAmountOfItemInIv(p, item);
 	    	int itemAmount = item.getAmount();
-    		pIv.addItem(item);
+	    	pIv.addItem(item);
     		int amountOfItemInIvAfter = getAmountOfItemInIv(p, item);
-    		
-    		if (amountOfItemInIv + itemAmount > amountOfItemInIvAfter) {
-    			int remainingAmount = amountOfItemInIv + itemAmount - amountOfItemInIvAfter;
+    		int dropAmount = itemAmount - (amountOfItemInIvAfter - amountOfItemInIv);
+    		if (dropAmount > 0) {
     			ItemStack itemClone = item.clone();
-    			itemClone.setAmount(remainingAmount);
+    			itemClone.setAmount(dropAmount);
     			p.getWorld().dropItemNaturally(bLoc, itemClone);
     		}	
 	    } else {

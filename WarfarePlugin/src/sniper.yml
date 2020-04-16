@@ -16,3 +16,4 @@ barrel-ammo-cap: 6
 require-mag: false
 barrel-caliber: "5.45x39"
 pre-load-ammo: rifleammo
+fire-rate: 10
