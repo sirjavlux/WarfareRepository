@@ -74,11 +74,13 @@ public class WeaponUseListener implements Listener {
 		lastShot.replace(uuid, System.currentTimeMillis());
 		//System.out.println("ticks since last shot " + ticks);
 		
-		startShooting(item, p);
+		startAutoShooting(item, p);
 	}
 	
-	//automatic weapon shooting
-	private static void startShooting(ItemStack item, Player p) {
+	/*/////////////////////////////
+	 * AUTOMATIC SHOOTING
+	 */////////////////////////////
+	private static void startAutoShooting(ItemStack item, Player p) {
 		//get nbt tag and item
 		net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(item);
 		NBTTagCompound tagComp = NMSItem.getTag();
@@ -146,4 +148,19 @@ public class WeaponUseListener implements Listener {
 			}.runTaskTimer(Main.getPlugin(Main.class), 0, ticksCooldown);
 		}
 	}
+	
+	/*/////////////////////////////
+	 * SEMI-AUTOMATIC SHOOTING
+	 */////////////////////////////
+	
+	
+	/*/////////////////////////////
+	 * SINGLE-FIRE SHOOTING
+	 */////////////////////////////
+	
+	
+	/*/////////////////////////////
+	 * BURST SHOOTING
+	 */////////////////////////////
+	
 }

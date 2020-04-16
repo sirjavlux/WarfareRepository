@@ -10,6 +10,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
 import com.coding.sirjavlux.types.Ammo;
+import com.coding.sirjavlux.types.AmmoType;
 import com.coding.sirjavlux.types.Magazine;
 import com.coding.sirjavlux.types.Weapon;
 import com.coding.sirjavlux.types.WeaponType;
@@ -190,9 +191,11 @@ public class WeaponLoader extends WeaponManager{
 					continue;
 				}
 			}
+			//burst amount
+			int burstAmount = conf.contains("burst-amount") ? conf.getInt("burst-amount") : 1;
 			
 			//create weapon
-			Weapon weapon = new Weapon(type, mat, magReq, name, smokeOffset, smokeEnabled, smokeIntensity, damage, lore, displayName, defaultMag, loadedByDefault, reqMag, barrelAmmoCap, caliber, fireRate, preLoadAmmo);
+			Weapon weapon = new Weapon(type, mat, magReq, name, smokeOffset, smokeEnabled, smokeIntensity, damage, lore, displayName, defaultMag, loadedByDefault, reqMag, barrelAmmoCap, caliber, fireRate, preLoadAmmo, burstAmount);
 			weaponStored.put(name, weapon);
 			badWeapons.remove(file.getName());
 			goodWeapons.add(file.getName());
@@ -338,9 +341,24 @@ public class WeaponLoader extends WeaponManager{
 			if (Material.valueOf(sMatS.toUpperCase()) != null) {
 				shootMat = Material.valueOf(sMatS.toUpperCase());
 			}
+			//ammo type
+			AmmoType type = conf.contains("type") ? AmmoType.valueOf(conf.getString("type")) : null; 
+			if (type == null) {
+				System.out.println(Color.RED + "The weapon " + name + " didn't have any weapon type selected!" + Color.RESET);
+				System.out.println(Color.RED + "Add this to config 'type: <Auto/SemiAuto/BoltAction>'" + Color.RESET);
+				continue;
+			}
+			//split bullet amount
+			int splitBulletAmount = conf.contains("split-bullet-amount") ? conf.getInt("split-bullet-amount") : 1;
+			//explosion range
+			double explosionRange = conf.contains("explosion-range") ? conf.getDouble("explosion-range") : 0;
+			//explosion damage
+			double explosionDamage = conf.contains("explosion-damage") ? conf.getDouble("explosion-damage") : 0;
+			//explosion damage drop
+			double explosionDamageDrop = conf.contains("explosion-damage-drop") ? conf.getDouble("explosion-damage-drop") : 0;
 			
 			//add ammunition to map
-			Ammo ammo = new Ammo(name, caliber, mat, damage, armorPen, lore, displayName, speed, maxStackSize, shootMat);
+			Ammo ammo = new Ammo(name, caliber, mat, damage, armorPen, lore, displayName, speed, maxStackSize, shootMat, type, splitBulletAmount, explosionRange, explosionDamage, explosionDamageDrop);
 			WeaponManager.ammoStored.put(name, ammo);
 			
 			badAmmo.remove(file.getName());
