@@ -1,19 +1,19 @@
 name: sniper
-#valid types are BoltAction, SemiAuto, Auto
+#valid types are BoltAction, SemiAuto, Auto, Burst
 type: BoltAction
 material: WOODEN_PICKAXE
 smoke-enabled: false
-damage: 4.0
+damage: 2.0
 #use & for color codes
 #valid placeholders are %ammo% %max-ammo%
 lore:
-    - test1
-    - test2
+    - line1
+    - line2
     - "%ammo% / %max-ammo%"
 display-name: "&e&lSniper"
 loaded-by-default: true
 barrel-ammo-cap: 6
 require-mag: false
-barrel-caliber: "5.45x39"
-pre-load-ammo: rifleammo
-fire-rate: 10
+barrel-caliber: "7.62x54"
+pre-load-ammo: sniperammo
+fire-rate: 2

@@ -33,6 +33,7 @@ public class WeaponLoader extends WeaponManager{
 			System.out.println("Loading ammunition presets...");
 			ammoFile.mkdir();
 			
+			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/ammunition/sniper_ammo.yml", "sniper_ammo.yml");
 			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/ammunition/rifle_ammo.yml", "rifle_ammo.yml");
 		}
 		loadAmmunitionConfigs();

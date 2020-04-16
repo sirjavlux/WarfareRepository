@@ -1,14 +1,14 @@
-name: rifleammo
-display-name: "&eRifle-Ammo &75.45x39"
+name: sniperammo
+display-name: "&eSniper-Ammo &77.62x54"
 lore: 
     - "&7This ammo is usable for weapons"
     - "&7and magazines using the "
     - "&7caliber 5.45x39!"
 #This is used to load magazines and weapons with the matching caliber
-caliber: "5.45x39"
+caliber: "7.62x54"
 material: STONE
-damage: 2
-armor-penetration: 0.2
+damage: 6
+armor-penetration: 0.8
 max-stack-size: 20
 #This is the ammo type, valid types are Regular, Split, Incindiary, Flame, Explosive
 type: Regular
