@@ -1,4 +1,4 @@
-package com.coding.sirjavlux.core;
+package com.coding.sirjavlux.events;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Drowned;
@@ -23,6 +23,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
+import com.coding.sirjavlux.core.ConfigManager;
+import com.coding.sirjavlux.core.WeaponManager;
 import com.coding.sirjavlux.projectiles.BodyPart;
 import com.coding.sirjavlux.types.Ammo;
 import com.coding.sirjavlux.types.Weapon;
@@ -39,6 +41,7 @@ public class EntityDamagedByBulletEvent extends Event implements Cancellable {
     private final BodyPart hitPart;
     private final double damage;
     private final double pen;
+    private final ItemStack protectingPiece;
     
     public EntityDamagedByBulletEvent(LivingEntity damaged, Projectile projectile) {
         this.damaged = damaged;
@@ -54,36 +57,37 @@ public class EntityDamagedByBulletEvent extends Event implements Cancellable {
 		//get other body part then chest if zombie, player or skeleton
 		Vector pDir = projectile.getLocation().getDirection();
 		this.hitPart = isBodyPartRegistrable(damaged) ? getHitBodyPart(projectile.getLocation(), damaged.getLocation(), pDir) : BodyPart.Chest;
+		this.protectingPiece = getHitArmorPice();
 		this.damage = calculateDamage(damaged, ammo.getDamage() * Double.parseDouble(hitPart.toString()), pen);
     }
-
+    
+	//get protecting armor pice
+    private ItemStack getHitArmorPice() {
+		ItemStack piece = null;
+		switch (hitPart) {
+		//chest
+		case Chest: piece = damaged.getEquipment().getChestplate();
+			break;
+		//head
+		case Head: piece = damaged.getEquipment().getHelmet();
+			break;
+		//leg
+		case Leg: piece = damaged.getEquipment().getLeggings();
+			break;
+		}
+		return piece;
+    }
+    
     /*///////////////////////////
      * DAMAGE CALCULATOR 0.2
      *///////////////////////////
 	private double calculateDamage(LivingEntity entity, double damage, double pen) {	
-		//get protecting armor pice
-		ItemStack[] armor = entity.getEquipment().getArmorContents();
-		ItemStack protectingPice = null;
-		switch (hitPart) {
-		//chest
-		case Chest: protectingPice = armor[2];
-			break;
-		//head
-		case Head: protectingPice = armor[3];
-			break;
-		//leg
-		case Leg: protectingPice = armor[1];
-			break;
-		}
-		
 		//calculate damage protection
-		if (protectingPice != null) {
-			double armorProt = ConfigManager.getItemArmorProtection(protectingPice);
+		if (protectingPiece != null) {
+			double armorProt = ConfigManager.getItemArmorProtection(protectingPiece);
 			armorProt = armorProt - armorProt * pen;
 			damage = damage - damage * armorProt;
 		}
-		
-		System.out.println("damage " + damage);
 		return damage ;
 	}
     
@@ -144,6 +148,10 @@ public class EntityDamagedByBulletEvent extends Event implements Cancellable {
     
     public double penetration() {
     	return this.pen;
+    }
+    
+    public ItemStack getHitArmorPiece() {
+    	return this.protectingPiece;
     }
     
 	///////////////////////////////////

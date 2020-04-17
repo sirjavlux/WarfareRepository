@@ -11,7 +11,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
+
+import com.coding.sirjavlux.events.EntityDamagedByBulletEvent;
 
 import net.minecraft.server.v1_15_R1.Entity;
 import net.minecraft.server.v1_15_R1.PacketPlayOutEntityStatus;
@@ -37,8 +42,6 @@ public class ProjectileListener implements Listener {
 						double finalHealth = startHealth - event.damage() < 0 ? 0 : startHealth - event.damage();
 						entity.setHealth(finalHealth);
 						
-						//System.out.println("damage " + event.damage());
-						
 						//fire status packet
 						Entity ce = ((CraftEntity) entity).getHandle();
 						PacketPlayOutEntityStatus statusPacket = new PacketPlayOutEntityStatus(ce, (byte) 2);
@@ -52,6 +55,25 @@ public class ProjectileListener implements Listener {
 						Vector knockDir = entityLoc.subtract(0, entityLoc.getY(), 0).toVector().subtract(pLoc.subtract(0, pLoc.getY(), 0).toVector());
 						knockDir.setY(0.65);
 						entity.setVelocity(entity.getVelocity().add(knockDir.multiply(knockback / 3)));
+						//destroy armor depending on round armor damage
+						ItemStack hitArmor = event.getHitArmorPiece();
+						if (hitArmor.getItemMeta() instanceof Damageable) {
+							double armorDamage = event.getAmmo().getArmorDamage();
+							Damageable damageableItem = ((Damageable) hitArmor.getItemMeta());
+							int maxDurability = hitArmor.getType().getMaxDurability();
+							int durability = maxDurability - damageableItem.getDamage();
+							int finalDurability = (int) (durability - armorDamage < 0 ? 0 : durability - armorDamage);
+							damageableItem.setDamage(maxDurability - finalDurability);
+							hitArmor.setItemMeta((ItemMeta) damageableItem);
+							switch(event.getHitBodyPart()) {
+							case Chest: entity.getEquipment().setChestplate(hitArmor);
+								break;
+							case Head: entity.getEquipment().setHelmet(hitArmor);
+								break;
+							case Leg: entity.getEquipment().setLeggings(hitArmor);
+								break;
+							}
+						}
 					}
 				}
 			}

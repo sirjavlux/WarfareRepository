@@ -5,6 +5,8 @@ import java.util.Map;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class ConfigManager {
 	
@@ -28,6 +30,7 @@ public class ConfigManager {
 	
 	private static double dynamicProtectionEnchantment;
 	private static double staticProtectionEnchantment;
+	private static double durabilityProtDecreaseRate;
 	
 	public static void loadConfig(FileConfiguration conf) {
 		
@@ -51,6 +54,7 @@ public class ConfigManager {
 		
 		dynamicProtectionEnchantment = conf.contains("armor.protection.dynamic-protection-enchantment") ? conf.getDouble("armor.protection.dynamic-protection-enchantment") : 0.04;
 		staticProtectionEnchantment = conf.contains("armor.protection.static-protection-enchantment") ? conf.getDouble("armor.protection.static-protection-enchantment") : 0.06;
+		durabilityProtDecreaseRate = conf.contains("armor.protection.durability-protection-decrease-rate") ? conf.getDouble("armor.protection.durability-protection-decrease-rate") : 0.6;
 	}
 	
 	public static double getItemArmorProtection(ItemStack item) {
@@ -101,6 +105,15 @@ public class ConfigManager {
 		Map<Enchantment, Integer> enchants = item.getEnchantments();
 		int enchantmentAmount = enchants.containsKey(Enchantment.PROTECTION_ENVIRONMENTAL) ? enchants.get(Enchantment.PROTECTION_ENVIRONMENTAL) : 0;
 		armorProt = armorProt + armorProt * (dynamicProtectionEnchantment * enchantmentAmount) + staticProtectionEnchantment * enchantmentAmount;
+		//calculate armor durabilitmy protection decrease
+		ItemMeta meta = item.getItemMeta();
+		if (meta instanceof Damageable) {
+			Damageable dMeta = (Damageable) meta;
+			double maxDurability = item.getType().getMaxDurability();
+			double durability = maxDurability - dMeta.getDamage();
+			armorProt -= ((armorProt * 100) * ((1 - durability / maxDurability) * durabilityProtDecreaseRate)) / 100;
+			armorProt = armorProt < 0 ? 0 : armorProt;
+		}
 		
 		return armorProt;
 	}

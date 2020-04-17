@@ -11,9 +11,10 @@ particle:
 
 #This is modifiers for armor protection when shot in the area of each armorpice location
 #set protection enchant is static and the protection enchant modifier is dynamic depending on total default armor
-#protection enchantment works like this: armor protection + armor protection * (protection enchant * protection enchantment amount) + set protection enchant * protection enchantment amount
+#durability protection decrease rate works like this total armor - ((total armor * 100) * ((1 - durability / maxdurability) * durability protection rate)) / 100
 armor:
     protection:
+        durability-protection-decrease-rate: 0.6
         dynamic-protection-enchantment: 0.05
         static-protection-enchantment: 0.07
         helmet:
