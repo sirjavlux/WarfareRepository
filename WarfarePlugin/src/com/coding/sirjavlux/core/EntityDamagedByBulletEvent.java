@@ -58,10 +58,33 @@ public class EntityDamagedByBulletEvent extends Event implements Cancellable {
     }
 
     /*///////////////////////////
-     * DAMAGE CALCULATOR 0.1
+     * DAMAGE CALCULATOR 0.2
      *///////////////////////////
-	private double calculateDamage(LivingEntity entity, double damage, double pen) {		
-		return damage;
+	private double calculateDamage(LivingEntity entity, double damage, double pen) {	
+		//get protecting armor pice
+		ItemStack[] armor = entity.getEquipment().getArmorContents();
+		ItemStack protectingPice = null;
+		switch (hitPart) {
+		//chest
+		case Chest: protectingPice = armor[2];
+			break;
+		//head
+		case Head: protectingPice = armor[3];
+			break;
+		//leg
+		case Leg: protectingPice = armor[1];
+			break;
+		}
+		
+		//calculate damage protection
+		if (protectingPice != null) {
+			double armorProt = ConfigManager.getItemArmorProtection(protectingPice);
+			armorProt = armorProt - armorProt * pen;
+			damage = damage - damage * armorProt;
+		}
+		
+		System.out.println("damage " + damage);
+		return damage ;
 	}
     
 	/*/////////////////////////

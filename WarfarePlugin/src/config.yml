@@ -1,2 +1,36 @@
-settings:
+#####################
+# PARTICLE SETTINGS #
+#####################
+
+particle:
     smoke-enabled: true
+    
+#############################
+# ARMOR PROTECTION SETTINGS #
+#############################
+
+#This is modifiers for armor protection when shot in the area of each armorpice location
+#set protection enchant is static and the protection enchant modifier is dynamic depending on total default armor
+#protection enchantment works like this: armor protection + armor protection * (protection enchant * protection enchantment amount) + set protection enchant * protection enchantment amount
+armor:
+    protection:
+        dynamic-protection-enchantment: 0.05
+        static-protection-enchantment: 0.07
+        helmet:
+            leather: 0.15
+            gold: 0.17
+            chain: 0.2
+            iron: 0.34
+            diamond: 0.64
+        chestplate:
+            leather: 0.17
+            gold: 0.2
+            chain: 0.32
+            iron: 0.41
+            diamond: 0.73
+        leggings:
+            leather: 0.16
+            gold: 0.19
+            chain: 0.28
+            iron: 0.37
+            diamond: 0.68

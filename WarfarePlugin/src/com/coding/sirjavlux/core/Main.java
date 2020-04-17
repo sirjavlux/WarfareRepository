@@ -25,6 +25,9 @@ public class Main extends JavaPlugin {
 		//load weapon files
 		WeaponLoader.loadFiles();
 		
+		//load config
+		ConfigManager.loadConfig(this.getConfig());
+		
 		instance = this;
 		
 		System.out.println(Color.GREEN + "Warfare successfully enabled!" + Color.RESET);
