@@ -193,10 +193,12 @@ public class WeaponLoader extends WeaponManager{
 				}
 			}
 			//burst amount
-			int burstAmount = conf.contains("burst-amount") ? conf.getInt("burst-amount") : 1;
+			int burstAmount = conf.contains("burst-amount") ? conf.getInt("burst-amount") : 3;
+			//burst speed
+			double burstSpeed = conf.contains("burst-speed") ? conf.getDouble("burst-speed") : 7;
 			
 			//create weapon
-			Weapon weapon = new Weapon(type, mat, magReq, name, smokeOffset, smokeEnabled, smokeIntensity, damage, lore, displayName, defaultMag, loadedByDefault, reqMag, barrelAmmoCap, caliber, fireRate, preLoadAmmo, burstAmount);
+			Weapon weapon = new Weapon(type, mat, magReq, name, smokeOffset, smokeEnabled, smokeIntensity, damage, lore, displayName, defaultMag, loadedByDefault, reqMag, barrelAmmoCap, caliber, fireRate, preLoadAmmo, burstAmount, burstSpeed);
 			weaponStored.put(name, weapon);
 			badWeapons.remove(file.getName());
 			goodWeapons.add(file.getName());

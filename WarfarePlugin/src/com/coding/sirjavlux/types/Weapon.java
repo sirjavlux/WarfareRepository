@@ -22,8 +22,9 @@ public class Weapon {
 	private double fireRate;
 	private Ammo preloadAmmo;
 	private int burstAmount;
+	private double burstSpeed;
 	
-	public Weapon (WeaponType type, Material mat, Magazine[] magReq, String name, double[] smokeOffset, boolean smokeEnabled, double smokeIntensity, double damage, String[] lore, String displayName, Magazine defaultMag, boolean loadedByDefault, boolean reqMag, int barrelAmmoCap, String caliber, double fireRate, Ammo preloadAmmo, int burstAmount) {
+	public Weapon (WeaponType type, Material mat, Magazine[] magReq, String name, double[] smokeOffset, boolean smokeEnabled, double smokeIntensity, double damage, String[] lore, String displayName, Magazine defaultMag, boolean loadedByDefault, boolean reqMag, int barrelAmmoCap, String caliber, double fireRate, Ammo preloadAmmo, int burstAmount, double burstSpeed) {
 		this.type = type;
 		this.mat = mat;
 		this.magReq = magReq;
@@ -42,6 +43,7 @@ public class Weapon {
 		this.fireRate = fireRate;
 		this.preloadAmmo = preloadAmmo;
 		this.burstAmount = burstAmount;
+		this.burstSpeed = burstSpeed;
 	}
 	
 	public WeaponType getType() { return type; }
@@ -62,4 +64,5 @@ public class Weapon {
 	public double getFireRate() { return fireRate; }
 	public Ammo getPreLoadAmmo() { return preloadAmmo; }
 	public int getBurstAmount() { return burstAmount; }
+	public double getBurstSpeed() { return burstSpeed; }
 }

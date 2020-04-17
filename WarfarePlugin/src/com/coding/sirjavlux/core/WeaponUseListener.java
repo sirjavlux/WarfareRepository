@@ -17,6 +17,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.coding.sirjavlux.projectiles.ProjectileManager;
 import com.coding.sirjavlux.types.Ammo;
+import com.coding.sirjavlux.types.AmmoType;
 import com.coding.sirjavlux.types.Weapon;
 
 import net.minecraft.server.v1_15_R1.NBTTagCompound;
@@ -77,7 +78,22 @@ public class WeaponUseListener implements Listener {
 		//double ticks = (System.currentTimeMillis() - lastTimeMillis) / 50;
 		//System.out.println("ticks since last shot " + ticks);
 		
-		startAutoShooting(item, p);
+		//get nbt tag and item
+		net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(item);
+		NBTTagCompound tagComp = NMSItem.getTag();
+		Weapon weapon = WeaponManager.getStoredWeapon(tagComp.getString("name"));
+		
+		//shoot depending on type
+		switch (weapon.getType()) {
+		case Auto: startAutoShooting(item, p);
+			break;
+		case BoltAction: startSingleShooting(item, p);
+			break;
+		case Burst: startBurstShooting(item, p);
+			break;
+		case SemiAuto: startSingleShooting(item, p);
+			break;
+		}
 	}
 	
 	/*/////////////////////////////
@@ -120,7 +136,8 @@ public class WeaponUseListener implements Listener {
 									Ammo ammo = WeaponManager.getStoredAmmo(ammoStr);
 									double damage = ammo.getDamage();
 									double speed = ammo.getSpeed();
-									ProjectileManager.fireProjectile(p, speed, damage);
+									AmmoType type = ammo.getAmmoType();
+									ProjectileManager.fireProjectile(p, speed, damage, type);
 								}
 								
 								//remove front bullet
@@ -157,17 +174,121 @@ public class WeaponUseListener implements Listener {
 	}
 	
 	/*/////////////////////////////
-	 * SEMI-AUTOMATIC SHOOTING
-	 */////////////////////////////
-	
-	
-	/*/////////////////////////////
 	 * SINGLE-FIRE SHOOTING
 	 */////////////////////////////
-	
+	private static void startSingleShooting(ItemStack item, Player p) {
+		//get nbt tag and item
+		net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(item);
+		NBTTagCompound tagComp = NMSItem.getTag();
+		Weapon weapon = WeaponManager.getStoredWeapon(tagComp.getString("name"));
+		double fireRate = weapon.getFireRate();
+		long ticksCooldown = (long) (20 / fireRate) < 1 ? 1 : (long) (20 / fireRate);
+		
+		UUID uuid = p.getUniqueId();
+		
+		String barrelRounds = tagComp.getString("barrelRounds");
+		
+		if ((System.currentTimeMillis() - lastShot.get(uuid)) / 50 >= ticksCooldown) {
+			if (tagComp.getInt("barrelAmmo") > 0) {
+	 			String ammoStr = ((!barrelRounds.contains(",")) ? barrelRounds : barrelRounds.substring(barrelRounds.lastIndexOf(","))).replaceAll(",", "");
+				if (WeaponManager.isAmmunition(ammoStr)) {
+					Ammo ammo = WeaponManager.getStoredAmmo(ammoStr);
+					double damage = ammo.getDamage();
+					double speed = ammo.getSpeed();
+					AmmoType type = ammo.getAmmoType();
+					ProjectileManager.fireProjectile(p, speed, damage, type);
+				}
+				WeaponManager.reduceAmmo(1, item, p);
+				
+				lastShot.replace(uuid, System.currentTimeMillis());
+			} else {
+				p.sendMessage(ChatColor.RED + "No ammo left, reload!");
+			}
+		}
+	}
 	
 	/*/////////////////////////////
 	 * BURST SHOOTING
 	 */////////////////////////////
+	private static void startBurstShooting(ItemStack item, Player p) {
+		//get nbt tag and item
+		net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(item);
+		NBTTagCompound tagComp = NMSItem.getTag();
+		Weapon weapon = WeaponManager.getStoredWeapon(tagComp.getString("name"));
+		double fireRate = weapon.getFireRate();
+		long ticksCooldown = (long) (20 / fireRate < 1 ? 1 : 20 / fireRate);
+		long burstSpeed = (long) (20 / weapon.getBurstSpeed() < 1 ? 1 : 20 / weapon.getBurstSpeed());
+		UUID uuid = p.getUniqueId();
+		
+		if ((System.currentTimeMillis() - lastShot.get(uuid)) / 50 >= ticksCooldown) {
+			if (tagComp.getInt("barrelAmmo") > 0) {
+	 			
+				if (!isShooting.get(uuid)) {
+					isShooting.replace(uuid, true);
+					new BukkitRunnable() {
+						int ammoUsed = 0;
+						int ammo = tagComp.getInt("barrelAmmo") + tagComp.getInt("magAmmo");
+						int burstAmount = weapon.getBurstAmount();
+						
+						String barrelRounds = tagComp.getString("barrelRounds");
+						String magRounds = tagComp.getString("magRounds");
+						
+						@Override
+						public void run() {
+							if (!p.isOnline()) {
+								WeaponManager.reduceAmmo(ammoUsed, item, p);
+								cancel();
+								isShooting.replace(uuid, false);
+							} else {
+								//shoot if bullets in barrel
+								if (ammo > 0) {
+									if (burstAmount > 0) {
+										burstAmount--;
+										ammo--;
+										ammoUsed++;
+										String ammoStr = ((!barrelRounds.contains(",")) ? barrelRounds : barrelRounds.substring(barrelRounds.lastIndexOf(","))).replaceAll(",", "");
+										if (WeaponManager.isAmmunition(ammoStr)) {
+											Ammo ammo = WeaponManager.getStoredAmmo(ammoStr);
+											double damage = ammo.getDamage();
+											double speed = ammo.getSpeed();
+											AmmoType type = ammo.getAmmoType();
+											ProjectileManager.fireProjectile(p, speed, damage, type);
+										}
+										
+										//remove front bullet
+										barrelRounds = barrelRounds.contains(",") ? barrelRounds.substring(0, barrelRounds.lastIndexOf(",")) : "";
+										
+										//add from magazine to barrel if has mag and remove from mag
+										if (weapon.requiresMagazine()) {
+											if (tagComp.getString("mag") != "none") {
+												String bulletToAdd = ((!magRounds.contains(",")) ? magRounds : magRounds.substring(magRounds.lastIndexOf(","))).replaceAll(",", "");
+												barrelRounds = barrelRounds.isEmpty() ? bulletToAdd : "," + bulletToAdd;
+												//remove from magrounds
+												magRounds = !magRounds.contains(",") ? magRounds.substring(0, magRounds.lastIndexOf(",")) : "";
+											}
+										}
+										lastShot.replace(uuid, System.currentTimeMillis());
+									} else {
+										WeaponManager.reduceAmmo(ammoUsed, item, p);
+										cancel();
+										isShooting.replace(uuid, false);
+									}
+								} else {
+									WeaponManager.reduceAmmo(ammoUsed, item, p);
+									cancel();
+									isShooting.replace(uuid, false);
+								}
+							}
+						}
+						
+					}.runTaskTimer(Main.getPlugin(Main.class), 0, burstSpeed);
+				}
+				
+				lastShot.replace(uuid, System.currentTimeMillis());
+			} else {
+				p.sendMessage(ChatColor.RED + "No ammo left, reload!");
+			}
+		}
+	}
 	
 }

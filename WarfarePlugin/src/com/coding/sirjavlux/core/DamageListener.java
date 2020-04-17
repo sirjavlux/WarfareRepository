@@ -1,11 +1,21 @@
 package com.coding.sirjavlux.core;
 
 import org.bukkit.Location;
+import org.bukkit.entity.Drowned;
+import org.bukkit.entity.Evoker;
+import org.bukkit.entity.Husk;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Pillager;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.Skeleton;
+import org.bukkit.entity.Stray;
+import org.bukkit.entity.Villager;
+import org.bukkit.entity.Vindicator;
+import org.bukkit.entity.WanderingTrader;
+import org.bukkit.entity.Witch;
 import org.bukkit.entity.Zombie;
+import org.bukkit.entity.ZombieVillager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileHitEvent;
@@ -28,12 +38,32 @@ public class DamageListener implements Listener {
 					double damage = Double.parseDouble(data[1]);
 					
 					//get other body part then chest if zombie, player or skeleton
-					BodyPart part = damaged instanceof Player || damaged instanceof Skeleton || damaged instanceof Zombie ? getHitBodyPart(ptile.getLocation(), damaged.getLocation(), pDir) : BodyPart.Chest;
+					BodyPart part = isBodyPartRegistrable(damaged) ? getHitBodyPart(ptile.getLocation(), damaged.getLocation(), pDir) : BodyPart.Chest;
 					
 					System.out.println("damage " + damage * Double.parseDouble(part.toString()));
 					damaged.damage((damage * Double.parseDouble(part.toString())), shooter);
 				}
 			}
+		}
+	}
+	
+	private boolean isBodyPartRegistrable(LivingEntity entity) {
+		if (entity instanceof Player 
+				|| entity instanceof Skeleton 
+				|| entity instanceof Zombie
+				|| entity instanceof Pillager
+				|| entity instanceof Villager
+				|| entity instanceof Vindicator
+				|| entity instanceof WanderingTrader
+				|| entity instanceof Evoker
+				|| entity instanceof Husk
+				|| entity instanceof ZombieVillager
+				|| entity instanceof Witch
+				|| entity instanceof Stray
+				|| entity instanceof Drowned) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 	

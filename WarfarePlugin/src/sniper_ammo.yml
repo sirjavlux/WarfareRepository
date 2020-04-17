@@ -3,7 +3,7 @@ display-name: "&eSniper-Ammo &77.62x54"
 lore: 
     - "&7This ammo is usable for weapons"
     - "&7and magazines using the "
-    - "&7caliber 5.45x39!"
+    - "&7caliber 7.62x54!"
 #This is used to load magazines and weapons with the matching caliber
 caliber: "7.62x54"
 material: STONE
