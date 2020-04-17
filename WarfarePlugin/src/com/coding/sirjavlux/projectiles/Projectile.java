@@ -1,8 +1,10 @@
 package com.coding.sirjavlux.projectiles;
 
-import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftEntity;
 import org.bukkit.entity.Player;
+
+import com.coding.sirjavlux.types.Ammo;
+import com.coding.sirjavlux.types.Weapon;
 
 import net.minecraft.server.v1_15_R1.EntityLiving;
 import net.minecraft.server.v1_15_R1.EntitySnowball;
@@ -12,17 +14,17 @@ import net.minecraft.server.v1_15_R1.MovingObjectPosition;
 
 public class Projectile extends EntitySnowball {
 
-	double damage;
-	Location hitLoc;
+	Weapon weapon;
+	Ammo ammo;
 	
-    public Projectile(World world, EntityLiving e, ItemStack item, double speedMultiplier, double damage) {
+    public Projectile(World world, EntityLiving e, ItemStack item, double speedMultiplier, Weapon weapon, Ammo ammo) {
 		super(world, e);
 		
 		this.setItem(item);
-		this.damage = damage;
+		this.weapon = weapon;
+		this.ammo = ammo;
 		CraftEntity entity = this.getBukkitEntity();
 		Player p = (Player) this.getShooter().getBukkitEntity();
-		hitLoc = entity.getLocation();
 		entity.setVelocity(p.getEyeLocation().getDirection().multiply(speedMultiplier));
 		entity.setCustomNameVisible(false);
 		updateName();
@@ -30,14 +32,11 @@ public class Projectile extends EntitySnowball {
 
 	@Override
     protected void a(MovingObjectPosition movingobjectposition) {
-		Location loc = this.getBukkitEntity().getLocation();
-		hitLoc = loc;
-		updateName();
 		super.a(movingobjectposition);
     }
 	
 	private void updateName() {
 		CraftEntity entity = this.getBukkitEntity();
-		entity.setCustomName("projectile," + damage);
+		entity.setCustomName("projectile," + weapon.getName() + "," + ammo.getName());
 	}
 }

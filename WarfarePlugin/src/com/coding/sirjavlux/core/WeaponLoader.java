@@ -359,9 +359,11 @@ public class WeaponLoader extends WeaponManager{
 			double explosionDamage = conf.contains("explosion-damage") ? conf.getDouble("explosion-damage") : 0;
 			//explosion damage drop
 			double explosionDamageDrop = conf.contains("explosion-damage-drop") ? conf.getDouble("explosion-damage-drop") : 0;
+			//knock back
+			double knockBack = conf.contains("knockback") ? conf.getDouble("knockback") : 0.5;
 			
 			//add ammunition to map
-			Ammo ammo = new Ammo(name, caliber, mat, damage, armorPen, lore, displayName, speed, maxStackSize, shootMat, type, splitBulletAmount, explosionRange, explosionDamage, explosionDamageDrop);
+			Ammo ammo = new Ammo(name, caliber, mat, damage, armorPen, lore, displayName, speed, maxStackSize, shootMat, type, splitBulletAmount, explosionRange, explosionDamage, explosionDamageDrop, knockBack);
 			WeaponManager.ammoStored.put(name, ammo);
 			
 			badAmmo.remove(file.getName());

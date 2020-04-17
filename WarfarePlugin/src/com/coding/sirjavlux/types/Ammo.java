@@ -19,8 +19,9 @@ public class Ammo {
 	private double explosionRange;
 	private double explosionDamage;
 	private double explosionDamageDrop;
+	private double knockBack;
 	
-	public Ammo(String name, String cal, Material mat, double damage, double armorPen, String[] lore, String displayName, double speed, int maxStackSize, Material shootMat, AmmoType type, int splitBulletAmount, double explosionRange, double explotionDamage, double explotionDamageDrop) {
+	public Ammo(String name, String cal, Material mat, double damage, double armorPen, String[] lore, String displayName, double speed, int maxStackSize, Material shootMat, AmmoType type, int splitBulletAmount, double explosionRange, double explotionDamage, double explotionDamageDrop, double knockBack) {
 		this.name = name;
 		this.cal = cal;
 		this.mat = mat;
@@ -36,6 +37,7 @@ public class Ammo {
 		this.explosionRange = explosionRange;
 		this.explosionDamage = explotionDamage;
 		this.explosionDamageDrop = explotionDamageDrop;
+		this.knockBack = knockBack;
 	}
 	
 	public String getName() { return name; }
@@ -53,5 +55,6 @@ public class Ammo {
 	public double getExplotionRange() { return explosionRange; }
 	public double getExplotionDamage() { return explosionDamage; }
 	public double getExplotionDrop() { return explosionDamageDrop; }
+	public double getKnockBack() { return knockBack; }
 	
 }

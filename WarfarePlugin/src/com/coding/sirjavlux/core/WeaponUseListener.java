@@ -134,10 +134,9 @@ public class WeaponUseListener implements Listener {
 								String ammoStr = ((!barrelRounds.contains(",")) ? barrelRounds : barrelRounds.substring(barrelRounds.lastIndexOf(","))).replaceAll(",", "");
 								if (WeaponManager.isAmmunition(ammoStr)) {
 									Ammo ammo = WeaponManager.getStoredAmmo(ammoStr);
-									double damage = ammo.getDamage();
 									double speed = ammo.getSpeed();
 									AmmoType type = ammo.getAmmoType();
-									ProjectileManager.fireProjectile(p, speed, damage, type);
+									ProjectileManager.fireProjectile(p, speed, weapon, ammo, type);
 								}
 								
 								//remove front bullet
@@ -193,10 +192,9 @@ public class WeaponUseListener implements Listener {
 	 			String ammoStr = ((!barrelRounds.contains(",")) ? barrelRounds : barrelRounds.substring(barrelRounds.lastIndexOf(","))).replaceAll(",", "");
 				if (WeaponManager.isAmmunition(ammoStr)) {
 					Ammo ammo = WeaponManager.getStoredAmmo(ammoStr);
-					double damage = ammo.getDamage();
 					double speed = ammo.getSpeed();
 					AmmoType type = ammo.getAmmoType();
-					ProjectileManager.fireProjectile(p, speed, damage, type);
+					ProjectileManager.fireProjectile(p, speed, weapon, ammo, type);
 				}
 				WeaponManager.reduceAmmo(1, item, p);
 				
@@ -249,10 +247,9 @@ public class WeaponUseListener implements Listener {
 										String ammoStr = ((!barrelRounds.contains(",")) ? barrelRounds : barrelRounds.substring(barrelRounds.lastIndexOf(","))).replaceAll(",", "");
 										if (WeaponManager.isAmmunition(ammoStr)) {
 											Ammo ammo = WeaponManager.getStoredAmmo(ammoStr);
-											double damage = ammo.getDamage();
 											double speed = ammo.getSpeed();
 											AmmoType type = ammo.getAmmoType();
-											ProjectileManager.fireProjectile(p, speed, damage, type);
+											ProjectileManager.fireProjectile(p, speed, weapon, ammo, type);
 										}
 										
 										//remove front bullet
@@ -290,5 +287,4 @@ public class WeaponUseListener implements Listener {
 			}
 		}
 	}
-	
 }

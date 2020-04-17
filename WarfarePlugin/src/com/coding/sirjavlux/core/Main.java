@@ -16,7 +16,7 @@ public class Main extends JavaPlugin {
 		this.saveDefaultConfig();
 		
 		//load listeners
-		Bukkit.getPluginManager().registerEvents(new DamageListener(), this);
+		Bukkit.getPluginManager().registerEvents(new ProjectileListener(), this);
 		Bukkit.getPluginManager().registerEvents(new WeaponUseListener(), this);
 		
 		//commands
