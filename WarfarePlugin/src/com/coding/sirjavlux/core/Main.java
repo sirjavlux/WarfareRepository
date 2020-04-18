@@ -9,6 +9,7 @@ import com.coding.sirjavlux.utils.Color;
 public class Main extends JavaPlugin {
 	
 	private static Main instance;
+	private static AsyncBulletHandler bulletHandler;
 	
 	@Override
 	public void onEnable() {
@@ -17,7 +18,7 @@ public class Main extends JavaPlugin {
 		
 		//load listeners
 		Bukkit.getPluginManager().registerEvents(new ProjectileListener(), this);
-		Bukkit.getPluginManager().registerEvents(new WeaponUseListener(), this);
+		Bukkit.getPluginManager().registerEvents(new AsyncBulletHandler(), this);
 		
 		//commands
 		this.getCommand("wf").setExecutor(new CommandManager());
@@ -41,5 +42,9 @@ public class Main extends JavaPlugin {
 	
 	public static Main getInstance() {
 		return instance;
+	}
+	
+	public static AsyncBulletHandler getBulletHandler() {
+		return bulletHandler;
 	}
 }

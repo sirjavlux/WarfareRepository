@@ -314,61 +314,52 @@ public class WeaponManager {
 			//get nbt tag and item
 			net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(item);
 			NBTTagCompound tagComp = NMSItem.getTag();
-			Weapon weapon = getStoredWeapon(tagComp.getString("name"));
+			//Weapon weapon = getStoredWeapon(tagComp.getString("name"));
 			
-			//if integrated magazine
-			if (!weapon.requiresMagazine()) {
-				int ammo = tagComp.getInt("barrelAmmo");
-				ammo -= ammo - amount < 0 ? ammo : amount;
-				tagComp.setInt("barrelAmmo", ammo);
-			} 
-			//if requires magazine
-			else {
-				int magAmmo = tagComp.getInt("magAmmo");
-				int barrelAmmo = tagComp.getInt("barrelAmmo");
-				int barrelAmmoCap = tagComp.getInt("barrelAmmoCap");
-				int barrelAmmoReduction = barrelAmmoCap > amount ? amount : barrelAmmoCap;
-				String magRounds = tagComp.getString("magRounds");
-				String barrelRounds = tagComp.getString("barrelRounds");
-				
-				//change bullets in weapon and mag
-				//remove bullets from barrel
-				int count = 0;
-				for (int i = 0; i < amount; i++) {
-					if (!barrelRounds.isEmpty()) {
-						String lastBulletInBarrel = barrelRounds.contains(",") ? barrelRounds.substring(barrelRounds.lastIndexOf(",")) : barrelRounds;
-						barrelRounds = barrelRounds.substring(0, barrelRounds.length() - lastBulletInBarrel.length());
-						count++;
-					}
+			int magAmmo = tagComp.getInt("magAmmo");
+			int barrelAmmo = tagComp.getInt("barrelAmmo");
+			int barrelAmmoCap = tagComp.getInt("barrelAmmoCap");
+			int barrelAmmoReduction = barrelAmmoCap > amount ? amount : barrelAmmoCap;
+			String magRounds = tagComp.getString("magRounds");
+			String barrelRounds = tagComp.getString("barrelRounds");
+			
+			//change bullets in weapon and mag
+			//remove bullets from barrel
+			int count = 0;
+			for (int i = 0; i < amount; i++) {
+				if (!barrelRounds.isEmpty()) {
+					String lastBulletInBarrel = barrelRounds.contains(",") ? barrelRounds.substring(barrelRounds.lastIndexOf(",")) : barrelRounds;
+					barrelRounds = barrelRounds.substring(0, barrelRounds.length() - lastBulletInBarrel.length());
+					count++;
 				}
-				//remove bullets from mag and add to barrel
-				if (magAmmo > 0) {
-					for (int i = 0; i < count; i++) {
-						//remove bullets from mag
-						if (!magRounds.isEmpty()) {
-							String lastBulletInMag = magRounds.contains(",") ? magRounds.substring(magRounds.lastIndexOf(",")) : magRounds;
-							magRounds = magRounds.substring(0, magRounds.length() - lastBulletInMag.length());
-							//add removed bullet to barrel
-							barrelRounds = (lastBulletInMag.indexOf(0) == ',' ? lastBulletInMag.replace(",", "") : lastBulletInMag) + barrelRounds;
-						}
-					}
-				}
-				
-				//change ammo number
-				magAmmo = magAmmo - barrelAmmoReduction;
-				if (magAmmo < 0) {
-					barrelAmmo -= magAmmo * -1;
-					barrelAmmo = barrelAmmo < 0 ? 0 : barrelAmmo;
-					magAmmo = 0;
-				} else {
-					
-				}
-				
-				tagComp.setString("magRounds", magRounds);
-				tagComp.setString("barrelRounds", barrelRounds);
-				tagComp.setInt("magAmmo", magAmmo);
-				tagComp.setInt("barrelAmmo", barrelAmmo);
 			}
+			//remove bullets from mag and add to barrel
+			if (magAmmo > 0) {
+				for (int i = 0; i < count; i++) {
+					//remove bullets from mag
+					if (!magRounds.isEmpty()) {
+						String lastBulletInMag = magRounds.contains(",") ? magRounds.substring(magRounds.lastIndexOf(",")) : magRounds;
+						magRounds = magRounds.substring(0, magRounds.length() - lastBulletInMag.length());
+						//add removed bullet to barrel
+						barrelRounds = (lastBulletInMag.indexOf(0) == ',' ? lastBulletInMag.replace(",", "") : lastBulletInMag) + barrelRounds;
+					}
+				}
+			}
+			
+			//change ammo number
+			magAmmo = magAmmo - barrelAmmoReduction;
+			if (magAmmo < 0) {
+				barrelAmmo -= magAmmo * -1;
+				barrelAmmo = barrelAmmo < 0 ? 0 : barrelAmmo;
+				magAmmo = 0;
+			} else {
+				magAmmo -= barrelAmmoReduction;
+			}
+			
+			tagComp.setString("magRounds", magRounds);
+			tagComp.setString("barrelRounds", barrelRounds);
+			tagComp.setInt("magAmmo", magAmmo);
+			tagComp.setInt("barrelAmmo", barrelAmmo);
 			
 			//set new tag
 			NMSItem.setTag(tagComp);
