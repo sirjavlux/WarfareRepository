@@ -102,7 +102,9 @@ public class AsyncBulletHandler implements Listener {
     	    			int count = 0;
     	    			for (ItemStack item : p.getInventory().getContents()) {
     	    				if (WeaponManager.isWeapon(item)) {
-    	    					UUID wUUID = UUID.fromString(tagComp.getString("uuid"));
+    	        	    		net.minecraft.server.v1_15_R1.ItemStack NMSItemTemp = CraftItemStack.asNMSCopy(item);
+    	        	    		NBTTagCompound tagTemp = NMSItemTemp.getTag();
+    	    					UUID wUUID = UUID.fromString(tagTemp.getString("uuid"));
     	    					if (wUUID.equals(uuid)) {
         	    	    			activeWeapon.saveData(item, p, count);
         	    	    			activeWeapon.hardUpdate(item);
@@ -118,7 +120,9 @@ public class AsyncBulletHandler implements Listener {
     	    			int count = 0;
     	    			for (ItemStack item : p.getInventory().getContents()) {
     	    				if (WeaponManager.isWeapon(item)) {
-    	    					UUID wUUID = UUID.fromString(tagComp.getString("uuid"));
+    	        	    		net.minecraft.server.v1_15_R1.ItemStack NMSItemTemp = CraftItemStack.asNMSCopy(item);
+    	        	    		NBTTagCompound tagTemp = NMSItemTemp.getTag();
+    	    					UUID wUUID = UUID.fromString(tagTemp.getString("uuid"));
     	    					if (wUUID.equals(uuid)) {
         	    	    			activeWeapon.saveData(item, p, count);
         	    	    			activeWeapon.hardUpdate(item);
