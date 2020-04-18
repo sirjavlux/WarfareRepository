@@ -9,12 +9,12 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.coding.sirjavlux.core.WeaponManager;
 import com.coding.sirjavlux.types.Ammo;
 import com.coding.sirjavlux.types.Magazine;
 import com.coding.sirjavlux.types.Weapon;
 import com.coding.sirjavlux.utils.Color;
 import com.coding.sirjavlux.utils.StringHandler;
+import com.coding.sirjavlux.weapons.WeaponManager;
 
 public class GiveCommand extends CommandManager {
 	

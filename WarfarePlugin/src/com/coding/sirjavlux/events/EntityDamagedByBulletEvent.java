@@ -24,10 +24,10 @@ import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
 import com.coding.sirjavlux.core.ConfigManager;
-import com.coding.sirjavlux.core.WeaponManager;
 import com.coding.sirjavlux.projectiles.BodyPart;
 import com.coding.sirjavlux.types.Ammo;
 import com.coding.sirjavlux.types.Weapon;
+import com.coding.sirjavlux.weapons.WeaponManager;
 
 public class EntityDamagedByBulletEvent extends Event implements Cancellable {
 

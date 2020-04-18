@@ -4,7 +4,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.coding.sirjavlux.commands.CommandManager;
+import com.coding.sirjavlux.listeners.AsyncBulletHandler;
+import com.coding.sirjavlux.listeners.InventoryListener;
+import com.coding.sirjavlux.listeners.ProjectileListener;
 import com.coding.sirjavlux.utils.Color;
+import com.coding.sirjavlux.weapons.WeaponLoader;
 
 public class Main extends JavaPlugin {
 	
@@ -19,6 +23,7 @@ public class Main extends JavaPlugin {
 		//load listeners
 		Bukkit.getPluginManager().registerEvents(new ProjectileListener(), this);
 		Bukkit.getPluginManager().registerEvents(new AsyncBulletHandler(), this);
+		Bukkit.getPluginManager().registerEvents(new InventoryListener(), this);
 		
 		//commands
 		this.getCommand("wf").setExecutor(new CommandManager());

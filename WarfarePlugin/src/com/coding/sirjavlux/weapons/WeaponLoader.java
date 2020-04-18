@@ -1,4 +1,4 @@
-package com.coding.sirjavlux.core;
+package com.coding.sirjavlux.weapons;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -9,6 +9,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
+import com.coding.sirjavlux.core.Main;
 import com.coding.sirjavlux.types.Ammo;
 import com.coding.sirjavlux.types.AmmoType;
 import com.coding.sirjavlux.types.Magazine;

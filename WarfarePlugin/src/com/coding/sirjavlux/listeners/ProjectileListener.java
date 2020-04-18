@@ -1,4 +1,4 @@
-package com.coding.sirjavlux.core;
+package com.coding.sirjavlux.listeners;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
