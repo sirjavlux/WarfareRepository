@@ -125,6 +125,7 @@ public class WeaponManager {
 		NBTTagCompound tagComp = NMSItem.hasTag() ? NMSItem.getTag() : new NBTTagCompound();
 		UUID wUUID = generateRandomSafeUUID();
 		tagComp.setString("uuid", wUUID.toString());
+		tagComp.setString("name", weapon.getName());
 		//set tags
 		NMSItem.setTag(tagComp);
 		wItem = CraftItemStack.asBukkitCopy(NMSItem);
@@ -133,9 +134,94 @@ public class WeaponManager {
 		weaponItems.put(wUUID, weaponItem);
 		//update display data of item
 		weaponItem.hardUpdate(wItem);
+		saveWeaponData(wItem);
 		
 		//give item
 		inventoryHandler.giveToPlayer(p, wItem, p.getLocation());
+	}
+	
+	public static ItemStack saveWeaponData(ItemStack item) {
+		net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(item);
+		NBTTagCompound tagComp = NMSItem.hasTag() ? NMSItem.getTag() : new NBTTagCompound();
+		if (isWeapon(item)) {
+			UUID uuid = UUID.fromString(tagComp.getString("uuid"));
+			WeaponItem weaponItem = getWeaponItem(uuid);
+			//generate and update barrel ammo string
+			List<Ammo> barrelAmmoList = weaponItem.getBarrelAmmo();
+			StringBuilder barrelAmmo = new StringBuilder(barrelAmmoList.size() < 1 ? "" : barrelAmmoList.get(0).getName());
+			for (int i = 1; i < barrelAmmoList.size(); i++) barrelAmmo.append("," + barrelAmmoList.get(i).getName());
+			tagComp.setString("barrelAmmo", barrelAmmo.toString());
+			//generate and update magazine ammo string
+			MagazineItem mag = weaponItem.getMagazineItem();
+			if (mag != null) {
+				List<Ammo> magAmmoList = mag.getRounds();
+				StringBuilder magAmmo = new StringBuilder(magAmmoList.size() < 1 ? "" : magAmmoList.get(0).getName());
+				for (int i = 1; i < magAmmoList.size(); i++) magAmmo.append("," + magAmmoList.get(i).getName());
+				tagComp.setString("magAmmo", magAmmo.toString());
+				tagComp.setString("magName", mag.getMagazine().getName());
+				tagComp.setString("magUUID", mag.getUniqueId().toString());
+			} else {
+				tagComp.setString("magAmmo", "");
+				tagComp.setString("magName", "");
+				tagComp.setString("magUUID", "");
+			}
+		}
+		NMSItem.setTag(tagComp);
+		item = CraftItemStack.asBukkitCopy(NMSItem);
+		return item;
+	}
+	
+	public static void loadWeaponData(ItemStack item) {
+		net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(item);
+		NBTTagCompound tagComp = NMSItem.hasTag() ? NMSItem.getTag() : new NBTTagCompound();
+		if (tagComp.hasKey("uuid") && tagComp.hasKey("name")) {
+			UUID uuid = UUID.fromString(tagComp.getString("uuid"));
+			String name = tagComp.getString("name");
+			if (isWeapon(name) && !weaponItems.containsKey(uuid)) {
+				Weapon weapon = getStoredWeapon(name);
+				WeaponItem weaponItem = new WeaponItem(weapon, uuid);
+				//load magazine data from item
+				String magName = tagComp.getString("magName");
+				MagazineItem magItem = null;
+				if (isMagazine(magName)) {
+					Magazine mag = getStoredMagazine(magName);
+					String rounds = tagComp.getString("magAmmo");
+					List<Ammo> roundList = new ArrayList<>();
+					for (String str : rounds.split(",")) {
+						if (isAmmunition(str)) {
+							Ammo round = getStoredAmmo(str);
+							roundList.add(round);
+						}
+					}
+					//create magazine and set data
+					UUID magUUID = UUID.fromString(tagComp.getString("magUUID"));
+					magItem = new MagazineItem(mag, magUUID);
+					magItem.setRounds(roundList);
+				} 
+				weaponItem.setMagazineItem(magItem);
+				//load barrel data
+				String barrelRounds = tagComp.getString("barrelAmmo");
+				List<Ammo> barrelRoundList = new ArrayList<>();
+				for (String str : barrelRounds.split(",")) {
+					if (isAmmunition(str)) {
+						Ammo round = getStoredAmmo(str);
+						barrelRoundList.add(round);
+					}
+				}
+				weaponItem.setBarrelAmmo(barrelRoundList);
+				//save weapon to map
+				weaponItems.put(uuid, weaponItem);
+			}
+		}
+	}
+	
+	public static ItemStack saveMagazineData(ItemStack item) {
+		
+		return item;
+	}
+	
+	public static void loadMagazineData(ItemStack item) {
+		
 	}
 	
 	public static void givePlayerMagazine(Player p, Magazine mag) {
@@ -146,6 +232,7 @@ public class WeaponManager {
 		NBTTagCompound tagComp = NMSItem.hasTag() ? NMSItem.getTag() : new NBTTagCompound();
 		UUID uuid = generateRandomSafeUUID();
 		tagComp.setString("uuid", uuid.toString());
+		tagComp.setString("name", mag.getName());
 		NMSItem.setTag(tagComp);
 		magItem = CraftItemStack.asBukkitCopy(NMSItem);
 		//add item to map

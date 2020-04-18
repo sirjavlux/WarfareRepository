@@ -79,4 +79,5 @@ public class MagazineItem {
 	public UUID getUniqueId() { return uuid; }
 	public List<Ammo> getRounds() { return rounds; }
 	public Ammo getNextAmmo() { return nextAmmo; }
+	public void setRounds(List<Ammo> rounds) { this.rounds = rounds; }
 }

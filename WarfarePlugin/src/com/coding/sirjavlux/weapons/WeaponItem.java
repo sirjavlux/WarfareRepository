@@ -125,4 +125,7 @@ public class WeaponItem {
 	public Ammo getNextAmmo() { return nextAmmo; }
 	public int getBurstAmountRemaning() { return burstBulletsLeft; }
 	public void resetBurst() { burstBulletsLeft = weapon.getBurstAmount(); }
+	public MagazineItem getMagazineItem() { return mag; }
+	public void setBarrelAmmo(List<Ammo> barrelAmmo) { this.barrelAmmo = barrelAmmo; }
+	public void setMagazineItem(MagazineItem magItem) { this.mag = magItem; }
 }
