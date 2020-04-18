@@ -98,21 +98,41 @@ public class AsyncBulletHandler implements Listener {
     	    		ItemStack hand = p.getInventory().getItemInMainHand();
     	    		net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(hand);
     	    		NBTTagCompound tagComp = NMSItem.hasTag() ? NMSItem.getTag() : new NBTTagCompound();
-    	    		if ((System.currentTimeMillis() - lastClickInput.get(uuid)) / 50 > 4 && !weapon.getType().equals(WeaponType.Burst)) {
-    	    			activeWeapon.resetBurst();
-    	    			activeWeapon.hardUpdate(hand);
-    	    			activeWeapons.remove(uuid);
-						continue;
-    	    		}
-    	    		else if (!tagComp.hasKey("uuid")) {
-    	    			activeWeapon.resetBurst();
-    	    			activeWeapon.hardUpdate(hand);
+    	    		if (!tagComp.hasKey("uuid")) {
+    	    			int count = 0;
+    	    			for (ItemStack item : p.getInventory().getContents()) {
+    	    				if (WeaponManager.isWeapon(item)) {
+    	    					UUID wUUID = UUID.fromString(tagComp.getString("uuid"));
+    	    					if (wUUID.equals(uuid)) {
+        	    	    			activeWeapon.saveData(item, p, count);
+        	    	    			activeWeapon.hardUpdate(item);
+    	    					}
+    	    				}
+    	    				count++;
+    	    			}
     	    			activeWeapons.remove(uuid);
 						continue;
     	    		}
     	    		else if (!UUID.fromString(tagComp.getString("uuid")).equals(activeWeapon.getUniqueId())) {
     	    			activeWeapon.resetBurst();
+    	    			int count = 0;
+    	    			for (ItemStack item : p.getInventory().getContents()) {
+    	    				if (WeaponManager.isWeapon(item)) {
+    	    					UUID wUUID = UUID.fromString(tagComp.getString("uuid"));
+    	    					if (wUUID.equals(uuid)) {
+        	    	    			activeWeapon.saveData(item, p, count);
+        	    	    			activeWeapon.hardUpdate(item);
+    	    					}
+    	    				}
+    	    				count++;
+    	    			}
+    	    			activeWeapons.remove(uuid);
+						continue;
+    	    		}
+    	    		else if ((System.currentTimeMillis() - lastClickInput.get(uuid)) / 50 > 4 && !weapon.getType().equals(WeaponType.Burst)) {
+    	    			activeWeapon.resetBurst();
     	    			activeWeapon.hardUpdate(hand);
+    	    			activeWeapon.saveData(hand, p, p.getInventory().getHeldItemSlot());
     	    			activeWeapons.remove(uuid);
 						continue;
     	    		}
@@ -144,6 +164,7 @@ public class AsyncBulletHandler implements Listener {
     	    		activeWeapon.update(hand);
     	    		if (isEmpty) {
     	    			activeWeapon.hardUpdate(hand);
+    	    			activeWeapon.saveData(hand, p, p.getInventory().getHeldItemSlot());
     	    			activeWeapons.remove(uuid);
     	    		}
     			}
@@ -190,6 +211,7 @@ public class AsyncBulletHandler implements Listener {
 						shootBullet(p, weapon, ammo);
 						weaponItem.removeBullet();
 						weaponItem.hardUpdate(item);
+						weaponItem.saveData(item, p, p.getInventory().getHeldItemSlot());
 					}
 					break;
 				}

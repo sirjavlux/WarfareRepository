@@ -92,17 +92,21 @@ public class WeaponManager {
 	}
 	
 	public static boolean isWeapon(ItemStack item) {
-		boolean weapon = false;
 		net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(item);
 		if (NMSItem.hasTag()) {
 			NBTTagCompound tagComp = NMSItem.getTag();
 			if (tagComp.hasKey("uuid")) {
 				if (weaponItems.containsKey(UUID.fromString(tagComp.getString("uuid")))) {
-					weapon = true;
+					return true;
+				}
+			} 
+			if (tagComp.hasKey("name")) {
+				if (weaponStored.containsKey(tagComp.getString("name"))) {
+					return true;
 				}
 			}
 		}
-		return weapon;
+		return false;
 	}
 	
 	public static UUID generateRandomSafeUUID() {
@@ -118,28 +122,9 @@ public class WeaponManager {
 		return uuid;
 	}
 	
-	public static void givePlayerWeapon(Player p, Weapon weapon) {
-		ItemStack wItem = new ItemStack(weapon.getMat());
-		//add nms tags
-		net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(wItem);
-		NBTTagCompound tagComp = NMSItem.hasTag() ? NMSItem.getTag() : new NBTTagCompound();
-		UUID wUUID = generateRandomSafeUUID();
-		tagComp.setString("uuid", wUUID.toString());
-		tagComp.setString("name", weapon.getName());
-		//set tags
-		NMSItem.setTag(tagComp);
-		wItem = CraftItemStack.asBukkitCopy(NMSItem);
-		//add weapon to stored weapons
-		WeaponItem weaponItem = new WeaponItem(weapon, wUUID);
-		weaponItems.put(wUUID, weaponItem);
-		//update display data of item
-		weaponItem.hardUpdate(wItem);
-		saveWeaponData(wItem);
-		
-		//give item
-		inventoryHandler.giveToPlayer(p, wItem, p.getLocation());
-	}
-	
+	/*////////////////////////////////
+	 * SAVING AND LOADING WEAPONS
+	 *////////////////////////////////
 	public static ItemStack saveWeaponData(ItemStack item) {
 		net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(item);
 		NBTTagCompound tagComp = NMSItem.hasTag() ? NMSItem.getTag() : new NBTTagCompound();
@@ -215,6 +200,9 @@ public class WeaponManager {
 		}
 	}
 	
+	/*////////////////////////////////
+	 * SAVING AND LOADING MAGAZINES
+	 *////////////////////////////////
 	public static ItemStack saveMagazineData(ItemStack item) {
 		
 		return item;
@@ -222,6 +210,31 @@ public class WeaponManager {
 	
 	public static void loadMagazineData(ItemStack item) {
 		
+	}
+	
+	/*////////////////////////////////
+	 * GIVING ITEMS
+	 *////////////////////////////////
+	public static void givePlayerWeapon(Player p, Weapon weapon) {
+		ItemStack wItem = new ItemStack(weapon.getMat());
+		//add nms tags
+		net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(wItem);
+		NBTTagCompound tagComp = NMSItem.hasTag() ? NMSItem.getTag() : new NBTTagCompound();
+		UUID wUUID = generateRandomSafeUUID();
+		tagComp.setString("uuid", wUUID.toString());
+		tagComp.setString("name", weapon.getName());
+		//set tags
+		NMSItem.setTag(tagComp);
+		wItem = CraftItemStack.asBukkitCopy(NMSItem);
+		//add weapon to stored weapons
+		WeaponItem weaponItem = new WeaponItem(weapon, wUUID);
+		weaponItems.put(wUUID, weaponItem);
+		//update display data of item
+		weaponItem.hardUpdate(wItem);
+		wItem = saveWeaponData(wItem);
+		
+		//give item
+		inventoryHandler.giveToPlayer(p, wItem, p.getLocation());
 	}
 	
 	public static void givePlayerMagazine(Player p, Magazine mag) {

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -117,6 +118,12 @@ public class WeaponItem {
 		meta.setLore(loreList);
 		
 		item.setItemMeta(meta);
+	}
+	
+	public void saveData(ItemStack item, Player p, int slot) {
+		//save and set item
+		item = WeaponManager.saveWeaponData(item);
+		p.getInventory().setItem(slot, item);
 	}
 	
 	public Weapon getWeapon() { return weapon; }

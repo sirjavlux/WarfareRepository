@@ -32,23 +32,6 @@ public class PlayerJoinQuitListener implements Listener {
 	
 	@EventHandler 
 	public void playerQuit(PlayerQuitEvent e) {
-		Player p = e.getPlayer();
-		Inventory iv = p.getInventory();
-		int count = 0;
-		for (ItemStack item : iv.getContents()) {
-			//if weapon
-			if (WeaponManager.isWeapon(item)) {
-				//load data and set to weapon item obj
-				ItemStack genItem = WeaponManager.saveWeaponData(item);
-				iv.setItem(count, genItem);
-			} 
-			//if magazine
-			else if (WeaponManager.isMagazine(item)) {
-				//load data and set to magazine item obj
-				ItemStack genItem = WeaponManager.saveMagazineData(item);
-				iv.setItem(count, genItem);
-			}
-			count++;
-		}
+		
 	}
 }
