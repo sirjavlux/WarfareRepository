@@ -111,11 +111,14 @@ public class WeaponLoader extends WeaponManager{
 				System.out.println(Color.RED + "The weapon " + name + " didn't have any material selected!" + Color.RESET);
 				System.out.println(Color.RED + "Add this to config 'material: <material>'" + Color.RESET);
 				continue;
-			} else if (Material.valueOf(matS.toUpperCase()) == null) {
-				System.out.println(Color.RED + "The selected material " + matS + " in the weapon " + name + " didn't exist!" + Color.RESET);
+			}
+			Material mat = null;
+			try {
+				mat = Material.valueOf(matS.toUpperCase());
+			} catch (Exception e) {
+				System.out.println(Color.RED + "The selected weapon " + matS + " in the ammunition " + name + " didn't exist!" + Color.RESET);
 				continue;
 			}
-			Material mat = Material.valueOf(matS.toUpperCase());
 			//smoke offset
 			List<Double> smokeOffsetList = conf.contains("smoke-offset") ? conf.getDoubleList("smoke-offset") : null;
 			double[] smokeOffset = new double[] { 0d, 0d, 0d };
@@ -237,11 +240,14 @@ public class WeaponLoader extends WeaponManager{
 				System.out.println(Color.RED + "The magazine " + name + " didn't have any material selected!" + Color.RESET);
 				System.out.println(Color.RED + "Add this to config 'material: <material>'" + Color.RESET);
 				continue;
-			} else if (Material.valueOf(matS.toUpperCase()) == null) {
+			}
+			Material mat = null;
+			try {
+				mat = Material.valueOf(matS.toUpperCase());
+			} catch (Exception e) {
 				System.out.println(Color.RED + "The selected material " + matS + " in the magazine " + name + " didn't exist!" + Color.RESET);
 				continue;
 			}
-			Material mat = Material.valueOf(matS.toUpperCase());
 			//caliber
 			String caliber = conf.contains("caliber") ? conf.getString("caliber") : null;
 			if (caliber == null) {
@@ -308,11 +314,14 @@ public class WeaponLoader extends WeaponManager{
 				System.out.println(Color.RED + "The ammunition " + name + " didn't have any material selected!" + Color.RESET);
 				System.out.println(Color.RED + "Add this to config 'material: <material>'" + Color.RESET);
 				continue;
-			} else if (Material.valueOf(matS.toUpperCase()) == null) {
+			}
+			Material mat = null;
+			try {
+				mat = Material.valueOf(matS.toUpperCase());
+			} catch (Exception e) {
 				System.out.println(Color.RED + "The selected material " + matS + " in the ammunition " + name + " didn't exist!" + Color.RESET);
 				continue;
 			}
-			Material mat = Material.valueOf(matS.toUpperCase());
 			//caliber
 			String caliber = conf.contains("caliber") ? conf.getString("caliber") : null;
 			if (caliber == null) {
@@ -342,8 +351,10 @@ public class WeaponLoader extends WeaponManager{
 			//shoot material
 			String sMatS = conf.contains("projectile-material") ? conf.getString("projectile-material") : null;
 			Material shootMat = mat;
-			if (Material.valueOf(sMatS.toUpperCase()) != null) {
-				shootMat = Material.valueOf(sMatS.toUpperCase());
+			try {
+				mat = Material.valueOf(sMatS.toUpperCase());
+			} catch (Exception e) {
+				System.out.println(e);
 			}
 			//ammo type
 			AmmoType type = conf.contains("type") ? AmmoType.valueOf(conf.getString("type")) : null; 

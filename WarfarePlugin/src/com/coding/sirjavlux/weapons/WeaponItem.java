@@ -70,7 +70,7 @@ public class WeaponItem {
 	}
 	
 	public void updateNextAmmo() {
-		this.nextAmmo = barrelAmmo.size() > 0 ? barrelAmmo.get(0) : null;
+		this.nextAmmo = barrelAmmo.size() > 0 ? barrelAmmo.get(barrelAmmo.size() - 1) : null;
 	}
 	
 	public void update(ItemStack item) {

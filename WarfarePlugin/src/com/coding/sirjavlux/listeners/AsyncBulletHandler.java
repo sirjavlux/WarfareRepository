@@ -208,14 +208,14 @@ public class AsyncBulletHandler implements Listener {
 					break;
 				default:
 					//get next ammo in barrel and shoot a single bullet
-					String barrelRounds = tagComp.getString("barrelRounds");
-					String ammoStr = ((!barrelRounds.contains(",")) ? barrelRounds : barrelRounds.substring(barrelRounds.lastIndexOf(","))).replaceAll(",", "");
-					if (WeaponManager.isAmmunition(ammoStr)) {
-						Ammo ammo = WeaponManager.getStoredAmmo(ammoStr);
+					Ammo ammo = weaponItem.getNextAmmo();
+					if (ammo != null) {
 						shootBullet(p, weapon, ammo);
 						weaponItem.removeBullet();
 						weaponItem.hardUpdate(item);
 						weaponItem.saveData(item, p, p.getInventory().getHeldItemSlot());
+					} else {
+						p.sendMessage(ChatColor.RED + "Reload, ammunition empty!");
 					}
 					break;
 				}

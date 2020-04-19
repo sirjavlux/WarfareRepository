@@ -198,6 +198,7 @@ public class WeaponManager {
 					}
 				}
 				weaponItem.setBarrelAmmo(barrelRoundList);
+				weaponItem.updateNextAmmo();
 				//save weapon to map
 				weaponItems.put(uuid, weaponItem);
 			}

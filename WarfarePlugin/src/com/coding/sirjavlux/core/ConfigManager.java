@@ -1,7 +1,10 @@
 package com.coding.sirjavlux.core;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -32,8 +35,11 @@ public class ConfigManager {
 	private static double staticProtectionEnchantment;
 	private static double durabilityProtDecreaseRate;
 	
+	private static List<Material> ignoredBlocks = new ArrayList<>();
+	private static boolean ignoreOpenGate;
+	
 	public static void loadConfig(FileConfiguration conf) {
-		
+		//armor protection data
 		leatherHelmetProt = conf.contains("armor.protection.helmet.leather") ? conf.getDouble("armor.protection.helmet.leather") : 0.15;
 		goldenHelmetProt = conf.contains("armor.protection.helmet.gold") ? conf.getDouble("armor.protection.helmet.gold") : 0.17;
 		chainHelmetProt = conf.contains("armor.protection.helmet.chain") ? conf.getDouble("armor.protection.helmet.chain") : 0.2;
@@ -55,7 +61,21 @@ public class ConfigManager {
 		dynamicProtectionEnchantment = conf.contains("armor.protection.dynamic-protection-enchantment") ? conf.getDouble("armor.protection.dynamic-protection-enchantment") : 0.04;
 		staticProtectionEnchantment = conf.contains("armor.protection.static-protection-enchantment") ? conf.getDouble("armor.protection.static-protection-enchantment") : 0.06;
 		durabilityProtDecreaseRate = conf.contains("armor.protection.durability-protection-decrease-rate") ? conf.getDouble("armor.protection.durability-protection-decrease-rate") : 0.6;
+	
+		//ignored blocks by projectile data
+		List<String> blocks = conf.contains("projectile.ignored-blocks") ? conf.getStringList("projectile.ignored-blocks") : new ArrayList<>();
+		for (String str : blocks) {
+			try{
+				ignoredBlocks.add(Material.getMaterial(str.toUpperCase()));
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+		ignoreOpenGate = conf.contains("projectile.ignore-open.fence-gate") ? conf.getBoolean("projectile.ignore-open.fence-gate") : true;
 	}
+	
+	public static List<Material> getIgnoredBlocks() { return ignoredBlocks; }
+	public static boolean ignoreOpenGates() { return ignoreOpenGate; }
 	
 	public static double getItemArmorProtection(ItemStack item) {
 		double armorProt = 0;

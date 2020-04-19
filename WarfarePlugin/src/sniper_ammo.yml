@@ -6,7 +6,10 @@ lore:
     - "&7caliber 7.62x54!"
 #This is used to load magazines and weapons with the matching caliber
 caliber: "7.62x54"
+#Material of item in inventory
 material: STONE
+#Material of item when fired
+projectile-material: STONE_BUTTON
 damage: 6
 armor-penetration: 0.8
 max-stack-size: 20

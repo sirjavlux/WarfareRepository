@@ -35,3 +35,17 @@ armor:
             chain: 0.28
             iron: 0.37
             diamond: 0.68
+
+#######################
+# PROJECTILE SETTINGS #
+#######################
+
+projectile:
+    ignored-blocks:
+        - "GRASS"
+        - "TALL_GRASS"
+        - "VINE"
+        - "STRING"
+        - "COBWEB"
+    ignore-open:
+        fence-gate: true
