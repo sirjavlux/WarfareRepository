@@ -35,6 +35,10 @@ public class WeaponManager {
 		return weaponItems.containsKey(uuid) ? weaponItems.get(uuid) : null;
 	}
 	
+	public static MagazineItem getMagazineItem(UUID uuid) {
+		return magazineItems.containsKey(uuid) ? magazineItems.get(uuid) : null;
+	}
+	
 	public static Ammo getStoredAmmo(String name) {
 		return ammoStored.get(name);
 	}
@@ -204,12 +208,45 @@ public class WeaponManager {
 	 * SAVING AND LOADING MAGAZINES
 	 *////////////////////////////////
 	public static ItemStack saveMagazineData(ItemStack item) {
-		
+		net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(item);
+		NBTTagCompound tagComp = NMSItem.hasTag() ? NMSItem.getTag() : new NBTTagCompound();
+		if (isWeapon(item)) {
+			UUID uuid = UUID.fromString(tagComp.getString("uuid"));
+			MagazineItem magItem = getMagazineItem(uuid);
+			//generate and update ammo string
+			List<Ammo> magAmmoList = magItem.getRounds();
+			StringBuilder magAmmo = new StringBuilder(magAmmoList.size() < 1 ? "" : magAmmoList.get(0).getName());
+			for (int i = 1; i < magAmmoList.size(); i++) magAmmo.append("," + magAmmoList.get(i).getName());
+			tagComp.setString("ammo", magAmmo.toString());
+		}
+		NMSItem.setTag(tagComp);
+		item = CraftItemStack.asBukkitCopy(NMSItem);
 		return item;
 	}
 	
 	public static void loadMagazineData(ItemStack item) {
-		
+		net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(item);
+		NBTTagCompound tagComp = NMSItem.hasTag() ? NMSItem.getTag() : new NBTTagCompound();
+		if (tagComp.hasKey("uuid") && tagComp.hasKey("name")) {
+			UUID uuid = UUID.fromString(tagComp.getString("uuid"));
+			String name = tagComp.getString("name");
+			if (isMagazine(name) && !magazineItems.containsKey(uuid)) {
+				Magazine mag = getStoredMagazine(name);
+				String rounds = tagComp.getString("ammo");
+				List<Ammo> roundList = new ArrayList<>();
+				for (String str : rounds.split(",")) {
+					if (isAmmunition(str)) {
+						Ammo round = getStoredAmmo(str);
+						roundList.add(round);
+					}
+				}
+				//create magazine and set data
+				MagazineItem magItem = new MagazineItem(mag, uuid);
+				magItem.setRounds(roundList);
+				//save weapon to map
+				magazineItems.put(uuid, magItem);
+			}
+		}
 	}
 	
 	/*////////////////////////////////

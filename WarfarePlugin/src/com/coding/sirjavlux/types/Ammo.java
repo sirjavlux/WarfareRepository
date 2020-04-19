@@ -58,6 +58,5 @@ public class Ammo {
 	public double getExplotionDamage() { return explosionDamage; }
 	public double getExplotionDrop() { return explosionDamageDrop; }
 	public double getKnockBack() { return knockBack; }
-	public double getArmorDamage() { return armorDamage; }
-	
+	public double getArmorDamage() { return armorDamage; }	
 }

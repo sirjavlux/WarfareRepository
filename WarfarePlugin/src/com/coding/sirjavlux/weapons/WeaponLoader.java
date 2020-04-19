@@ -340,7 +340,7 @@ public class WeaponLoader extends WeaponManager{
 			//stack size
 			int maxStackSize = conf.contains("max-stack-size") ? conf.getInt("max-stack-size") : 64;
 			//shoot material
-			String sMatS = conf.contains("material") ? conf.getString("material") : null;
+			String sMatS = conf.contains("projectile-material") ? conf.getString("projectile-material") : null;
 			Material shootMat = mat;
 			if (Material.valueOf(sMatS.toUpperCase()) != null) {
 				shootMat = Material.valueOf(sMatS.toUpperCase());
