@@ -49,3 +49,13 @@ projectile:
         - "COBWEB"
     ignore-open:
         fence-gate: true
+    speed-reduction:
+        entity: 0.3
+        obsticle: 0.03
+    penetration-reduction: 
+        obsticle: 0.02
+        armor: 0.4
+        entity: 0.2
+    damage-reduction:
+        speed: 0.7
+        penetration: 0.5

@@ -20,7 +20,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import com.coding.sirjavlux.core.Main;
 import com.coding.sirjavlux.projectiles.ProjectileManager;
 import com.coding.sirjavlux.types.Ammo;
-import com.coding.sirjavlux.types.AmmoType;
 import com.coding.sirjavlux.types.Weapon;
 import com.coding.sirjavlux.types.WeaponType;
 import com.coding.sirjavlux.utils.Color;
@@ -179,9 +178,7 @@ public class AsyncBulletHandler implements Listener {
 	private void shootBullet(Player p, Weapon weapon, Ammo ammo) {
 		//shoot bullet if weapon and ammo are valid
 		if (ammo != null && weapon != null) {
-			double speed = ammo.getSpeed();
-			AmmoType type = ammo.getAmmoType();
-			ProjectileManager.fireProjectile(p, speed, weapon, ammo, type);
+			ProjectileManager.fireProjectile(p, weapon, ammo);
 			lastShot.replace(p.getUniqueId(), System.currentTimeMillis());
 		}
 	}

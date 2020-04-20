@@ -1,28 +1,13 @@
 package com.coding.sirjavlux.listeners;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftEntity;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.util.Vector;
-
-import com.coding.sirjavlux.events.EntityDamagedByBulletEvent;
-
-import net.minecraft.server.v1_15_R1.Entity;
-import net.minecraft.server.v1_15_R1.PacketPlayOutEntityStatus;
 
 public class ProjectileListener implements Listener {
 
+	/*
 	@EventHandler
 	public void projectileHitEvent(ProjectileHitEvent e) {
 		if (e.getEntity().getShooter() instanceof Player && e.getHitEntity() != null) {
@@ -79,6 +64,7 @@ public class ProjectileListener implements Listener {
 			}
 		}
 	}
+	*/
 	
 	@EventHandler
 	public void projectileDamageEvent(EntityDamageByEntityEvent e) {

@@ -42,8 +42,9 @@ public class EntityDamagedByBulletEvent extends Event implements Cancellable {
     private final double damage;
     private final double pen;
     private final ItemStack protectingPiece;
+    private double armorProt;
     
-    public EntityDamagedByBulletEvent(LivingEntity damaged, Projectile projectile) {
+    public EntityDamagedByBulletEvent(LivingEntity damaged, Projectile projectile, double pen) {
         this.damaged = damaged;
         this.projectile = projectile;
 		String[] data = projectile.getCustomName().split(",");
@@ -53,7 +54,7 @@ public class EntityDamagedByBulletEvent extends Event implements Cancellable {
         this.weapon = WeaponManager.getStoredWeapon(wName);
         this.shooter = projectile.getShooter();
         this.itemUsed = this.shooter instanceof Player ? ((Player) shooter).getInventory().getItemInMainHand() : null;
-		this.pen = ammo.getArmorPenetration();
+		this.pen = pen;
 		//get other body part then chest if zombie, player or skeleton
 		Vector pDir = projectile.getLocation().getDirection();
 		this.hitPart = isBodyPartRegistrable(damaged) ? getHitBodyPart(projectile.getLocation(), damaged.getLocation(), pDir) : BodyPart.Chest;
@@ -79,14 +80,18 @@ public class EntityDamagedByBulletEvent extends Event implements Cancellable {
     }
     
     /*///////////////////////////
-     * DAMAGE CALCULATOR 0.2
+     * DAMAGE CALCULATOR 0.4
      *///////////////////////////
 	private double calculateDamage(LivingEntity entity, double damage, double pen) {	
 		//calculate damage protection
 		if (protectingPiece != null) {
-			double armorProt = ConfigManager.getItemArmorProtection(protectingPiece);
+			this.armorProt = ConfigManager.getItemArmorProtection(protectingPiece);
 			armorProt = armorProt - armorProt * pen;
 			damage = damage - damage * armorProt;
+			double damageRedSpeed = 1 / ((1 - (((projectile.getVelocity().length() > ammo.getSpeed() ? ammo.getSpeed() : projectile.getVelocity().length()) * 100)) / (ammo.getSpeed() * 100)) / (1 / ConfigManager.getDamageReductionSpeed()));
+			double damageRedPen = 1 / ((1 - (pen * 100) / (ammo.getArmorPenetration() * 100)) / (1 / ConfigManager.getDamageReductionPenetration()));
+			damage = damage - damage / damageRedSpeed; //speed loss damage reduction
+			damage = damage - damage / damageRedPen; //penetration loss damage reduction
 		}
 		return damage ;
 	}
@@ -152,6 +157,10 @@ public class EntityDamagedByBulletEvent extends Event implements Cancellable {
     
     public ItemStack getHitArmorPiece() {
     	return this.protectingPiece;
+    }
+    
+    public double getArmorProtection() {
+    	return this.armorProt;
     }
     
 	///////////////////////////////////

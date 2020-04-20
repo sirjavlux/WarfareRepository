@@ -38,6 +38,14 @@ public class ConfigManager {
 	private static List<Material> ignoredBlocks = new ArrayList<>();
 	private static boolean ignoreOpenGate;
 	
+	private static double speedRedEntity;
+	private static double speedRedObsticle;
+	private static double penRedArmor;
+	private static double penRedObsticle;
+	private static double penRedEntity;
+	private static double damageRedSpeed;
+	private static double damageRedPen;
+	
 	public static void loadConfig(FileConfiguration conf) {
 		//armor protection data
 		leatherHelmetProt = conf.contains("armor.protection.helmet.leather") ? conf.getDouble("armor.protection.helmet.leather") : 0.15;
@@ -72,10 +80,27 @@ public class ConfigManager {
 			}
 		}
 		ignoreOpenGate = conf.contains("projectile.ignore-open.fence-gate") ? conf.getBoolean("projectile.ignore-open.fence-gate") : true;
+		
+		//collateral speed/penetration affecting values
+		speedRedEntity = conf.contains("projectile.speed-reduction.entity") ? conf.getDouble("projectile.speed-reduction.entity") : 0.4;
+		speedRedObsticle = conf.contains("projectile.speed-reduction.obsticle") ? conf.getDouble("projectile.speed-reduction.obsticle") : 0.1;
+		penRedArmor = conf.contains("projectile.penetration-reduction.armor") ? conf.getDouble("projectile.penetration-reduction.armor") : 0.6;
+		penRedObsticle = conf.contains("projectile.penetration-reduction.obsticle") ? conf.getDouble("projectile.penetration-reduction.obsticle") : 0.1;
+		penRedEntity = conf.contains("projectile.penetration-reduction.entity") ? conf.getDouble("projectile.penetration-reduction.entity") : 0.2;
+		damageRedSpeed = conf.contains("projectile.damage-reduction.speed") ? conf.getDouble("projectile.damage-reduction.speed") : 0.4;
+		damageRedPen = conf.contains("projectile.damage-reduction.penetration") ? conf.getDouble("projectile.damage-reduction.penetration") : 0.2;
 	}
 	
 	public static List<Material> getIgnoredBlocks() { return ignoredBlocks; }
 	public static boolean ignoreOpenGates() { return ignoreOpenGate; }
+	
+	public static double getSpeedReductionEntity() { return speedRedEntity; }
+	public static double getSpeedReductionObsticle() { return speedRedObsticle; }
+	public static double getPenetrationReductionArmor() { return penRedArmor; }
+	public static double getPenetrationReductionObsticle() { return penRedObsticle; }
+	public static double getPenetrationReductionEntity() { return penRedEntity; }
+	public static double getDamageReductionSpeed() { return damageRedSpeed; }
+	public static double getDamageReductionPenetration() { return damageRedPen; }
 	
 	public static double getItemArmorProtection(ItemStack item) {
 		double armorProt = 0;
