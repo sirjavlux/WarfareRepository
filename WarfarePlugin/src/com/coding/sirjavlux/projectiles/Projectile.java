@@ -20,8 +20,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
 import com.coding.sirjavlux.core.ConfigManager;
+import com.coding.sirjavlux.events.BulletHitEvent;
 import com.coding.sirjavlux.events.EntityDamagedByBulletEvent;
 import com.coding.sirjavlux.types.Ammo;
+import com.coding.sirjavlux.types.AmmoType;
 import com.coding.sirjavlux.types.Weapon;
 
 import net.minecraft.server.v1_15_R1.EntityLiving;
@@ -40,6 +42,7 @@ public class Projectile extends EntitySnowball {
 	double penetration;
 	double bulletSpeed;
 	List<LivingEntity> hitEntities;
+	Block block;
 	
 	public Projectile(net.minecraft.server.v1_15_R1.World world, EntityLiving e, ItemStack item, Weapon weapon, Ammo ammo) {
 		super(world, e);
@@ -66,7 +69,7 @@ public class Projectile extends EntitySnowball {
 		 *//////////////////////////////////////////
 		Location hitLoc = new Location(bukkitWorld, movingobjectposition.getPos().getX(), movingobjectposition.getPos().getY(), movingobjectposition.getPos().getZ());
 		Location hitBlockLoc = hitLoc.getBlock().getLocation().add(0.5, 0.5, 0.5);
-		Block block = hitBlockLoc.getBlock();
+		block = hitBlockLoc.getBlock();
 		Material mat = block.getType();
 		//check if hit location has potential target
 		if (movingobjectposition.getType().equals(EnumMovingObjectType.BLOCK)) {
@@ -199,7 +202,25 @@ public class Projectile extends EntitySnowball {
 	private void projectileHitEvent() {
 		CraftEntity craftEntity = this.getBukkitEntity();
 		org.bukkit.entity.Projectile projectile = (org.bukkit.entity.Projectile) craftEntity;
+		BulletHitEvent event = new BulletHitEvent(ammo, projectile);
+		Bukkit.getPluginManager().callEvent(event);
 		
+		if (!event.isCancelled()) {
+			Ammo eventAmmo = event.getAmmo();
+			AmmoType type = eventAmmo.getAmmoType();
+			switch (type) {
+			case Explosive:
+				break;
+			case Flame:
+				break;
+			case Incindiary:
+				break;
+			case Regular:
+				break;
+			case Split:
+				break;
+			}
+		}
 	}
 	
 	/*///////////////////////////////////
