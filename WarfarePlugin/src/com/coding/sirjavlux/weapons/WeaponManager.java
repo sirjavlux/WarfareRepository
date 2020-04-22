@@ -254,6 +254,11 @@ public class WeaponManager {
 	 * GIVING ITEMS
 	 *////////////////////////////////
 	public static void givePlayerWeapon(Player p, Weapon weapon) {
+		//give item
+		inventoryHandler.giveToPlayer(p, generateWeapon(weapon), p.getLocation());
+	}
+	
+	public static ItemStack generateWeapon(Weapon weapon) {
 		ItemStack wItem = new ItemStack(weapon.getMat());
 		//add nms tags
 		net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(wItem);
@@ -270,12 +275,15 @@ public class WeaponManager {
 		//update display data of item
 		weaponItem.hardUpdate(wItem);
 		wItem = saveWeaponData(wItem);
-		
-		//give item
-		inventoryHandler.giveToPlayer(p, wItem, p.getLocation());
+		return wItem;
 	}
 	
 	public static void givePlayerMagazine(Player p, Magazine mag) {
+		//give item
+		inventoryHandler.giveToPlayer(p, generateMagazine(mag), p.getLocation());
+	}
+	
+	public static ItemStack generateMagazine(Magazine mag) {
 		ItemStack magItem = new ItemStack(mag.getMaterial());
 		
 		//add nms tags
@@ -291,13 +299,23 @@ public class WeaponManager {
 		magazineItems.put(uuid, magazineItem);
 		//update display data of item
 		magazineItem.update(magItem);
-		//give item
-		inventoryHandler.giveToPlayer(p, magItem, p.getLocation());
+		return magItem;
 	}
 	
 	public static void giveAmmo(Player p, Ammo ammo, int amount) {
-		ItemStack ammoItem = new ItemStack(ammo.getMaterial());
 		int maxStack = ammo.getMaxStackSize();
+		//give item
+		while (amount > 0) {
+			ItemStack ammoItem = generateAmmo(ammo);
+			int amountToAdd = amount > maxStack ? maxStack : amount;
+			amount -= amountToAdd;
+			ammoItem.setAmount(amountToAdd);
+			inventoryHandler.giveToPlayer(p, ammoItem, p.getLocation());
+		}
+	}
+	
+	public static ItemStack generateAmmo(Ammo ammo) {
+		ItemStack ammoItem = new ItemStack(ammo.getMaterial());
 		
 		//add nms tags
 		net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(ammoItem);
@@ -308,18 +326,28 @@ public class WeaponManager {
 		ammoItem = CraftItemStack.asBukkitCopy(NMSItem);
 		
 		//update display data of item
-		updateAmmoItem(ammoItem, p);
-		
-		//give item
-		while (amount > 0) {
-			int amountToAdd = amount > maxStack ? maxStack : amount;
-			amount -= amountToAdd;
-			ammoItem.setAmount(amountToAdd);
-			inventoryHandler.giveToPlayer(p, ammoItem, p.getLocation());
-		}
+		updateAmmoItem(ammoItem);
+		return ammoItem;
 	}
 	
-	public static void updateAmmoItem(ItemStack item, Player p) {
+	public static ItemStack generateAmmo(Ammo ammo, int amount) {
+		ItemStack ammoItem = new ItemStack(ammo.getMaterial());
+		
+		//add nms tags
+		net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(ammoItem);
+		NBTTagCompound tagComp = NMSItem.hasTag() ? NMSItem.getTag() : new NBTTagCompound();
+		tagComp.setString("name", ammo.getName());
+		tagComp.setString("uuid", UUID.randomUUID().toString());
+		NMSItem.setTag(tagComp);
+		ammoItem = CraftItemStack.asBukkitCopy(NMSItem);
+		
+		//update display data of item
+		updateAmmoItem(ammoItem);
+		ammoItem.setAmount(amount > ammoItem.getMaxStackSize() ? ammoItem.getMaxStackSize() : amount);
+		return ammoItem;
+	}
+	
+	public static void updateAmmoItem(ItemStack item) {
 		if (isAmmunition(item)) {
 			ItemMeta meta = item.getItemMeta();
 			
