@@ -70,6 +70,7 @@ public class MagazineItem {
 		meta.setLore(loreList);
 		
 		item.setItemMeta(meta);
+		item.setType(mag.getMaterial());
 		updateNextAmmo();
 	}
 	

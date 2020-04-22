@@ -123,6 +123,20 @@ public class ItemListener implements Listener {
 						NBTTagCompound tagCompC = NMSItemC.getTag();
 						UUID uuidMag = UUID.fromString(tagCompC.getString("uuid"));
 						MagazineItem magItem = WeaponManager.getMagazineItem(uuidMag);
+						List<Ammo> rounds = magItem.getRounds();
+						List<Ammo> barrelRounds = weaponItem.getBarrelAmmo();
+						int spaceEmpty = weaponItem.getWeapon().getBarrelAmmoCap() - barrelRounds.size();
+						for (int i = 0; i < spaceEmpty; i++) {
+							if (!rounds.isEmpty()) {
+								List<Ammo> barrelRoundsNew = new ArrayList<>();
+								barrelRoundsNew.add(rounds.get(0));
+								barrelRounds.addAll(barrelRounds);
+								barrelRounds = barrelRoundsNew;
+								rounds.remove(rounds.size() - 1);
+							}
+						}
+						magItem.setRounds(rounds);
+						weaponItem.setBarrelAmmo(barrelRounds);
 						weaponItem.setMagazineItem(magItem);
 						weaponItem.hardUpdate(item);
 						weaponItem.updateNextAmmo();

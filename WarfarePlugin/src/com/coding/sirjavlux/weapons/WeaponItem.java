@@ -106,8 +106,6 @@ public class WeaponItem {
 				.replaceAll("%max-ammo%", String.valueOf(maxAmmo)));
 		meta.setDisplayName(displayName);
 		
-		item.setItemMeta(meta);
-		
 		//lore
 		String[] lore = weapon.getLore();
 		List<String> loreList = new ArrayList<>();
@@ -118,6 +116,7 @@ public class WeaponItem {
 		meta.setLore(loreList);
 		
 		item.setItemMeta(meta);
+		item.setType(weapon.getMat());
 	}
 	
 	public void saveData(ItemStack item, Player p, int slot) {
