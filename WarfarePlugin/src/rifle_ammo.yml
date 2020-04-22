@@ -9,6 +9,7 @@ caliber: "5.45x39"
 material: STONE
 damage: 2
 armor-penetration: 0.2
-max-stack-size: 20
+max-stack-size: 40
+armor-damage: 16
 #This is the ammo type, valid types are Regular, Split, Incindiary, Flame, Explosive
 type: Regular

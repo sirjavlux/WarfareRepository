@@ -22,6 +22,7 @@ public class MagazineItem {
 		this.mag = mag;
 		this.uuid = uuid;
 		rounds = new ArrayList<>();
+		updateNextAmmo();
 	}
 	
 	public void addRounds(Ammo ammo, int amount) {
@@ -51,7 +52,7 @@ public class MagazineItem {
 		ItemMeta meta = item.getItemMeta();
 		
 		int ammo = rounds.size();
-		int maxAmmo =  mag.getAmmoCapasity();
+		int maxAmmo = mag.getAmmoCapasity();
 		
 		//displayName
 		String displayName = mag.getDisplayName();
@@ -69,6 +70,7 @@ public class MagazineItem {
 		meta.setLore(loreList);
 		
 		item.setItemMeta(meta);
+		updateNextAmmo();
 	}
 	
 	private void updateNextAmmo() {
@@ -79,5 +81,5 @@ public class MagazineItem {
 	public UUID getUniqueId() { return uuid; }
 	public List<Ammo> getRounds() { return rounds; }
 	public Ammo getNextAmmo() { return nextAmmo; }
-	public void setRounds(List<Ammo> rounds) { this.rounds = rounds; }
+	public void setRounds(List<Ammo> rounds) { this.rounds = rounds == null ? new ArrayList<Ammo>() : rounds; }
 }

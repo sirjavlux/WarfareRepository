@@ -1,2 +1,22 @@
 name: assaultrifle
+#valid types are BoltAction, SemiAuto, Auto, Burst
 type: Auto
+material: WOODEN_PICKAXE
+smoke-enabled: false
+damage: 2.0
+#use & for color codes
+#valid placeholders are %ammo% %max-ammo%
+lore:
+    - line1
+    - line2
+    - "%ammo% / %max-ammo%"
+display-name: "&e&lAssault Rifle"
+loaded-by-default: true
+barrel-ammo-cap: 1
+require-mag: true
+default-magazine: "riflemag"
+magazine-required:
+    - "riflemag"
+barrel-caliber: "5.45x39"
+pre-load-ammo: rifleammo
+fire-rate: 6

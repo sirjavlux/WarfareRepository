@@ -53,7 +53,7 @@ public class WeaponItem {
 		if (weapon.requiresMagazine()) {
 			if (mag != null) {
 				Ammo swapAmmo = mag.removeBullet();
-				barrelAmmo.add(swapAmmo);
+				if (swapAmmo != null) barrelAmmo.add(swapAmmo);
 			}
 		}
 		//check if burst is empty
@@ -133,6 +133,6 @@ public class WeaponItem {
 	public int getBurstAmountRemaning() { return burstBulletsLeft; }
 	public void resetBurst() { burstBulletsLeft = weapon.getBurstAmount(); }
 	public MagazineItem getMagazineItem() { return mag; }
-	public void setBarrelAmmo(List<Ammo> barrelAmmo) { this.barrelAmmo = barrelAmmo; }
+	public void setBarrelAmmo(List<Ammo> barrelAmmo) { this.barrelAmmo = barrelAmmo == null ? new ArrayList<Ammo>() : barrelAmmo; }
 	public void setMagazineItem(MagazineItem magItem) { this.mag = magItem; }
 }

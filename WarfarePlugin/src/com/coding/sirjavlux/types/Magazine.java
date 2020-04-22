@@ -16,6 +16,8 @@ public class Magazine {
 		this.caliber = caliber;
 		this.name = name;
 		this.mat = mat;
+		this.displayName = displayName;
+		this.lore = lore;
 	}
 	
 	public int getAmmoCapasity() { return ammoCap; }

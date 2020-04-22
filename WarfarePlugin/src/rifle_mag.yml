@@ -1,0 +1,9 @@
+name: riflemag
+material: GOLD_BLOCK
+caliber: "5.45x39"
+ammo-capasity: 30
+lore:
+    - line1
+    - line2
+    - "%ammo% / %max-ammo%"
+display-name: "&e&lRifle Magazine &75.45x39"

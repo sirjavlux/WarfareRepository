@@ -271,6 +271,14 @@ public class WeaponManager {
 		wItem = CraftItemStack.asBukkitCopy(NMSItem);
 		//add weapon to stored weapons
 		WeaponItem weaponItem = new WeaponItem(weapon, wUUID);
+		if (weapon.getDefaultMagazine() != null && weapon.requiresMagazine() && weapon.getPreLoadAmmo() != null) {
+			Ammo preloadAmmo = weapon.getPreLoadAmmo();
+			MagazineItem magItem = new MagazineItem(weapon.getDefaultMagazine(), generateRandomSafeUUID());
+			List<Ammo> rounds = new ArrayList<>();
+			for (int i = 0; i < magItem.getMagazine().getAmmoCapasity(); i++) rounds.add(preloadAmmo);
+			magItem.setRounds(rounds);
+			weaponItem.setMagazineItem(magItem);
+		}
 		weaponItems.put(wUUID, weaponItem);
 		//update display data of item
 		weaponItem.hardUpdate(wItem);

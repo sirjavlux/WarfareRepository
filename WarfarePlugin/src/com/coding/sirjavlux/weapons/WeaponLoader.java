@@ -46,6 +46,7 @@ public class WeaponLoader extends WeaponManager{
 			System.out.println("Loading magazine presets...");
 			magsFile.mkdir();
 			
+			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/magazines/rifle_mag.yml", "rifle_mag.yml");
 		}
 		loadMagazineConfigs();
 		
@@ -97,7 +98,7 @@ public class WeaponLoader extends WeaponManager{
 				List<Magazine> magList = new ArrayList<Magazine>();
 				for (String str : magReqStr) {
 					if (!isMagazine(str)) {
-						System.out.println(Color.RED + "The selected required magazine " + magReqStr + " in the weapon " + name + " didn't exist!" + Color.RESET);
+						System.out.println(Color.RED + "The selected required magazine " + str + " in the weapon " + name + " didn't exist!" + Color.RESET);
 						continue;
 					}
 					magList.add(getStoredMagazine(str));

@@ -1,7 +1,7 @@
 name: sniper
 #valid types are BoltAction, SemiAuto, Auto, Burst
 type: BoltAction
-material: WOODEN_PICKAXE
+material: WOODEN_AXE
 smoke-enabled: false
 damage: 2.0
 #use & for color codes
