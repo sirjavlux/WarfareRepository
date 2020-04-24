@@ -7,7 +7,7 @@ import com.coding.sirjavlux.commands.CommandManager;
 import com.coding.sirjavlux.listeners.AsyncBulletHandler;
 import com.coding.sirjavlux.listeners.InventoryListener;
 import com.coding.sirjavlux.listeners.ItemListener;
-import com.coding.sirjavlux.listeners.PlayerJoinQuitListener;
+import com.coding.sirjavlux.listeners.PlayerListener;
 import com.coding.sirjavlux.utils.Color;
 import com.coding.sirjavlux.weapons.WeaponLoader;
 
@@ -24,7 +24,7 @@ public class Main extends JavaPlugin {
 		//load listeners
 		Bukkit.getPluginManager().registerEvents(new AsyncBulletHandler(), this);
 		Bukkit.getPluginManager().registerEvents(new InventoryListener(), this);
-		Bukkit.getPluginManager().registerEvents(new PlayerJoinQuitListener(), this);
+		Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
 		Bukkit.getPluginManager().registerEvents(new ItemListener(), this);
 		
 		//commands

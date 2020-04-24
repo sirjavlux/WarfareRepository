@@ -184,13 +184,31 @@ public class Projectile extends EntitySnowball {
 			double bleedingDamage = 0;
 			boolean brokenBone = false;
 			boolean concussion = false;
+			
 			switch(event.getHitBodyPart()) {
 			case Chest: 
 				break;
 			case Head: 
+				double concussionChance = ConfigManager.getConcussionChance() + ConfigManager.getConcussionDamageChance() * event.damage();
+				if (concussionChance > Math.random()) concussion = true;
 				break;
 			case Leg: 
+				double brokenBoneChance = ConfigManager.getBreakLegDamageChance() * event.damage();
+				if (brokenBoneChance > Math.random()) brokenBone = true;
 				break;
+			}
+			
+			double bleedingChance = ConfigManager.getBleadingDamageChance() * event.damage();
+			if (bleedingChance > Math.random()) bleedingDamage = ConfigManager.getBleedingPerDamage() * event.damage();
+			
+			if (bleedingDamage > 0 && ConfigManager.bleedingEnabled()) {
+				
+			}
+			if (brokenBone && ConfigManager.breakLegEnabled()) {
+				
+			}
+			if (concussion && ConfigManager.concussionEnabled()) {
+				
 			}
 			//calculate reduced collateral speed
 			double penRed = ConfigManager.getPenetrationReductionArmor();
