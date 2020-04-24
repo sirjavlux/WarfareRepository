@@ -23,8 +23,10 @@ public class Weapon {
 	private Ammo preloadAmmo;
 	private int burstAmount;
 	private double burstSpeed;
+	private double recoilRed;
+	private double knockbackRed;
 	
-	public Weapon (WeaponType type, Material mat, Magazine[] magReq, String name, double[] smokeOffset, boolean smokeEnabled, double smokeIntensity, double damage, String[] lore, String displayName, Magazine defaultMag, boolean loadedByDefault, boolean reqMag, int barrelAmmoCap, String caliber, double fireRate, Ammo preloadAmmo, int burstAmount, double burstSpeed) {
+	public Weapon (WeaponType type, Material mat, Magazine[] magReq, String name, double[] smokeOffset, boolean smokeEnabled, double smokeIntensity, double damage, String[] lore, String displayName, Magazine defaultMag, boolean loadedByDefault, boolean reqMag, int barrelAmmoCap, String caliber, double fireRate, Ammo preloadAmmo, int burstAmount, double burstSpeed, double recoilRed, double knockbackRed) {
 		this.type = type;
 		this.mat = mat;
 		this.magReq = magReq;
@@ -44,6 +46,8 @@ public class Weapon {
 		this.preloadAmmo = preloadAmmo;
 		this.burstAmount = burstAmount;
 		this.burstSpeed = burstSpeed;
+		this.recoilRed = recoilRed;
+		this.knockbackRed = knockbackRed;
 	}
 	
 	public WeaponType getType() { return type; }
@@ -65,4 +69,6 @@ public class Weapon {
 	public Ammo getPreLoadAmmo() { return preloadAmmo; }
 	public int getBurstAmount() { return burstAmount; }
 	public double getBurstSpeed() { return burstSpeed; }
+	public double getRecoilReduction() { return recoilRed; }
+	public double getKnockbackReduction() { return knockbackRed; }
 }

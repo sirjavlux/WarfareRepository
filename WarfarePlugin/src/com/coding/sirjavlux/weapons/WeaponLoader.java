@@ -201,9 +201,13 @@ public class WeaponLoader extends WeaponManager{
 			int burstAmount = conf.contains("burst-amount") ? conf.getInt("burst-amount") : 3;
 			//burst speed
 			double burstSpeed = conf.contains("burst-speed") ? conf.getDouble("burst-speed") : 7;
+			//recoil reduction
+			double recoilRed = conf.contains("recoil-reduction") ? conf.getDouble("recoil-reduction") : 0;
+			//knockback reduction
+			double knockbackRed = conf.contains("knockback-reduction") ? conf.getDouble("knockback-reduction") : 0;
 			
 			//create weapon
-			Weapon weapon = new Weapon(type, mat, magReq, name, smokeOffset, smokeEnabled, smokeIntensity, damage, lore, displayName, defaultMag, loadedByDefault, reqMag, barrelAmmoCap, caliber, fireRate, preLoadAmmo, burstAmount, burstSpeed);
+			Weapon weapon = new Weapon(type, mat, magReq, name, smokeOffset, smokeEnabled, smokeIntensity, damage, lore, displayName, defaultMag, loadedByDefault, reqMag, barrelAmmoCap, caliber, fireRate, preLoadAmmo, burstAmount, burstSpeed, recoilRed, knockbackRed);
 			weaponStored.put(name, weapon);
 			badWeapons.remove(file.getName());
 			goodWeapons.add(file.getName());
@@ -376,9 +380,13 @@ public class WeaponLoader extends WeaponManager{
 			double knockBack = conf.contains("knockback") ? conf.getDouble("knockback") : 0.5;
 			//armor damage 
 			double armorDamage = conf.contains("armor-damage") ? conf.getDouble("armor-damage") : 7;
-			
+			//recoil
+			double recoil = conf.contains("recoil") ? conf.getDouble("recoil") : 0;
+			//knockback
+			double knockback = conf.contains("knockback") ? conf.getDouble("knockback") : 0;
+					
 			//add ammunition to map
-			Ammo ammo = new Ammo(name, caliber, mat, damage, armorPen, lore, displayName, speed, maxStackSize, shootMat, type, splitBulletAmount, explosionRange, explosionDamage, explosionDamageDrop, knockBack, armorDamage);
+			Ammo ammo = new Ammo(name, caliber, mat, damage, armorPen, lore, displayName, speed, maxStackSize, shootMat, type, splitBulletAmount, explosionRange, explosionDamage, explosionDamageDrop, knockBack, armorDamage, recoil, knockback);
 			WeaponManager.ammoStored.put(name, ammo);
 			
 			badAmmo.remove(file.getName());

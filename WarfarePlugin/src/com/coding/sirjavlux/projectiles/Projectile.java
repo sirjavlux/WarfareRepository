@@ -180,7 +180,18 @@ public class Projectile extends EntitySnowball {
 					}
 				}	
 			}
-			
+			//calculate concussion, broken legs, bleeding
+			double bleedingDamage = 0;
+			boolean brokenBone = false;
+			boolean concussion = false;
+			switch(event.getHitBodyPart()) {
+			case Chest: 
+				break;
+			case Head: 
+				break;
+			case Leg: 
+				break;
+			}
 			//calculate reduced collateral speed
 			double penRed = ConfigManager.getPenetrationReductionArmor();
 			double speedRed = ConfigManager.getSpeedReductionEntity();

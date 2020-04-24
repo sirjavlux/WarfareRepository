@@ -104,7 +104,7 @@ public class ItemListener implements Listener {
 		HumanEntity p = e.getWhoClicked();
 		
 		/*///////////////////////////////
-		 * UNLOAD AND LOAD MAGAZINE
+		 * UNLOAD AND LOAD WEAPON
 		 *///////////////////////////////
 		
 		//if weapon
@@ -223,6 +223,11 @@ public class ItemListener implements Listener {
 				}
 			}
 		}
+		
+		/*///////////////////////////////
+		 * UNLOAD AND LOAD MAGAZINE
+		 *///////////////////////////////
+		
 		//if magazine
 		else if (WeaponManager.isMagazine(item)) {
 			//load 
@@ -289,6 +294,11 @@ public class ItemListener implements Listener {
 				}
 			}
 		}
+		
+		/*///////////////////////////////
+		 * FIX AMMO STACKING
+		 *///////////////////////////////
+		
 		//if ammo
 		else if (WeaponManager.isAmmunition(item) && WeaponManager.isAmmunition(cursor) && (click.equals(ClickType.RIGHT) || click.equals(ClickType.LEFT))) {
 			net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(item);

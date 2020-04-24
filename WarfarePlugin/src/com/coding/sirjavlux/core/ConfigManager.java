@@ -46,6 +46,23 @@ public class ConfigManager {
 	private static double damageRedSpeed;
 	private static double damageRedPen;
 	
+	private static boolean damageBreakLegEnabled;
+	private static boolean damageConcussionEnabled;
+	private static boolean damageBleedingEnabled;
+	private static double damageBreakLegHeight;
+	private static double damageBreakLegChanceDamage;
+	private static double damageConcussionChanceDamage;
+	private static double damageConcussionChance;
+	private static double damageBleedingChanceDamage;
+	private static double damageBleedingPerDamage;
+	private static int damageBrokenLegTime;
+	private static int damageConcussionTime;
+	private static int damageBleedingTime;
+	        
+	private static float recoilYawModifier;
+	private static boolean recoilEnabled;
+	private static boolean knockbackEnabled;
+	
 	public static void loadConfig(FileConfiguration conf) {
 		//armor protection data
 		leatherHelmetProt = conf.contains("armor.protection.helmet.leather") ? conf.getDouble("armor.protection.helmet.leather") : 0.15;
@@ -89,7 +106,43 @@ public class ConfigManager {
 		penRedEntity = conf.contains("projectile.penetration-reduction.entity") ? conf.getDouble("projectile.penetration-reduction.entity") : 0.2;
 		damageRedSpeed = conf.contains("projectile.damage-reduction.speed") ? conf.getDouble("projectile.damage-reduction.speed") : 0.4;
 		damageRedPen = conf.contains("projectile.damage-reduction.penetration") ? conf.getDouble("projectile.damage-reduction.penetration") : 0.2;
+		
+		//damage settings
+		damageBreakLegEnabled = conf.contains("damage.break-leg.enabled") ? conf.getBoolean("damage.break-leg.enabled") : true;
+		damageConcussionEnabled = conf.contains("damage.concussion.enabled") ? conf.getBoolean("damage.concussion.enabled") : true;
+		damageBleedingEnabled = conf.contains("damage.bleeding.enabled") ? conf.getBoolean("damage.bleeding.enabled") : true;
+		damageBreakLegHeight = conf.contains("damage.break-leg.height") ? conf.getDouble("damage.break-leg.height") : 4;
+		damageBreakLegChanceDamage = conf.contains("damage.break-leg.chance-per-legdamage") ? conf.getDouble("damage.break-leg.chance-per-legdamage") : 0.06;
+		damageConcussionChanceDamage = conf.contains("damage.concussion.chance-per-headdamage") ? conf.getDouble("damage.concussion.chance-per-headdamage") : 0.08;
+		damageConcussionChance = conf.contains("damage.concussion.chance-per-head") ? conf.getDouble("damage.concussion.chance-per-head") : 0.1;
+		damageBleedingChanceDamage = conf.contains("damage.bleeding.chance-per-damage") ? conf.getDouble("damage.bleeding.chance-per-damage") : 0.04;
+		damageBleedingPerDamage = conf.contains("damage.bleeding.bleeding-per-damage") ? conf.getDouble("damage.bleeding.bleeding-per-damage") : 0.1;
+		damageBrokenLegTime = conf.contains("damage.break-leg.time-active-ticks") ? conf.getInt("damage.break-leg.time-active-ticks") : 24000;
+		damageConcussionTime = conf.contains("damage.concussion.time-active-ticks") ? conf.getInt("damage.concussion.time-active-ticks") : 12000;
+		damageBleedingTime = conf.contains("damage.bleeding.time-active-ticks") ? conf.getInt("damage.bleeding.time-active-ticks") : 6000;
+	
+		//shooting settings
+		recoilYawModifier = (float) (conf.contains("shooting.recoil.yaw-modifier") ? conf.getDouble("shooting.recoil.yaw-modifier") : 0.2);
+		recoilEnabled = conf.contains("shooting.recoil.enabled") ? conf.getBoolean("shooting.recoil.enabled") : true;
+		knockbackEnabled = conf.contains("shooting.knockback.enabled") ? conf.getBoolean("shooting.knockback.enabled") : true;
 	}
+	
+	public static float getRecoilYawModifier() { return recoilYawModifier; }
+	public static boolean recoilEnabled() { return recoilEnabled; }
+	public static boolean knockbackEnabled() { return knockbackEnabled; }
+	
+	public static boolean breakLegEnabled() { return damageBreakLegEnabled; }
+	public static boolean concussionEnabled() { return damageConcussionEnabled; }
+	public static boolean bleedingEnabled() { return damageBleedingEnabled; }
+	public static double getBreakLegHeight() { return damageBreakLegHeight; }
+	public static double getBreakLegDamageChance() { return damageBreakLegChanceDamage; }
+	public static double getConcussionDamageChance() { return damageConcussionChanceDamage; }
+	public static double getConcussionChance() { return damageConcussionChance; }
+	public static double getBleadingDamageChance() { return damageBleedingChanceDamage; }
+	public static double getBleedingPerDamage() { return damageBleedingPerDamage; }
+	public static int getBrokenLegTime() { return damageBrokenLegTime; }
+	public static int getConcussionTime() { return damageConcussionTime; }
+	public static int getBleedingTime() { return damageBleedingTime; }
 	
 	public static List<Material> getIgnoredBlocks() { return ignoredBlocks; }
 	public static boolean ignoreOpenGates() { return ignoreOpenGate; }

@@ -20,3 +20,5 @@ magazine-required:
 barrel-caliber: "5.45x39"
 pre-load-ammo: rifleammo
 fire-rate: 6
+recoil-reduction: 1.3
+knockback-reduction: 0.1

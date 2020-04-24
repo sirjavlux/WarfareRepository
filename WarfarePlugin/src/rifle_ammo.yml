@@ -13,3 +13,5 @@ max-stack-size: 40
 armor-damage: 16
 #This is the ammo type, valid types are Regular, Split, Incindiary, Flame, Explosive
 type: Regular
+recoil: 2.3
+knockback: 0.2

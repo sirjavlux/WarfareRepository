@@ -59,3 +59,35 @@ projectile:
     damage-reduction:
         speed: 0.7
         penetration: 0.5
+
+###################
+# DAMAGE SETTINGS #
+###################
+
+damage:
+    break-leg:
+        enabled: true
+        height: 4
+        chance-per-legdamage: 0.06
+        time-active-ticks:  24000
+    concussion:
+        enabled: true
+        chance-hit-head: 0.1
+        chance-per-headdamage: 0.08
+        time-active-ticks:  12000
+    bleeding:
+        enabled: true
+        chance-per-damage: 0.04
+        bleeding-per-damage: 0.1
+        time-active-ticks:  6000
+
+###################
+# WEAPON SHOOTING #
+###################
+
+shooting:
+    recoil:
+        enabled: true
+        yaw-modifier: 0.2
+    knockback:
+        enabled true

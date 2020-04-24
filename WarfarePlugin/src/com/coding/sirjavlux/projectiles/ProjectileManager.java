@@ -1,20 +1,32 @@
 package com.coding.sirjavlux.projectiles;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
+
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 
+import com.coding.sirjavlux.core.ConfigManager;
 import com.coding.sirjavlux.events.BulletFireEvent;
 import com.coding.sirjavlux.types.Ammo;
 import com.coding.sirjavlux.types.Weapon;
 
 import net.minecraft.server.v1_15_R1.EntityPlayer;
+import net.minecraft.server.v1_15_R1.PacketPlayOutPosition;
+import net.minecraft.server.v1_15_R1.PacketPlayOutPosition.EnumPlayerTeleportFlags;
 import net.minecraft.server.v1_15_R1.World;
 
 public class ProjectileManager {
 
+	private static Set<EnumPlayerTeleportFlags> teleportFlags = new HashSet<>(Arrays.asList(EnumPlayerTeleportFlags.X, EnumPlayerTeleportFlags.Y, EnumPlayerTeleportFlags.Z));
+	
 	public static void fireProjectile(Player p, Weapon weapon, Ammo ammo) {
 		EntityPlayer eP = ((CraftPlayer) p).getHandle();
 		World w = eP.getWorld();
@@ -24,8 +36,35 @@ public class ProjectileManager {
 		Bukkit.getPluginManager().callEvent(event);
 		
 		if (!event.isCancelled()) {
+			//shoot projectile
 			Projectile ptile = new Projectile(w, eP, CraftItemStack.asNMSCopy(item), weapon, event.getAmmo());
 			CustomEntitySnowballRegistry.spawnEntity(ptile, w);
+			//manage recoil
+			if (ConfigManager.recoilEnabled()) {
+				float yawModifier = ConfigManager.getRecoilYawModifier();
+				Random r = new Random();
+				double recoil = ammo.getRecoil();
+				double recoilRed = weapon.getRecoilReduction();
+				double finalRecoil = recoil - recoilRed < 0 ? 0 : recoil - recoilRed;
+				Location pLoc = p.getLocation();
+				float yaw = pLoc.getYaw();
+				float pitch = pLoc.getPitch();
+				float yawRecMod = (float) (finalRecoil * yawModifier);
+				float yawAdd = -yawModifier + r.nextFloat() * (yawRecMod - -yawModifier);
+				float pitchAdd = (float) (finalRecoil - yawAdd) * -1f;
+				yaw += yawAdd;
+				pitch += pitchAdd;
+				PacketPlayOutPosition packet = new PacketPlayOutPosition(0.0, 0.0, 0.0, yaw, pitch, teleportFlags, 0);
+			    ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
+			}
+			//manage knockback
+			if (ConfigManager.knockbackEnabled()) {
+				double knockback = ammo.getKnockback();
+				double knockbackRed = weapon.getKnockbackReduction();
+				double velToAdd = knockback - knockbackRed < 0 ? 0 : knockback - knockbackRed;
+				Vector vel = p.getEyeLocation().getDirection().normalize().multiply(velToAdd);
+				p.setVelocity(p.getVelocity().subtract(vel));
+			}
 		}
 	}
 	
