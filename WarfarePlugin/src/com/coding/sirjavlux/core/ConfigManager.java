@@ -58,7 +58,11 @@ public class ConfigManager {
 	private static int damageBrokenLegTime;
 	private static int damageConcussionTime;
 	private static int damageBleedingTime;
-	        
+	private static int damageTimeBetweanBleeding;
+	private static boolean damageOnlyPlayerBleeding;
+	private static int damageConcussionStrenght;
+	private static int damageBrokenLegStrenght;
+	
 	private static float recoilYawModifier;
 	private static boolean recoilEnabled;
 	private static boolean knockbackEnabled;
@@ -120,7 +124,11 @@ public class ConfigManager {
 		damageBrokenLegTime = conf.contains("damage.break-leg.time-active-ticks") ? conf.getInt("damage.break-leg.time-active-ticks") : 24000;
 		damageConcussionTime = conf.contains("damage.concussion.time-active-ticks") ? conf.getInt("damage.concussion.time-active-ticks") : 12000;
 		damageBleedingTime = conf.contains("damage.bleeding.time-active-ticks") ? conf.getInt("damage.bleeding.time-active-ticks") : 6000;
-	
+		damageTimeBetweanBleeding = conf.contains("damage.bleeding.time-betwean-bleeding") ? conf.getInt("damage.bleeding.time-betwean-bleeding") : 20;
+		damageOnlyPlayerBleeding = conf.contains("damage.bleeding.only-players") ? conf.getBoolean("damage.bleeding.only-players") : false;
+		damageConcussionStrenght = conf.contains("damage.concussion.strenght") ? conf.getInt("damage.concussion.strenght") : 0;
+		damageBrokenLegStrenght = conf.contains("damage.break-leg.strenght") ? conf.getInt("damage.break-leg.strenght") : 1;
+		
 		//shooting settings
 		recoilYawModifier = (float) (conf.contains("shooting.recoil.yaw-modifier") ? conf.getDouble("shooting.recoil.yaw-modifier") : 0.2);
 		recoilEnabled = conf.contains("shooting.recoil.enabled") ? conf.getBoolean("shooting.recoil.enabled") : true;
@@ -143,6 +151,10 @@ public class ConfigManager {
 	public static int getBrokenLegTime() { return damageBrokenLegTime; }
 	public static int getConcussionTime() { return damageConcussionTime; }
 	public static int getBleedingTime() { return damageBleedingTime; }
+	public static int getTimeBetweanBleeding() { return damageTimeBetweanBleeding; }
+	public static boolean getOnlyPlayerBleeding() { return damageOnlyPlayerBleeding; }
+	public static int getConcussionStrenght() { return damageConcussionStrenght; }
+	public static int getBrokenLegStrenght() { return damageBrokenLegStrenght; }
 	
 	public static List<Material> getIgnoredBlocks() { return ignoredBlocks; }
 	public static boolean ignoreOpenGates() { return ignoreOpenGate; }

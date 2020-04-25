@@ -16,6 +16,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.coding.sirjavlux.core.ConfigManager;
+import com.coding.sirjavlux.health.HealthEffects;
 import com.coding.sirjavlux.weapons.WeaponManager;
 
 public class PlayerListener implements Listener {
@@ -71,7 +72,7 @@ public class PlayerListener implements Listener {
 			Location pLoc = p.getLocation();
 			double distance = playersInAir.get(uuid).distance(pLoc);
 			if (distance >= ConfigManager.getBreakLegHeight() && ConfigManager.breakLegEnabled()) {
-				
+				HealthEffects.breakLeg(p);
 			}
 			playersInAir.replace(uuid, null);
 		}

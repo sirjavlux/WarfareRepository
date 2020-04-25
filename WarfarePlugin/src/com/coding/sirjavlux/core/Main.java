@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.coding.sirjavlux.commands.CommandManager;
+import com.coding.sirjavlux.health.HealthEffects;
 import com.coding.sirjavlux.listeners.AsyncBulletHandler;
 import com.coding.sirjavlux.listeners.InventoryListener;
 import com.coding.sirjavlux.listeners.ItemListener;
@@ -15,17 +16,23 @@ public class Main extends JavaPlugin {
 	
 	private static Main instance;
 	private static AsyncBulletHandler bulletHandler;
+	private static HealthEffects healthEffects;
 	
 	@Override
 	public void onEnable() {
 		//create config if first launch
 		this.saveDefaultConfig();
 		
+		//create healtheffects and bullet handler instance
+		healthEffects = new HealthEffects();
+		bulletHandler = new AsyncBulletHandler();
+		
 		//load listeners
-		Bukkit.getPluginManager().registerEvents(new AsyncBulletHandler(), this);
+		Bukkit.getPluginManager().registerEvents(bulletHandler, this);
 		Bukkit.getPluginManager().registerEvents(new InventoryListener(), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
 		Bukkit.getPluginManager().registerEvents(new ItemListener(), this);
+		Bukkit.getPluginManager().registerEvents(healthEffects, this);
 		
 		//commands
 		this.getCommand("wf").setExecutor(new CommandManager());
@@ -52,5 +59,9 @@ public class Main extends JavaPlugin {
 	
 	public static AsyncBulletHandler getBulletHandler() {
 		return bulletHandler;
+	}
+	
+	public static HealthEffects getHealthEffects() {
+		return healthEffects;
 	}
 }

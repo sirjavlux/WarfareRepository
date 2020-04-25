@@ -22,6 +22,7 @@ import org.bukkit.util.Vector;
 import com.coding.sirjavlux.core.ConfigManager;
 import com.coding.sirjavlux.events.BulletHitEvent;
 import com.coding.sirjavlux.events.EntityDamagedByBulletEvent;
+import com.coding.sirjavlux.health.HealthEffects;
 import com.coding.sirjavlux.types.Ammo;
 import com.coding.sirjavlux.types.AmmoType;
 import com.coding.sirjavlux.types.Weapon;
@@ -202,13 +203,16 @@ public class Projectile extends EntitySnowball {
 			if (bleedingChance > Math.random()) bleedingDamage = ConfigManager.getBleedingPerDamage() * event.damage();
 			
 			if (bleedingDamage > 0 && ConfigManager.bleedingEnabled()) {
-				
+				HealthEffects.addBleeding(entity, bleedingDamage);
 			}
-			if (brokenBone && ConfigManager.breakLegEnabled()) {
-				
-			}
-			if (concussion && ConfigManager.concussionEnabled()) {
-				
+			if (entity instanceof Player) {
+				Player p = (Player) entity;
+				if (brokenBone && ConfigManager.breakLegEnabled()) {
+					HealthEffects.breakLeg(p);
+				}
+				if (concussion && ConfigManager.concussionEnabled()) {
+					HealthEffects.concussion(p);
+				}
 			}
 			//calculate reduced collateral speed
 			double penRed = ConfigManager.getPenetrationReductionArmor();
