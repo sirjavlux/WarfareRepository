@@ -69,6 +69,10 @@ public class MagazineItem {
 		}
 		meta.setLore(loreList);
 		
+		//set custom texture
+		meta.setCustomModelData(mag.getCustomModelData());
+		meta.setUnbreakable(true);
+		
 		item.setItemMeta(meta);
 		item.setType(mag.getMaterial());
 		updateNextAmmo();

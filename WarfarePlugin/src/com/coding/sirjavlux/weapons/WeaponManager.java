@@ -377,7 +377,12 @@ public class WeaponManager {
 			}
 			meta.setLore(loreList);
 			
+			//set custom texture
+			meta.setCustomModelData(ammo.getCustomModelData());
+			meta.setUnbreakable(true);
+			
 			item.setItemMeta(meta);
+			item.setType(ammo.getMaterial());
 		}
 	}
 }

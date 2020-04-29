@@ -23,8 +23,9 @@ public class Ammo {
 	private double armorDamage;
 	private double recoil;
 	private double knockback;
+	private int customModel; 
 	
-	public Ammo(String name, String cal, Material mat, double damage, double armorPen, String[] lore, String displayName, double speed, int maxStackSize, Material shootMat, AmmoType type, int splitBulletAmount, double explosionRange, double explotionDamage, double explotionDamageDrop, double knockBack, double armorDamage, double recoil, double knockback) {
+	public Ammo(String name, String cal, Material mat, double damage, double armorPen, String[] lore, String displayName, double speed, int maxStackSize, Material shootMat, AmmoType type, int splitBulletAmount, double explosionRange, double explotionDamage, double explotionDamageDrop, double knockBack, double armorDamage, double recoil, double knockback, int customModel) {
 		this.name = name;
 		this.cal = cal;
 		this.mat = mat;
@@ -44,6 +45,7 @@ public class Ammo {
 		this.armorDamage = armorDamage;
 		this.recoil = recoil;
 		this.knockback = knockback;
+		this.customModel = customModel;
 	}
 	
 	public String getName() { return name; }
@@ -65,4 +67,5 @@ public class Ammo {
 	public double getArmorDamage() { return armorDamage; }	
 	public double getRecoil() { return recoil; }
 	public double getKnockback() { return knockback; }
+	public int getCustomModelData() { return customModel; }
 }

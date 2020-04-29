@@ -15,3 +15,4 @@ armor-damage: 16
 type: Regular
 recoil: 2.3
 knockback: 0.2
+custom-model-data: 0

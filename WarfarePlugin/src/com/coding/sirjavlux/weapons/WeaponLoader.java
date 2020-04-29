@@ -207,9 +207,11 @@ public class WeaponLoader extends WeaponManager{
 			double knockbackRed = conf.contains("knockback-reduction") ? conf.getDouble("knockback-reduction") : 0;
 			//reload speed
 			int reloadSpeed = conf.contains("reload-speed") ? conf.getInt("reload-speed") : 80;
+			//custom model data
+			int customModel = conf.contains("custom-model-data") ? conf.getInt("custom-model-data") : 0;
 			
 			//create weapon
-			Weapon weapon = new Weapon(type, mat, magReq, name, smokeOffset, smokeEnabled, smokeIntensity, damage, lore, displayName, defaultMag, loadedByDefault, reqMag, barrelAmmoCap, caliber, fireRate, preLoadAmmo, burstAmount, burstSpeed, recoilRed, knockbackRed, reloadSpeed);
+			Weapon weapon = new Weapon(type, mat, magReq, name, smokeOffset, smokeEnabled, smokeIntensity, damage, lore, displayName, defaultMag, loadedByDefault, reqMag, barrelAmmoCap, caliber, fireRate, preLoadAmmo, burstAmount, burstSpeed, recoilRed, knockbackRed, reloadSpeed, customModel);
 			weaponStored.put(name, weapon);
 			badWeapons.remove(file.getName());
 			goodWeapons.add(file.getName());
@@ -280,9 +282,11 @@ public class WeaponLoader extends WeaponManager{
 			}
 			String[] lore = new String[loreList.size()];
 			lore = loreList.toArray(lore);
+			//custom model data
+			int customModel = conf.contains("custom-model-data") ? conf.getInt("custom-model-data") : 0;
 			
 			//add mag to map
-			Magazine mag = new Magazine(caliber, ammoCap, name, mat, displayName, lore);
+			Magazine mag = new Magazine(caliber, ammoCap, name, mat, displayName, lore, customModel);
 			WeaponManager.magazineStored.put(name, mag);
 			
 			badMags.remove(file.getName());
@@ -386,9 +390,11 @@ public class WeaponLoader extends WeaponManager{
 			double recoil = conf.contains("recoil") ? conf.getDouble("recoil") : 0;
 			//knockback
 			double knockback = conf.contains("knockback") ? conf.getDouble("knockback") : 0;
-					
+			//custom model data
+			int customModel = conf.contains("custom-model-data") ? conf.getInt("custom-model-data") : 0;
+			
 			//add ammunition to map
-			Ammo ammo = new Ammo(name, caliber, mat, damage, armorPen, lore, displayName, speed, maxStackSize, shootMat, type, splitBulletAmount, explosionRange, explosionDamage, explosionDamageDrop, knockBack, armorDamage, recoil, knockback);
+			Ammo ammo = new Ammo(name, caliber, mat, damage, armorPen, lore, displayName, speed, maxStackSize, shootMat, type, splitBulletAmount, explosionRange, explosionDamage, explosionDamageDrop, knockBack, armorDamage, recoil, knockback, customModel);
 			WeaponManager.ammoStored.put(name, ammo);
 			
 			badAmmo.remove(file.getName());

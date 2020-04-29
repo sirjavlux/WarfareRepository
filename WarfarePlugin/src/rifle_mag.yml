@@ -7,3 +7,4 @@ lore:
     - line2
     - "%ammo% / %max-ammo%"
 display-name: "&e&lRifle Magazine &75.45x39"
+custom-model-data: 0

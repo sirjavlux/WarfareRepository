@@ -10,14 +10,16 @@ public class Magazine {
 	private Material mat;
 	private String displayName;
 	private String[] lore;
+	private int customModel;
 	
-	public Magazine(String caliber, int ammoCap, String name, Material mat, String displayName, String[] lore) {
+	public Magazine(String caliber, int ammoCap, String name, Material mat, String displayName, String[] lore, int customModel) {
 		this.ammoCap = ammoCap;
 		this.caliber = caliber;
 		this.name = name;
 		this.mat = mat;
 		this.displayName = displayName;
 		this.lore = lore;
+		this.customModel = customModel;
 	}
 	
 	public int getAmmoCapasity() { return ammoCap; }
@@ -26,4 +28,5 @@ public class Magazine {
 	public Material getMaterial() { return mat; }
 	public String getDisplayName() { return displayName; }
 	public String[] getLore() { return lore; }
+	public int getCustomModelData() { return customModel; }
 }

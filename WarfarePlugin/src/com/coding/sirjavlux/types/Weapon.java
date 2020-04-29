@@ -26,8 +26,9 @@ public class Weapon {
 	private double recoilRed;
 	private double knockbackRed;
 	private int reloadSpeed;
+	private int customModel;
 	
-	public Weapon (WeaponType type, Material mat, Magazine[] magReq, String name, double[] smokeOffset, boolean smokeEnabled, double smokeIntensity, double damage, String[] lore, String displayName, Magazine defaultMag, boolean loadedByDefault, boolean reqMag, int barrelAmmoCap, String caliber, double fireRate, Ammo preloadAmmo, int burstAmount, double burstSpeed, double recoilRed, double knockbackRed, int reloadSpeed) {
+	public Weapon (WeaponType type, Material mat, Magazine[] magReq, String name, double[] smokeOffset, boolean smokeEnabled, double smokeIntensity, double damage, String[] lore, String displayName, Magazine defaultMag, boolean loadedByDefault, boolean reqMag, int barrelAmmoCap, String caliber, double fireRate, Ammo preloadAmmo, int burstAmount, double burstSpeed, double recoilRed, double knockbackRed, int reloadSpeed, int customModel) {
 		this.type = type;
 		this.mat = mat;
 		this.magReq = magReq;
@@ -50,6 +51,7 @@ public class Weapon {
 		this.recoilRed = recoilRed;
 		this.knockbackRed = knockbackRed;
 		this.reloadSpeed = reloadSpeed;
+		this.customModel = customModel;
 	}
 	
 	public WeaponType getType() { return type; }
@@ -74,4 +76,5 @@ public class Weapon {
 	public double getRecoilReduction() { return recoilRed; }
 	public double getKnockbackReduction() { return knockbackRed; }
 	public int getReloadSpeed() { return reloadSpeed; }
+	public int getCustomModelData() { return customModel; }
 }
