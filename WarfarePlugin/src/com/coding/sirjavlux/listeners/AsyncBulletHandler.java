@@ -58,17 +58,19 @@ public class AsyncBulletHandler implements Listener {
 			UUID uuid = p.getUniqueId();
 			lastClickInput.replace(uuid, System.currentTimeMillis());
 			
-			if ((action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK)) && p.isSneaking()) {
-				
-			}
-			else if ((action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) && p.isSneaking()) {
-				
-			}
-			else if (action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK)) {
-				startFireWeapon(p.getUniqueId(), item);
-			}
-			else if (action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) {
-				startFireWeapon(p.getUniqueId(), item); 
+			if (!Main.getWeaponReloadHandler().isReloading(p)) {
+				if ((action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK)) && p.isSneaking()) {
+					
+				}
+				else if ((action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) && p.isSneaking()) {
+					
+				}
+				else if (action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK)) {
+					startFireWeapon(p.getUniqueId(), item);
+				}
+				else if (action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) {
+					startFireWeapon(p.getUniqueId(), item); 
+				}
 			}
 		}
 	}

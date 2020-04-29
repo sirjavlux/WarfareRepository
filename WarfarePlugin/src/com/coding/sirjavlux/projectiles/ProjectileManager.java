@@ -30,7 +30,7 @@ public class ProjectileManager {
 	public static void fireProjectile(Player p, Weapon weapon, Ammo ammo) {
 		EntityPlayer eP = ((CraftPlayer) p).getHandle();
 		World w = eP.getWorld();
-		ItemStack item = new ItemStack(ammo.getMaterial());
+		ItemStack item = new ItemStack(ammo.getShootMaterial());
 		
 		BulletFireEvent event = new BulletFireEvent(ammo, p);
 		Bukkit.getPluginManager().callEvent(event);

@@ -17,3 +17,4 @@ require-mag: false
 barrel-caliber: "7.62x54"
 pre-load-ammo: sniperammo
 fire-rate: 2
+reload-speed: 18

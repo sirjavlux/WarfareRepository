@@ -48,7 +48,7 @@ public class HealthEffects implements Listener {
 								containsValidEffect = true;
 							}
 						}
-						PotionEffect effect = new PotionEffect(type, 15, ConfigManager.getBrokenLegStrenght(), true, false, false);
+						PotionEffect effect = new PotionEffect(type, 24, ConfigManager.getBrokenLegStrenght(), true, false, false);
 						if (!containsValidEffect) p.addPotionEffect(effect);
 					}
 				}

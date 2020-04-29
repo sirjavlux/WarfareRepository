@@ -7,14 +7,11 @@ import java.util.UUID;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
 import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.ItemDespawnEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCreativeEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -26,27 +23,6 @@ import com.coding.sirjavlux.weapons.WeaponManager;
 import net.minecraft.server.v1_15_R1.NBTTagCompound;
 
 public class ItemListener implements Listener {
-
-	@EventHandler
-	public void onItemDespawnEvent(ItemDespawnEvent e) {
-		 
-	}
-	
-	@EventHandler
-	public void playerDropItem(PlayerDropItemEvent e) {
-		Item drop = e.getItemDrop();
-		ItemStack item = drop.getItemStack();
-		if (WeaponManager.isWeapon(item)) {
-			net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(item);
-			NBTTagCompound tagComp = NMSItem.getTag();
-			UUID uuid = UUID.fromString(tagComp.getString("uuid"));
-			WeaponItem weaponItem = WeaponManager.getWeaponItem(uuid);
-			if (weaponItem != null) {
-				weaponItem.hardUpdate(item);
-				drop.setItemStack(WeaponManager.saveWeaponData(item));	
-			}
-		}
-	}
 	
 	@EventHandler
 	public void inventoryCreativeClickEvent(InventoryCreativeEvent e) {
@@ -54,7 +30,6 @@ public class ItemListener implements Listener {
 		Inventory iv = e.getClickedInventory();
 		int slot = e.getSlot();
 		ItemStack[] contents = iv.getContents();
-		
 		if (iv != null) {
 			//check middle click copy item
 			if (cursor != null) {
@@ -133,13 +108,14 @@ public class ItemListener implements Listener {
 								barrelRounds.addAll(barrelRounds);
 								barrelRounds = barrelRoundsNew;
 								rounds.remove(rounds.size() - 1);
-							}
+							} else break;
 						}
 						magItem.setRounds(rounds);
 						weaponItem.setBarrelAmmo(barrelRounds);
 						weaponItem.setMagazineItem(magItem);
 						weaponItem.hardUpdate(item);
 						weaponItem.updateNextAmmo();
+						iv.setItem(e.getSlot(), WeaponManager.saveWeaponData(item));
 						p.setItemOnCursor(new ItemStack(Material.AIR));
 						cancel = true;
 					} 
@@ -171,6 +147,7 @@ public class ItemListener implements Listener {
 							else p.setItemOnCursor(new ItemStack(Material.AIR));
 							weaponItem.hardUpdate(item);
 							weaponItem.updateNextAmmo();
+							iv.setItem(e.getSlot(), WeaponManager.saveWeaponData(item));
 							cancel = true;	
 						}
 					}
@@ -185,12 +162,13 @@ public class ItemListener implements Listener {
 						UUID uuidMag = UUID.fromString(tagCompMag.getString("uuid"));
 						MagazineItem magItem = WeaponManager.getMagazineItem(uuidMag);
 						magItem.setRounds(weaponItem.getMagazineItem().getRounds());
+						mag = WeaponManager.saveMagazineData(mag);
 						magItem.update(mag);
 						weaponItem.setMagazineItem(null);
 						p.setItemOnCursor(mag);
 						weaponItem.hardUpdate(item);
 						weaponItem.updateNextAmmo();
-						WeaponManager.saveWeaponData(item);
+						iv.setItem(e.getSlot(), WeaponManager.saveWeaponData(item));
 						cancel = true;
 					}
 					//if no mag
@@ -212,7 +190,7 @@ public class ItemListener implements Listener {
 							p.setItemOnCursor(WeaponManager.generateAmmo(ammo, amount));
 							weaponItem.hardUpdate(item);
 							weaponItem.updateNextAmmo();
-							WeaponManager.saveWeaponData(item);
+							iv.setItem(e.getSlot(), WeaponManager.saveWeaponData(item));
 							cancel = true;	
 						}
 					}
@@ -254,6 +232,7 @@ public class ItemListener implements Listener {
 						}
 						magItem.setRounds(rounds);
 						magItem.update(item);
+						iv.setItem(e.getSlot(), WeaponManager.saveMagazineData(item));
 						if (amount > 0) {
 							ItemStack cItem = cursor.clone();
 							cItem.setAmount(amount);
@@ -287,8 +266,8 @@ public class ItemListener implements Listener {
 				if (ammo != null) {
 					magItem.setRounds(rounds);
 					magItem.update(item);
+					iv.setItem(e.getSlot(), WeaponManager.saveMagazineData(item));
 					p.setItemOnCursor(WeaponManager.generateAmmo(ammo, amount));
-					WeaponManager.saveWeaponData(item);
 					e.setCancelled(true);
 					return;
 				}

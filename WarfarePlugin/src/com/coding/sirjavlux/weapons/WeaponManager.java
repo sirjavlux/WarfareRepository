@@ -211,7 +211,7 @@ public class WeaponManager {
 	public static ItemStack saveMagazineData(ItemStack item) {
 		net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(item);
 		NBTTagCompound tagComp = NMSItem.hasTag() ? NMSItem.getTag() : new NBTTagCompound();
-		if (isWeapon(item)) {
+		if (isMagazine(item)) {
 			UUID uuid = UUID.fromString(tagComp.getString("uuid"));
 			MagazineItem magItem = getMagazineItem(uuid);
 			//generate and update ammo string

@@ -205,9 +205,11 @@ public class WeaponLoader extends WeaponManager{
 			double recoilRed = conf.contains("recoil-reduction") ? conf.getDouble("recoil-reduction") : 0;
 			//knockback reduction
 			double knockbackRed = conf.contains("knockback-reduction") ? conf.getDouble("knockback-reduction") : 0;
+			//reload speed
+			int reloadSpeed = conf.contains("reload-speed") ? conf.getInt("reload-speed") : 80;
 			
 			//create weapon
-			Weapon weapon = new Weapon(type, mat, magReq, name, smokeOffset, smokeEnabled, smokeIntensity, damage, lore, displayName, defaultMag, loadedByDefault, reqMag, barrelAmmoCap, caliber, fireRate, preLoadAmmo, burstAmount, burstSpeed, recoilRed, knockbackRed);
+			Weapon weapon = new Weapon(type, mat, magReq, name, smokeOffset, smokeEnabled, smokeIntensity, damage, lore, displayName, defaultMag, loadedByDefault, reqMag, barrelAmmoCap, caliber, fireRate, preLoadAmmo, burstAmount, burstSpeed, recoilRed, knockbackRed, reloadSpeed);
 			weaponStored.put(name, weapon);
 			badWeapons.remove(file.getName());
 			goodWeapons.add(file.getName());

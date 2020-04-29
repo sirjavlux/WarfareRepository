@@ -11,12 +11,14 @@ import com.coding.sirjavlux.listeners.ItemListener;
 import com.coding.sirjavlux.listeners.PlayerListener;
 import com.coding.sirjavlux.utils.Color;
 import com.coding.sirjavlux.weapons.WeaponLoader;
+import com.coding.sirjavlux.weapons.WeaponReloadHandler;
 
 public class Main extends JavaPlugin {
 	
 	private static Main instance;
 	private static AsyncBulletHandler bulletHandler;
 	private static HealthEffects healthEffects;
+	private static WeaponReloadHandler weaponReloadHandler;
 	
 	@Override
 	public void onEnable() {
@@ -26,6 +28,7 @@ public class Main extends JavaPlugin {
 		//create healtheffects and bullet handler instance
 		healthEffects = new HealthEffects();
 		bulletHandler = new AsyncBulletHandler();
+		weaponReloadHandler = new WeaponReloadHandler();
 		
 		//load listeners
 		Bukkit.getPluginManager().registerEvents(bulletHandler, this);
@@ -33,6 +36,7 @@ public class Main extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
 		Bukkit.getPluginManager().registerEvents(new ItemListener(), this);
 		Bukkit.getPluginManager().registerEvents(healthEffects, this);
+		Bukkit.getPluginManager().registerEvents(weaponReloadHandler, this);
 		
 		//commands
 		this.getCommand("wf").setExecutor(new CommandManager());
@@ -63,5 +67,9 @@ public class Main extends JavaPlugin {
 	
 	public static HealthEffects getHealthEffects() {
 		return healthEffects;
+	}
+	
+	public static WeaponReloadHandler getWeaponReloadHandler() {
+		return weaponReloadHandler;
 	}
 }
