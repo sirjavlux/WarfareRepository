@@ -1,6 +1,7 @@
 package com.coding.sirjavlux.core;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.coding.sirjavlux.commands.CommandManager;
@@ -9,7 +10,6 @@ import com.coding.sirjavlux.listeners.AsyncBulletHandler;
 import com.coding.sirjavlux.listeners.InventoryListener;
 import com.coding.sirjavlux.listeners.ItemListener;
 import com.coding.sirjavlux.listeners.PlayerListener;
-import com.coding.sirjavlux.utils.Color;
 import com.coding.sirjavlux.weapons.WeaponLoader;
 import com.coding.sirjavlux.weapons.WeaponReloadHandler;
 
@@ -49,12 +49,12 @@ public class Main extends JavaPlugin {
 		
 		instance = this;
 		
-		System.out.println(Color.GREEN + "Warfare successfully enabled!" + Color.RESET);
+		Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "Warfare successfully enabled!");
 	}
 	
 	@Override
 	public void onDisable() {
-		System.out.println(Color.RED + "Warfare disabled!" + Color.RESET);
+		Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "Warfare disabled!");
 	}
 	
 	public static Main getInstance() {

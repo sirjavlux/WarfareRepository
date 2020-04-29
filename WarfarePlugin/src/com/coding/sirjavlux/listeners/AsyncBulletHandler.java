@@ -22,7 +22,6 @@ import com.coding.sirjavlux.projectiles.ProjectileManager;
 import com.coding.sirjavlux.types.Ammo;
 import com.coding.sirjavlux.types.Weapon;
 import com.coding.sirjavlux.types.WeaponType;
-import com.coding.sirjavlux.utils.Color;
 import com.coding.sirjavlux.weapons.WeaponItem;
 import com.coding.sirjavlux.weapons.WeaponManager;
 
@@ -158,7 +157,7 @@ public class AsyncBulletHandler implements Listener {
 							continue;
 						} else if (20 / weapon.getBurstSpeed() > (System.currentTimeMillis() - lastS) / 50) continue;
 						break;
-					default: System.out.println(Color.RED + "ERROR The weapon " + weapon.getName() + " wasn't an auto or burst type!");
+					default: Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "ERROR The weapon " + weapon.getName() + " wasn't an auto or burst type!");
 						continue;
     	    		}
     	    		//setup shot and add bullet to waiting list

@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -15,7 +17,6 @@ import com.coding.sirjavlux.types.AmmoType;
 import com.coding.sirjavlux.types.Magazine;
 import com.coding.sirjavlux.types.Weapon;
 import com.coding.sirjavlux.types.WeaponType;
-import com.coding.sirjavlux.utils.Color;
 import com.coding.sirjavlux.utils.FileManager;
 
 public class WeaponLoader extends WeaponManager{
@@ -77,15 +78,15 @@ public class WeaponLoader extends WeaponManager{
 			//name
 			String name = conf.contains("name") ? conf.getString("name") : null; 
 			if (name == null) {
-				System.out.println(Color.RED + "The weapon name in file " + file.getName() + " wasn't found!" + Color.RESET);
-				System.out.println(Color.RED + "Add this to config 'name: <weapon-name>'" + Color.RESET);
+				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "The weapon name in file " + file.getName() + " wasn't found!");
+				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "Add this to config 'name: <weapon-name>'");
 				continue;
 			}
 			//weapon type
 			WeaponType type = conf.contains("type") ? WeaponType.valueOf(conf.getString("type")) : null; 
 			if (type == null) {
-				System.out.println(Color.RED + "The weapon " + name + " didn't have any weapon type selected!" + Color.RESET);
-				System.out.println(Color.RED + "Add this to config 'type: <Auto/SemiAuto/BoltAction>'" + Color.RESET);
+				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "The weapon " + name + " didn't have any weapon type selected!");
+				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "Add this to config 'type: <Auto/SemiAuto/BoltAction>'");
 				continue;
 			}
 			//mag required
@@ -98,7 +99,7 @@ public class WeaponLoader extends WeaponManager{
 				List<Magazine> magList = new ArrayList<Magazine>();
 				for (String str : magReqStr) {
 					if (!isMagazine(str)) {
-						System.out.println(Color.RED + "The selected required magazine " + str + " in the weapon " + name + " didn't exist!" + Color.RESET);
+						Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "The selected required magazine " + str + " in the weapon " + name + " didn't exist!");
 						continue;
 					}
 					magList.add(getStoredMagazine(str));
@@ -109,15 +110,15 @@ public class WeaponLoader extends WeaponManager{
 			//material
 			String matS = conf.contains("material") ? conf.getString("material") : null;
 			if (matS == null) {
-				System.out.println(Color.RED + "The weapon " + name + " didn't have any material selected!" + Color.RESET);
-				System.out.println(Color.RED + "Add this to config 'material: <material>'" + Color.RESET);
+				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "The weapon " + name + " didn't have any material selected!");
+				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "Add this to config 'material: <material>'");
 				continue;
 			}
 			Material mat = null;
 			try {
 				mat = Material.valueOf(matS.toUpperCase());
 			} catch (Exception e) {
-				System.out.println(Color.RED + "The selected weapon " + matS + " in the ammunition " + name + " didn't exist!" + Color.RESET);
+				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "The selected weapon " + matS + " in the ammunition " + name + " didn't exist!");
 				continue;
 			}
 			//smoke offset
@@ -125,7 +126,7 @@ public class WeaponLoader extends WeaponManager{
 			double[] smokeOffset = new double[] { 0d, 0d, 0d };
 			if (smokeOffsetList != null) {
 				if (smokeOffsetList.size() != 3) {
-					System.out.println(Color.RED + "Invalid smoke offset in the weapon " + name + ", there can only be 3 numbers x, y, z!" + Color.RESET);
+					Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "Invalid smoke offset in the weapon " + name + ", there can only be 3 numbers x, y, z!");
 					continue;
 				}
 				smokeOffset[0] = smokeOffsetList.get(0);
@@ -154,7 +155,7 @@ public class WeaponLoader extends WeaponManager{
 			Magazine defaultMag = null;
 			if (defaultMagName != null) {
 				if (!isMagazine(defaultMagName)) {
-					System.out.println(Color.RED + "The selected default magazine " + defaultMagName + " in the weapon " + name + " didn't exist!" + Color.RESET);
+					Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "The selected default magazine " + defaultMagName + " in the weapon " + name + " didn't exist!");
 					continue;
 				}
 				defaultMag = getStoredMagazine(defaultMagName);
@@ -169,9 +170,9 @@ public class WeaponLoader extends WeaponManager{
 			//caliber
 			String caliber = magReq != null ? magReq[0].getCaliber() : (conf.contains("barrel-caliber") ? conf.getString("barrel-caliber") : null);
 			if (caliber == null) {
-				System.out.println(Color.RED + "The weapon " + name + " didn't have any barrel caliber or magazine requirement set!" + Color.RESET);
-				System.out.println(Color.RED + "Add this to config for integrated magazine 'barrel-caliber: <caliber>'" + Color.RESET);
-				System.out.println(Color.RED + "Add this to config for use of magazines 'magazine-required: <- mag1>'" + Color.RESET);
+				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "The weapon " + name + " didn't have any barrel caliber or magazine requirement set!");
+				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "Add this to config for integrated magazine 'barrel-caliber: <caliber>'");
+				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "Add this to config for use of magazines 'magazine-required: <- mag1>'");
 				continue;
 			}
 			//fire rate
@@ -181,19 +182,19 @@ public class WeaponLoader extends WeaponManager{
 			Ammo preLoadAmmo = null;
 			if (loadedByDefault) {
 				if (preLoadAmmoStr == null) {
-					System.out.println(Color.RED + "The weapon " + name + " didn't have any pre load ammo selected!" + Color.RESET);
-					System.out.println(Color.RED + "Add this to config 'pre-load-ammo: <ammo-name>'" + Color.RESET);
+					Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "The weapon " + name + " didn't have any pre load ammo selected!");
+					Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "Add this to config 'pre-load-ammo: <ammo-name>'");
 					continue;
 				} else if (!WeaponManager.isAmmunition(preLoadAmmoStr)) {
-					System.out.println(Color.RED + "The pre load ammunition " + preLoadAmmoStr + " in The weapon " + name + " didn't exist!" + Color.RESET);
+					Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "The pre load ammunition " + preLoadAmmoStr + " in The weapon " + name + " didn't exist!");
 					continue;
 				}
 				preLoadAmmo = WeaponManager.getStoredAmmo(preLoadAmmoStr);
 			}
 			if (preLoadAmmo != null) {
 				if (!preLoadAmmo.getCaliber().equalsIgnoreCase(caliber)) {
-					System.out.println("Preload ammo caliber " + preLoadAmmo.getCaliber() + " | weapon caliber " + caliber);
-					System.out.println(Color.RED + "The pre load ammunition " + preLoadAmmoStr + " in The weapon " + name + " didn't have the same caliber as the weapon " + caliber + "!" + Color.RESET);
+					Bukkit.getServer().getConsoleSender().sendMessage("Preload ammo caliber " + preLoadAmmo.getCaliber() + " | weapon caliber " + caliber);
+					Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "The pre load ammunition " + preLoadAmmoStr + " in The weapon " + name + " didn't have the same caliber as the weapon " + caliber + "!");
 					continue;
 				}
 			}
@@ -239,36 +240,36 @@ public class WeaponLoader extends WeaponManager{
 			//name
 			String name = conf.contains("name") ? conf.getString("name") : null; 
 			if (name == null) {
-				System.out.println(Color.RED + "The magazine name in file " + file.getName() + " wasn't found!" + Color.RESET);
-				System.out.println(Color.RED + "Add this to config 'name: <magazine-name>'" + Color.RESET);
+				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "The magazine name in file " + file.getName() + " wasn't found!");
+				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "Add this to config 'name: <magazine-name>'");
 				continue;
 			}
 			//material
 			String matS = conf.contains("material") ? conf.getString("material") : null;
 			if (matS == null) {
-				System.out.println(Color.RED + "The magazine " + name + " didn't have any material selected!" + Color.RESET);
-				System.out.println(Color.RED + "Add this to config 'material: <material>'" + Color.RESET);
+				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "The magazine " + name + " didn't have any material selected!");
+				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "Add this to config 'material: <material>'");
 				continue;
 			}
 			Material mat = null;
 			try {
 				mat = Material.valueOf(matS.toUpperCase());
 			} catch (Exception e) {
-				System.out.println(Color.RED + "The selected material " + matS + " in the magazine " + name + " didn't exist!" + Color.RESET);
+				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "The selected material " + matS + " in the magazine " + name + " didn't exist!");
 				continue;
 			}
 			//caliber
 			String caliber = conf.contains("caliber") ? conf.getString("caliber") : null;
 			if (caliber == null) {
-				System.out.println(Color.RED + "The caliber in the magazine " + name + " wasn't found!" + Color.RESET);
-				System.out.println(Color.RED + "Add this to config 'caliber: <caliber>'" + Color.RESET);
+				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "The caliber in the magazine " + name + " wasn't found!");
+				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "Add this to config 'caliber: <caliber>'");
 				continue;
 			}
 			//ammo capasity
 			int ammoCap = conf.contains("ammo-capasity") ? conf.getInt("ammo-capasity") : 0;
 			if (!conf.contains("ammo-capasity")) {
-				System.out.println(Color.RED + "The ammunition capasity in the magazine " + name + " wasn't found!" + Color.RESET);
-				System.out.println(Color.RED + "Add this to config 'ammo-capasity: <amount>'" + Color.RESET);
+				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "The ammunition capasity in the magazine " + name + " wasn't found!");
+				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "Add this to config 'ammo-capasity: <amount>'");
 				continue;
 			}
 			//display name
@@ -315,29 +316,29 @@ public class WeaponLoader extends WeaponManager{
 			//name
 			String name = conf.contains("name") ? conf.getString("name") : null; 
 			if (name == null) {
-				System.out.println(Color.RED + "The ammunition name in file " + file.getName() + " wasn't found!" + Color.RESET);
-				System.out.println(Color.RED + "Add this to config 'name: <ammunition-name>'" + Color.RESET);
+				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "The ammunition name in file " + file.getName() + " wasn't found!");
+				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "Add this to config 'name: <ammunition-name>'");
 				continue;
 			}
 			//material
 			String matS = conf.contains("material") ? conf.getString("material") : null;
 			if (matS == null) {
-				System.out.println(Color.RED + "The ammunition " + name + " didn't have any material selected!" + Color.RESET);
-				System.out.println(Color.RED + "Add this to config 'material: <material>'" + Color.RESET);
+				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "The ammunition " + name + " didn't have any material selected!");
+				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "Add this to config 'material: <material>'");
 				continue;
 			}
 			Material mat = null;
 			try {
 				mat = Material.valueOf(matS.toUpperCase());
 			} catch (Exception e) {
-				System.out.println(Color.RED + "The selected material " + matS + " in the ammunition " + name + " didn't exist!" + Color.RESET);
+				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "The selected material " + matS + " in the ammunition " + name + " didn't exist!");
 				continue;
 			}
 			//caliber
 			String caliber = conf.contains("caliber") ? conf.getString("caliber") : null;
 			if (caliber == null) {
-				System.out.println(Color.RED + "The caliber in the ammunition " + name + " wasn't found!" + Color.RESET);
-				System.out.println(Color.RED + "Add this to config 'caliber: <caliber>'" + Color.RESET);
+				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "The caliber in the ammunition " + name + " wasn't found!");
+				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "Add this to config 'caliber: <caliber>'");
 				continue;
 			}
 			//damage
@@ -370,8 +371,8 @@ public class WeaponLoader extends WeaponManager{
 			//ammo type
 			AmmoType type = conf.contains("type") ? AmmoType.valueOf(conf.getString("type")) : null; 
 			if (type == null) {
-				System.out.println(Color.RED + "The weapon " + name + " didn't have any weapon type selected!" + Color.RESET);
-				System.out.println(Color.RED + "Add this to config 'type: <Auto/SemiAuto/BoltAction>'" + Color.RESET);
+				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "The weapon " + name + " didn't have any weapon type selected!");
+				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "Add this to config 'type: <Auto/SemiAuto/BoltAction>'");
 				continue;
 			}
 			//split bullet amount
@@ -410,11 +411,11 @@ public class WeaponLoader extends WeaponManager{
 		System.out.print(loadedName + ": ");
 		int count = 0;
 		for (String str : good) {
-			System.out.print((count > 0 ? ", " : "") + Color.GREEN + str + Color.RESET);
+			Bukkit.getServer().getConsoleSender().sendMessage((count > 0 ? ", " : "") + ChatColor.GREEN + str);
 			count++;
 		}
 		for (String str : bad) {
-			System.out.print((count > 0 ? ", " : "") + Color.RED + str + Color.RESET);
+			Bukkit.getServer().getConsoleSender().sendMessage((count > 0 ? ", " : "") + ChatColor.RED + str);
 			count++;
 		}
 		System.out.print("\n");
