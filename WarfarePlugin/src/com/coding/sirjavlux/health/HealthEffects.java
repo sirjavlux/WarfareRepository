@@ -113,7 +113,7 @@ public class HealthEffects implements Listener {
 							entity.setHealth(finalHealth);
 							bleeding.setCooldown(ConfigManager.getTimeBetweanBleeding());
 						} 
-						if (bleeding.getTime() > 0) bleedingList.add(bleeding);
+						bleedingList.add(bleeding);
 						if (finalHealth == 0) break;
 					}
 					if (finalHealth > 0) newBleeding.put(uuid, bleedingList);
@@ -124,16 +124,17 @@ public class HealthEffects implements Listener {
 					List<Bleeding> bleedingList = entry.getValue();
 					if (bleedingMap.containsKey(uuid)) {
 						List<Bleeding> oldBleeding = new ArrayList<>(bleedingMap.get(uuid));
+						List<Bleeding> finalBleeding = new ArrayList<>();
 						for (Bleeding bleeding : bleedingList) {
 							UUID bUUID = bleeding.getUniqueID();
 							int count = 0;
 							for (Bleeding old : oldBleeding) {
-								if (bUUID.equals(old.getUniqueID())) {
-									oldBleeding.set(count, bleeding);
-								}
+								if (bUUID.equals(old.getUniqueID())) oldBleeding.set(count, bleeding);
+								if (old.getTime() > 0) finalBleeding.add(oldBleeding.get(count));
 								count++;
 							}
 						}
+						bleedingMap.replace(uuid, finalBleeding);
 					}
 				}
 			}
