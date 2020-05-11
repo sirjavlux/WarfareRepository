@@ -69,7 +69,7 @@ damage:
         enabled: true
         strenght: 1
         height: 4
-        chance-per-legdamage: 0.013
+        chance-per-legdamage: 0.02
         time-active-ticks: 24000
     concussion:
         enabled: true
@@ -80,7 +80,7 @@ damage:
     bleeding:
         enabled: true
         only-players: false
-        chance-per-damage: 0.022
+        chance-per-damage: 0.024
         bleeding-per-damage: 0.1
         time-betwean-bleeding: 20
         time-active-ticks: 6000

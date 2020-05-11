@@ -36,6 +36,7 @@ public class HealthEffects implements Listener {
 			@Override
 			public void run() {
 				//concussion effect
+				HashMap<UUID, Integer> newConcussionTime = new HashMap<>();
 				for (Entry<UUID, Integer> entry: concussionTime.entrySet()) {
 					int time = entry.getValue();
 					if (time > 0) {
@@ -50,9 +51,22 @@ public class HealthEffects implements Listener {
 						}
 						PotionEffect effect = new PotionEffect(type, 24, ConfigManager.getBrokenLegStrenght(), true, false, false);
 						if (!containsValidEffect) p.addPotionEffect(effect);
+						newConcussionTime.put(entry.getKey(), time - 1);
 					}
 				}
+				//replace updated concussions
+				for (Entry<UUID, Integer> entry : newConcussionTime.entrySet()) {
+					UUID uuid = entry.getKey();
+					int time = entry.getValue();
+					if (concussionTime.containsKey(uuid)) {
+						if (concussionTime.get(uuid) > time) {
+							concussionTime.replace(uuid, time);
+						}
+					}
+				}
+				
 				//broken leg effect
+				HashMap<UUID, Integer> newBrokenLegTime = new HashMap<>();
 				for (Entry<UUID, Integer> entry: brokenLegTime.entrySet()) {
 					int time = entry.getValue();
 					if (time > 0) {
@@ -67,11 +81,23 @@ public class HealthEffects implements Listener {
 						}
 						PotionEffect effect = new PotionEffect(type, 15, ConfigManager.getBrokenLegStrenght(), true, false, false);
 						if (!containsValidEffect) p.addPotionEffect(effect);
+						newBrokenLegTime.put(entry.getKey(), time - 1);
 					}
 				}
+				//replace updated broken bones
+				for (Entry<UUID, Integer> entry : newBrokenLegTime.entrySet()) {
+					UUID uuid = entry.getKey();
+					int time = entry.getValue();
+					if (brokenLegTime.containsKey(uuid)) {
+						if (brokenLegTime.get(uuid) > time) {
+							brokenLegTime.replace(uuid, time);
+						}
+					}
+				}
+				
 				//bleeding
-				HashMap<UUID, List<Bleeding>> cloneBleedingMap = new HashMap<>(bleedingMap);
-				for (Entry<UUID, List<Bleeding>> entry: cloneBleedingMap.entrySet()) {
+				HashMap<UUID, List<Bleeding>> newBleeding = new HashMap<>();
+				for (Entry<UUID, List<Bleeding>> entry: bleedingMap.entrySet()) {
 					List<Bleeding> bleedingList = new ArrayList<>();
 					UUID uuid = entry.getKey();
 					LivingEntity entity = (LivingEntity) Bukkit.getEntity(uuid);
@@ -90,7 +116,25 @@ public class HealthEffects implements Listener {
 						if (bleeding.getTime() > 0) bleedingList.add(bleeding);
 						if (finalHealth == 0) break;
 					}
-					if (finalHealth > 0) entry.setValue(bleedingList);
+					if (finalHealth > 0) newBleeding.put(uuid, bleedingList);
+				}
+				//replace updated bleeding
+				for (Entry<UUID, List<Bleeding>> entry : newBleeding.entrySet()) {
+					UUID uuid = entry.getKey();
+					List<Bleeding> bleedingList = entry.getValue();
+					if (bleedingMap.containsKey(uuid)) {
+						List<Bleeding> oldBleeding = new ArrayList<>(bleedingMap.get(uuid));
+						for (Bleeding bleeding : bleedingList) {
+							UUID bUUID = bleeding.getUniqueID();
+							int count = 0;
+							for (Bleeding old : oldBleeding) {
+								if (bUUID.equals(old.getUniqueID())) {
+									oldBleeding.set(count, bleeding);
+								}
+								count++;
+							}
+						}
+					}
 				}
 			}
 		}.runTaskTimer(Main.getPlugin(Main.class), 1, 1);
@@ -117,6 +161,27 @@ public class HealthEffects implements Listener {
 			List<Bleeding> list = bleedingMap.get(uuid);
 			list.add(new Bleeding(ConfigManager.getBleedingTime(), damage));
 			bleedingMap.replace(uuid, list);
+		}
+	}
+	
+	public static void removeBrokenLeg(Player p) {
+		UUID uuid = p.getUniqueId();
+		if (brokenLegTime.containsKey(uuid)) {
+			brokenLegTime.replace(uuid, 0);
+		}
+	}
+	
+	public static void removeConcussion(Player p) {
+		UUID uuid = p.getUniqueId();
+		if (concussionTime.containsKey(uuid)) {
+			concussionTime.replace(uuid, 0);
+		}
+	}
+	
+	public static void removeBleeding(LivingEntity entity) {
+		UUID uuid = entity.getUniqueId();
+		if (bleedingMap.containsKey(uuid)) {
+			bleedingMap.replace(uuid, new ArrayList<>());
 		}
 	}
 	
@@ -155,11 +220,13 @@ public class HealthEffects implements Listener {
 		private int time;
 		private double damage;
 		private int cooldown;
+		private UUID uuid;
 		
 		public Bleeding(int time, double damage) {
 			this.time = time;
 			this.damage = damage;
 			this.cooldown = ConfigManager.getTimeBetweanBleeding();
+			this.uuid = UUID.randomUUID();
 		}
 		
 		public int getTime() { return time; }
@@ -167,5 +234,6 @@ public class HealthEffects implements Listener {
 		public void setTime(int time) { this.time = time; }
 		public int getCooldown() { return cooldown; }
 		public void setCooldown(int cooldown) { this.cooldown = cooldown; }
+		public UUID getUniqueID() { return uuid; }
 	}
 }

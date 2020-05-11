@@ -28,9 +28,9 @@ public class ItemListener implements Listener {
 	public void inventoryCreativeClickEvent(InventoryCreativeEvent e) {
 		ItemStack cursor = e.getCursor();
 		Inventory iv = e.getClickedInventory();
-		int slot = e.getSlot();
 		ItemStack[] contents = iv.getContents();
 		if (iv != null) {
+			int slot = e.getSlot();
 			//check middle click copy item
 			if (cursor != null) {
 				if (WeaponManager.isWeapon(cursor) || WeaponManager.isMagazine(cursor)) {
