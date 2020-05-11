@@ -15,6 +15,7 @@ import com.coding.sirjavlux.core.Main;
 import com.coding.sirjavlux.types.Ammo;
 import com.coding.sirjavlux.types.AmmoType;
 import com.coding.sirjavlux.types.Magazine;
+import com.coding.sirjavlux.types.Mechanic;
 import com.coding.sirjavlux.types.Weapon;
 import com.coding.sirjavlux.types.WeaponType;
 import com.coding.sirjavlux.utils.FileManager;
@@ -35,8 +36,8 @@ public class WeaponLoader extends WeaponManager{
 			System.out.println("Loading ammunition presets...");
 			ammoFile.mkdir();
 			
-			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/ammunition/sniper_ammo.yml", "sniper_ammo.yml");
-			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/ammunition/rifle_ammo.yml", "rifle_ammo.yml");
+			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/ammunition/sniper_ammo.yml", "Ammo/sniper_ammo.yml");
+			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/ammunition/rifle_ammo.yml", "Ammo/rifle_ammo.yml");
 		}
 		loadAmmunitionConfigs();
 		
@@ -47,7 +48,7 @@ public class WeaponLoader extends WeaponManager{
 			System.out.println("Loading magazine presets...");
 			magsFile.mkdir();
 			
-			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/magazines/rifle_mag.yml", "rifle_mag.yml");
+			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/magazines/rifle_mag.yml", "Mags/rifle_mag.yml");
 		}
 		loadMagazineConfigs();
 		
@@ -58,8 +59,8 @@ public class WeaponLoader extends WeaponManager{
 			System.out.println("Loading weapon presets...");
 			weaponsFile.mkdir();
 			
-			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/weapons/auto_weapon.yml", "auto_weapon.yml");
-			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/weapons/sniper.yml", "sniper.yml");
+			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/weapons/auto_weapon.yml", "Weapons/auto_weapon.yml");
+			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/weapons/sniper.yml", "Weapons/sniper.yml");
 		}
 		loadWeaponConfigs();
 	}
@@ -210,9 +211,24 @@ public class WeaponLoader extends WeaponManager{
 			int reloadSpeed = conf.contains("reload-speed") ? conf.getInt("reload-speed") : 80;
 			//custom model data
 			int customModel = conf.contains("custom-model-data") ? conf.getInt("custom-model-data") : 0;
+			//right action
+			Mechanic right = Mechanic.SCOPE;
+			try { right = Mechanic.valueOf(conf.getString("actions.right").toUpperCase()); } catch (Exception e) {}
+			//right action
+			Mechanic left = Mechanic.SHOOT;
+			try { left = Mechanic.valueOf(conf.getString("actions.left").toUpperCase()); } catch (Exception e) {}
+			//right action
+			Mechanic shiftRight = null;
+			try { shiftRight = Mechanic.valueOf(conf.getString("actions.shift_right").toUpperCase()); } catch (Exception e) {}
+			//right action
+			Mechanic shiftLeft = null;
+			try { shiftLeft = Mechanic.valueOf(conf.getString("actions.shift_left").toUpperCase()); } catch (Exception e) {}
+			//right action
+			Mechanic shift = null;
+			try { shift = Mechanic.valueOf(conf.getString("actions.shift").toUpperCase()); } catch (Exception e) {}
 			
 			//create weapon
-			Weapon weapon = new Weapon(type, mat, magReq, name, smokeOffset, smokeEnabled, smokeIntensity, damage, lore, displayName, defaultMag, loadedByDefault, reqMag, barrelAmmoCap, caliber, fireRate, preLoadAmmo, burstAmount, burstSpeed, recoilRed, knockbackRed, reloadSpeed, customModel);
+			Weapon weapon = new Weapon(type, mat, magReq, name, smokeOffset, smokeEnabled, smokeIntensity, damage, lore, displayName, defaultMag, loadedByDefault, reqMag, barrelAmmoCap, caliber, fireRate, preLoadAmmo, burstAmount, burstSpeed, recoilRed, knockbackRed, reloadSpeed, customModel, right, shiftRight, left, shiftLeft, shift);
 			weaponStored.put(name, weapon);
 			badWeapons.remove(file.getName());
 			goodWeapons.add(file.getName());

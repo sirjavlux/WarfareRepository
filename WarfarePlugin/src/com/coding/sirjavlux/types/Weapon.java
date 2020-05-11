@@ -27,8 +27,9 @@ public class Weapon {
 	private double knockbackRed;
 	private int reloadSpeed;
 	private int customModel;
+	private Mechanic right, shiftRight, left, shiftLeft, shift;
 	
-	public Weapon (WeaponType type, Material mat, Magazine[] magReq, String name, double[] smokeOffset, boolean smokeEnabled, double smokeIntensity, double damage, String[] lore, String displayName, Magazine defaultMag, boolean loadedByDefault, boolean reqMag, int barrelAmmoCap, String caliber, double fireRate, Ammo preloadAmmo, int burstAmount, double burstSpeed, double recoilRed, double knockbackRed, int reloadSpeed, int customModel) {
+	public Weapon (WeaponType type, Material mat, Magazine[] magReq, String name, double[] smokeOffset, boolean smokeEnabled, double smokeIntensity, double damage, String[] lore, String displayName, Magazine defaultMag, boolean loadedByDefault, boolean reqMag, int barrelAmmoCap, String caliber, double fireRate, Ammo preloadAmmo, int burstAmount, double burstSpeed, double recoilRed, double knockbackRed, int reloadSpeed, int customModel, Mechanic right, Mechanic shiftRight, Mechanic left, Mechanic shiftLeft, Mechanic shift) {
 		this.type = type;
 		this.mat = mat;
 		this.magReq = magReq;
@@ -52,6 +53,11 @@ public class Weapon {
 		this.knockbackRed = knockbackRed;
 		this.reloadSpeed = reloadSpeed;
 		this.customModel = customModel;
+		this.right = right;
+		this.left = left;
+		this.shift = shift;
+		this.shiftLeft = shiftLeft;
+		this.shiftRight = shiftRight;
 	}
 	
 	public WeaponType getType() { return type; }
@@ -77,4 +83,9 @@ public class Weapon {
 	public double getKnockbackReduction() { return knockbackRed; }
 	public int getReloadSpeed() { return reloadSpeed; }
 	public int getCustomModelData() { return customModel; }
+	public Mechanic getRightMechanic() { return right; }
+	public Mechanic getLeftMechanic() { return left; }
+	public Mechanic getShiftRightMechanic() { return shiftRight; }
+	public Mechanic getShiftLeftMechanic() { return shiftLeft; }
+	public Mechanic getShiftMechanic() { return shift; }
 }

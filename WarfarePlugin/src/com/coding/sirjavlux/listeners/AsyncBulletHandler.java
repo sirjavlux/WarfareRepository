@@ -20,6 +20,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import com.coding.sirjavlux.core.Main;
 import com.coding.sirjavlux.projectiles.ProjectileManager;
 import com.coding.sirjavlux.types.Ammo;
+import com.coding.sirjavlux.types.Mechanic;
 import com.coding.sirjavlux.types.Weapon;
 import com.coding.sirjavlux.types.WeaponType;
 import com.coding.sirjavlux.weapons.WeaponItem;
@@ -54,21 +55,32 @@ public class AsyncBulletHandler implements Listener {
 		ItemStack item = e.getItem();
 		//check if weapon
 		if (WeaponManager.isWeapon(item)) {
+    		net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(item);
+    		NBTTagCompound tagComp = NMSItem.getTag();
+			Weapon weapon = WeaponManager.getStoredWeapon(tagComp.getString("name"));
 			UUID uuid = p.getUniqueId();
 			lastClickInput.replace(uuid, System.currentTimeMillis());
 			
 			if (!Main.getWeaponReloadHandler().isReloading(p)) {
 				if ((action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK)) && p.isSneaking()) {
-					
+					Mechanic mec = weapon.getShiftLeftMechanic();
+					if (mec.equals(Mechanic.SHOOT)) startFireWeapon(p.getUniqueId(), item);
 				}
 				else if ((action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) && p.isSneaking()) {
-					
+					Mechanic mec = weapon.getShiftRightMechanic();
+					if (mec.equals(Mechanic.SHOOT)) startFireWeapon(p.getUniqueId(), item);
 				}
 				else if (action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK)) {
-					startFireWeapon(p.getUniqueId(), item);
+					Mechanic mec = weapon.getLeftMechanic();
+					if (mec.equals(Mechanic.SHOOT)) startFireWeapon(p.getUniqueId(), item);
 				}
 				else if (action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) {
-					startFireWeapon(p.getUniqueId(), item); 
+					Mechanic mec = weapon.getRightMechanic();
+					if (mec.equals(Mechanic.SHOOT)) startFireWeapon(p.getUniqueId(), item);
+				}
+				else if (p.isSneaking()) {
+					Mechanic mec = weapon.getShiftMechanic();
+					if (mec.equals(Mechanic.SHOOT)) startFireWeapon(p.getUniqueId(), item);
 				}
 			}
 		}
