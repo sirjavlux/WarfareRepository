@@ -153,7 +153,7 @@ public class HealthEffects implements Listener {
 	
 	public static void addBleeding(LivingEntity entity, double damage) {
 		UUID uuid = entity.getUniqueId();
-		if (entity instanceof Player) {
+		if (entity instanceof Player && bleedingMap.containsKey(uuid)) {
 			List<Bleeding> list = bleedingMap.get(uuid);
 			list.add(new Bleeding(ConfigManager.getBleedingTime(), damage));
 			bleedingMap.replace(uuid, list);
@@ -210,8 +210,8 @@ public class HealthEffects implements Listener {
 		UUID uuid = entity.getUniqueId();
 		if (entity instanceof Player) {
 			if (bleedingMap.containsKey(uuid)) bleedingMap.replace(uuid, new ArrayList<Bleeding>());
-			if (brokenLegTime.get(uuid) > 0) brokenLegTime.replace(uuid, 0);
-			if (concussionTime.get(uuid) > 0) concussionTime.replace(uuid, 0);
+			if (brokenLegTime.containsKey(uuid)) brokenLegTime.replace(uuid, 0);
+			if (concussionTime.containsKey(uuid)) concussionTime.replace(uuid, 0);
 		} else {
 			if (bleedingMap.containsKey(uuid)) bleedingMap.remove(uuid);
 		}

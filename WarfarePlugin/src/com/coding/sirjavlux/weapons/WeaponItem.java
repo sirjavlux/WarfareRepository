@@ -70,6 +70,15 @@ public class WeaponItem {
 	}
 	
 	public void updateNextAmmo() {
+		if (barrelAmmo.size() < weapon.getBarrelAmmoCap() && mag.getRounds().size() > 0) {
+			for (int i = 0; i < weapon.getBarrelAmmoCap() - barrelAmmo.size(); i++) {
+				List<Ammo> list = new ArrayList<>();
+				list.add(mag.getNextAmmo());
+				list.addAll(barrelAmmo);
+				barrelAmmo = list;
+				mag.removeBullet();
+			}
+		}
 		this.nextAmmo = barrelAmmo.size() > 0 ? barrelAmmo.get(barrelAmmo.size() - 1) : null;
 	}
 	

@@ -144,74 +144,76 @@ public class Projectile extends EntitySnowball {
 		Bukkit.getPluginManager().callEvent(event);
 		//if not cancelled deal continue event
 		if (!event.isCancelled()) {
-			double startHealth = entity.getHealth();
-			double finalHealth = startHealth - event.damage() < 0 ? 0 : startHealth - event.damage();
-			entity.setHealth(finalHealth);
-			//fire status packet
-			net.minecraft.server.v1_15_R1.Entity ce = ((CraftEntity) entity).getHandle();
-			PacketPlayOutEntityStatus statusPacket = new PacketPlayOutEntityStatus(ce, (byte) 2);
-			for (Player p : Bukkit.getOnlinePlayers()) {
-				if (entity.getLocation().distance(p.getLocation()) < 30) ((CraftPlayer) p).getHandle().playerConnection.sendPacket(statusPacket);
-			}
-			//deal knock back
-			double knockback = event.getAmmo().getKnockBack();
-			Location entityLoc = entity.getLocation();
-			Location pLoc = projectile.getLocation();
-			Vector knockDir = entityLoc.subtract(0, entityLoc.getY(), 0).toVector().subtract(pLoc.subtract(0, pLoc.getY(), 0).toVector());
-			knockDir.setY(0.65);
-			entity.setVelocity(entity.getVelocity().add(knockDir.multiply(knockback / 3)));
-			//destroy armor depending on round armor damage
-			org.bukkit.inventory.ItemStack hitArmor = event.getHitArmorPiece();
-			if (hitArmor != null) {
-				if (hitArmor.getItemMeta() instanceof Damageable) {
-					double armorDamage = event.getAmmo().getArmorDamage();
-					Damageable damageableItem = ((Damageable) hitArmor.getItemMeta());
-					int maxDurability = hitArmor.getType().getMaxDurability();
-					int durability = maxDurability - damageableItem.getDamage();
-					int finalDurability = (int) (durability - armorDamage < 0 ? 0 : durability - armorDamage);
-					damageableItem.setDamage(maxDurability - finalDurability);
-					hitArmor.setItemMeta((ItemMeta) damageableItem);
-					switch(event.getHitBodyPart()) {
-					case Chest: entity.getEquipment().setChestplate(hitArmor);
-						break;
-					case Head: entity.getEquipment().setHelmet(hitArmor);
-						break;
-					case Leg: entity.getEquipment().setLeggings(hitArmor);
-						break;
-					}
-				}	
-			}
-			//calculate concussion, broken legs, bleeding
-			double bleedingDamage = 0;
-			boolean brokenBone = false;
-			boolean concussion = false;
-			
-			switch(event.getHitBodyPart()) {
-			case Chest: 
-				break;
-			case Head: 
-				double concussionChance = ConfigManager.getConcussionChance() + ConfigManager.getConcussionDamageChance() * event.damage();
-				if (concussionChance > Math.random()) concussion = true;
-				break;
-			case Leg: 
-				double brokenBoneChance = ConfigManager.getBreakLegDamageChance() * event.damage();
-				if (brokenBoneChance > Math.random()) brokenBone = true;
-				break;
-			}
-			
-			double bleedingChance = ConfigManager.getBleadingDamageChance() * event.damage();
-			if (bleedingChance > Math.random()) bleedingDamage = ConfigManager.getBleedingPerDamage() * event.damage();
-			
-			if (bleedingDamage > 0 && ConfigManager.bleedingEnabled()) {
-				HealthEffects.addBleeding(entity, bleedingDamage);
-			}
-			if (entity instanceof Player) {
-				Player p = (Player) entity;
-				if (brokenBone && ConfigManager.breakLegEnabled()) {
-					HealthEffects.breakLeg(p);
+			if (entity.getHealth() > 0) {
+				double startHealth = entity.getHealth();
+				double finalHealth = startHealth - event.damage() < 0 ? 0 : startHealth - event.damage();
+				entity.setHealth(finalHealth);
+				//fire status packet
+				net.minecraft.server.v1_15_R1.Entity ce = ((CraftEntity) entity).getHandle();
+				PacketPlayOutEntityStatus statusPacket = new PacketPlayOutEntityStatus(ce, (byte) 2);
+				for (Player p : Bukkit.getOnlinePlayers()) {
+					if (entity.getLocation().distance(p.getLocation()) < 30) ((CraftPlayer) p).getHandle().playerConnection.sendPacket(statusPacket);
 				}
-				if (concussion && ConfigManager.concussionEnabled()) {
-					HealthEffects.concussion(p);
+				//deal knock back
+				double knockback = event.getAmmo().getKnockBack();
+				Location entityLoc = entity.getLocation();
+				Location pLoc = projectile.getLocation();
+				Vector knockDir = entityLoc.subtract(0, entityLoc.getY(), 0).toVector().subtract(pLoc.subtract(0, pLoc.getY(), 0).toVector());
+				knockDir.setY(0.65);
+				entity.setVelocity(entity.getVelocity().add(knockDir.multiply(knockback / 3)));
+				//destroy armor depending on round armor damage
+				org.bukkit.inventory.ItemStack hitArmor = event.getHitArmorPiece();
+				if (hitArmor != null) {
+					if (hitArmor.getItemMeta() instanceof Damageable) {
+						double armorDamage = event.getAmmo().getArmorDamage();
+						Damageable damageableItem = ((Damageable) hitArmor.getItemMeta());
+						int maxDurability = hitArmor.getType().getMaxDurability();
+						int durability = maxDurability - damageableItem.getDamage();
+						int finalDurability = (int) (durability - armorDamage < 0 ? 0 : durability - armorDamage);
+						damageableItem.setDamage(maxDurability - finalDurability);
+						hitArmor.setItemMeta((ItemMeta) damageableItem);
+						switch(event.getHitBodyPart()) {
+						case Chest: entity.getEquipment().setChestplate(hitArmor);
+							break;
+						case Head: entity.getEquipment().setHelmet(hitArmor);
+							break;
+						case Leg: entity.getEquipment().setLeggings(hitArmor);
+							break;
+						}
+					}	
+				}
+				//calculate concussion, broken legs, bleeding
+				double bleedingDamage = 0;
+				boolean brokenBone = false;
+				boolean concussion = false;
+				
+				switch(event.getHitBodyPart()) {
+				case Chest: 
+					break;
+				case Head: 
+					double concussionChance = ConfigManager.getConcussionChance() + ConfigManager.getConcussionDamageChance() * event.damage();
+					if (concussionChance > Math.random()) concussion = true;
+					break;
+				case Leg: 
+					double brokenBoneChance = ConfigManager.getBreakLegDamageChance() * event.damage();
+					if (brokenBoneChance > Math.random()) brokenBone = true;
+					break;
+				}
+				
+				double bleedingChance = ConfigManager.getBleadingDamageChance() * event.damage();
+				if (bleedingChance > Math.random()) bleedingDamage = ConfigManager.getBleedingPerDamage() * event.damage();
+				
+				if (bleedingDamage > 0 && ConfigManager.bleedingEnabled()) {
+					HealthEffects.addBleeding(entity, bleedingDamage);
+				}
+				if (entity instanceof Player) {
+					Player p = (Player) entity;
+					if (brokenBone && ConfigManager.breakLegEnabled()) {
+						HealthEffects.breakLeg(p);
+					}
+					if (concussion && ConfigManager.concussionEnabled()) {
+						HealthEffects.concussion(p);
+					}
 				}
 			}
 			//calculate reduced collateral speed

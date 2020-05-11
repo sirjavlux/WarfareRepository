@@ -111,8 +111,8 @@ public class WeaponReloadHandler implements Listener {
 												iv.setItem(slot, new ItemStack(oldItem));
 											}
 											weaponItem.setMagazineItem(magItem);
-											weaponItem.updateNextAmmo();
 											weaponItem.hardUpdate(heldItem);
+											weaponItem.updateNextAmmo();
 										} else {
 											remove = false;
 										}
