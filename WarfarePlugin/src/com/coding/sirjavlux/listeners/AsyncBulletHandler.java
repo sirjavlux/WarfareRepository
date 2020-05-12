@@ -28,6 +28,8 @@ import com.coding.sirjavlux.utils.ScopeUtils;
 import com.coding.sirjavlux.weapons.WeaponItem;
 import com.coding.sirjavlux.weapons.WeaponManager;
 
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_15_R1.NBTTagCompound;
 
 public class AsyncBulletHandler implements Listener {
@@ -207,7 +209,7 @@ public class AsyncBulletHandler implements Listener {
     	    		}
     	    		//setup shot and add bullet to waiting list
     	    		Ammo ammo = activeWeapon.getNextAmmo();
-    	    		shootBullet(p, weapon, ammo);
+    	    		shootBullet(p, activeWeapon, ammo);
     	    		//update active weapon data and finish shooting if burst finished or no ammo left
     	    		boolean isEmpty = activeWeapon.removeBullet();
     	    		activeWeapon.update(hand);
@@ -221,12 +223,23 @@ public class AsyncBulletHandler implements Listener {
 		}.runTaskTimer(Main.getPlugin(Main.class), 1, 1);
 	}
 	
-	private void shootBullet(Player p, Weapon weapon, Ammo ammo) {
+	private void shootBullet(Player p, WeaponItem weapon, Ammo ammo) {
 		//shoot bullet if weapon and ammo are valid
 		if (ammo != null && weapon != null) {
-			ProjectileManager.fireProjectile(p, weapon, ammo);
+			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(getBulletChatColor(weapon) + "" + ChatColor.BOLD + String.valueOf(weapon.getBarrelAmmo().size() + weapon.getMagazineItem().getRounds().size() - 1)));
+			ProjectileManager.fireProjectile(p, weapon.getWeapon(), ammo);
 			lastShot.replace(p.getUniqueId(), System.currentTimeMillis());
 		}
+	}
+	
+	private ChatColor getBulletChatColor(WeaponItem weapon) {
+		ChatColor color = ChatColor.GREEN;
+		int currentAmmo = weapon.getBarrelAmmo().size() + weapon.getMagazineItem().getRounds().size() - 1;
+		int maxAmmo = weapon.getWeapon().getBarrelAmmoCap() + weapon.getMagazineItem().getMagazine().getAmmoCapasity();
+		float diff = (float) currentAmmo / (float) maxAmmo;
+		if (diff < 0.50f && diff >= 0.15f) color = ChatColor.YELLOW;
+		else if (diff < 0.15f) color = ChatColor.RED;
+		return color;
 	}
 	
 	private void startFireWeapon(UUID uuid, ItemStack item) {
@@ -253,7 +266,7 @@ public class AsyncBulletHandler implements Listener {
 					//get next ammo in barrel and shoot a single bullet
 					Ammo ammo = weaponItem.getNextAmmo();
 					if (ammo != null) {
-						shootBullet(p, weapon, ammo);
+						shootBullet(p, weaponItem, ammo);
 						weaponItem.removeBullet();
 						weaponItem.hardUpdate(item);
 						weaponItem.saveData(item, p, p.getInventory().getHeldItemSlot());

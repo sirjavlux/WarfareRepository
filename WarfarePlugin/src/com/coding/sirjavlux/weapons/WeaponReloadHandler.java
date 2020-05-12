@@ -1,10 +1,12 @@
 package com.coding.sirjavlux.weapons;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Item;
@@ -21,12 +23,14 @@ import com.coding.sirjavlux.types.Ammo;
 import com.coding.sirjavlux.types.Weapon;
 import com.coding.sirjavlux.utils.ScopeUtils;
 
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.minecraft.server.v1_15_R1.NBTTagCompound;
 
 public class WeaponReloadHandler implements Listener {
 
 	private HashMap<UUID, Reload> reloads;
-	final int runnableSpeed = 4;
+	final int runnableSpeed = 2;
 	
 	public WeaponReloadHandler() {
 		startReloadReader();
@@ -48,7 +52,6 @@ public class WeaponReloadHandler implements Listener {
 					//check if reload is valid
 					if (Bukkit.getOfflinePlayer(uuid).isOnline()) {
 						Player p = Bukkit.getPlayer(uuid);
-						ScopeUtils.unscope(p);
 						PlayerInventory iv = p.getInventory();
 						ItemStack heldItem = iv.getItemInMainHand();
 						if (WeaponManager.isWeapon(heldItem)) {
@@ -164,9 +167,22 @@ public class WeaponReloadHandler implements Listener {
 					//remove from reload
 					if (remove) {
 						reloads.remove(uuid);
+						if (time <= 0 && Bukkit.getOfflinePlayer(uuid).isOnline()) {
+							Player p = Bukkit.getPlayer(uuid);
+							p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(ChatColor.GRAY + "" + ChatColor.BOLD + "Reload Complete"));
+						}
 						continue;
 					} 
-					else reload.setTime(time);
+					//display reload in actionbar and unscope if scoped
+					else if (Bukkit.getOfflinePlayer(uuid).isOnline()) {
+						Player p = Bukkit.getPlayer(uuid);
+						ScopeUtils.unscope(p);
+						DecimalFormat format = new DecimalFormat("###########0.0");
+						if (time > 0) {
+							p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(ChatColor.GRAY + "" + ChatColor.BOLD + "Reloading... time remaining " + ChatColor.YELLOW + ChatColor.BOLD + format.format((double) (time / (20d / runnableSpeed)) - runnableSpeed / (20d / runnableSpeed))));
+						}
+						reload.setTime(time);
+					}
 				}
 			}
 		}.runTaskTimer(Main.getPlugin(Main.class), runnableSpeed, runnableSpeed);
