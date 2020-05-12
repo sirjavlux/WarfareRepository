@@ -19,6 +19,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import com.coding.sirjavlux.core.Main;
 import com.coding.sirjavlux.types.Ammo;
 import com.coding.sirjavlux.types.Weapon;
+import com.coding.sirjavlux.utils.ScopeUtils;
 
 import net.minecraft.server.v1_15_R1.NBTTagCompound;
 
@@ -47,6 +48,7 @@ public class WeaponReloadHandler implements Listener {
 					//check if reload is valid
 					if (Bukkit.getOfflinePlayer(uuid).isOnline()) {
 						Player p = Bukkit.getPlayer(uuid);
+						ScopeUtils.unscope(p);
 						PlayerInventory iv = p.getInventory();
 						ItemStack heldItem = iv.getItemInMainHand();
 						if (WeaponManager.isWeapon(heldItem)) {

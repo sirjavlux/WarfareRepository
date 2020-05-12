@@ -212,10 +212,10 @@ public class WeaponLoader extends WeaponManager{
 			//custom model data
 			int customModel = conf.contains("custom-model-data") ? conf.getInt("custom-model-data") : 0;
 			//right action
-			Mechanic right = Mechanic.SCOPE;
+			Mechanic right = null;
 			try { right = Mechanic.valueOf(conf.getString("actions.right").toUpperCase()); } catch (Exception e) {}
 			//right action
-			Mechanic left = Mechanic.SHOOT;
+			Mechanic left = null;
 			try { left = Mechanic.valueOf(conf.getString("actions.left").toUpperCase()); } catch (Exception e) {}
 			//right action
 			Mechanic shiftRight = null;
@@ -226,9 +226,11 @@ public class WeaponLoader extends WeaponManager{
 			//right action
 			Mechanic shift = null;
 			try { shift = Mechanic.valueOf(conf.getString("actions.shift").toUpperCase()); } catch (Exception e) {}
+			//scope amount
+			float scope = (float) (conf.contains("scope") ? conf.getDouble("scope") : -0.2);
 			
 			//create weapon
-			Weapon weapon = new Weapon(type, mat, magReq, name, smokeOffset, smokeEnabled, smokeIntensity, damage, lore, displayName, defaultMag, loadedByDefault, reqMag, barrelAmmoCap, caliber, fireRate, preLoadAmmo, burstAmount, burstSpeed, recoilRed, knockbackRed, reloadSpeed, customModel, right, shiftRight, left, shiftLeft, shift);
+			Weapon weapon = new Weapon(type, mat, magReq, name, smokeOffset, smokeEnabled, smokeIntensity, damage, lore, displayName, defaultMag, loadedByDefault, reqMag, barrelAmmoCap, caliber, fireRate, preLoadAmmo, burstAmount, burstSpeed, recoilRed, knockbackRed, reloadSpeed, customModel, right, shiftRight, left, shiftLeft, shift, scope);
 			weaponStored.put(name, weapon);
 			badWeapons.remove(file.getName());
 			goodWeapons.add(file.getName());

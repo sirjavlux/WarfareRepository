@@ -7,6 +7,8 @@ import java.util.Map.Entry;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,6 +22,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.coding.sirjavlux.core.ConfigManager;
 import com.coding.sirjavlux.core.Main;
+
+import net.minecraft.server.v1_15_R1.PacketPlayOutEntityStatus;
 
 public class HealthEffects implements Listener {
 	
@@ -37,7 +41,8 @@ public class HealthEffects implements Listener {
 			public void run() {
 				//concussion effect
 				HashMap<UUID, Integer> newConcussionTime = new HashMap<>();
-				for (Entry<UUID, Integer> entry: concussionTime.entrySet()) {
+				HashMap<UUID, Integer> tempConcussionMap = new HashMap<>(concussionTime);
+				for (Entry<UUID, Integer> entry : tempConcussionMap.entrySet()) {
 					int time = entry.getValue();
 					if (time > 0) {
 						Player p = Bukkit.getPlayer(entry.getKey());
@@ -67,7 +72,8 @@ public class HealthEffects implements Listener {
 				
 				//broken leg effect
 				HashMap<UUID, Integer> newBrokenLegTime = new HashMap<>();
-				for (Entry<UUID, Integer> entry: brokenLegTime.entrySet()) {
+				HashMap<UUID, Integer> tempBrokenLegMap = new HashMap<>(brokenLegTime);
+				for (Entry<UUID, Integer> entry: tempBrokenLegMap.entrySet()) {
 					int time = entry.getValue();
 					if (time > 0) {
 						Player p = Bukkit.getPlayer(entry.getKey());
@@ -97,7 +103,8 @@ public class HealthEffects implements Listener {
 				
 				//bleeding
 				HashMap<UUID, List<Bleeding>> newBleeding = new HashMap<>();
-				for (Entry<UUID, List<Bleeding>> entry: bleedingMap.entrySet()) {
+				HashMap<UUID, List<Bleeding>> tempBleedMap = new HashMap<>(bleedingMap);
+				for (Entry<UUID, List<Bleeding>> entry: tempBleedMap.entrySet()) {
 					List<Bleeding> bleedingList = new ArrayList<>();
 					UUID uuid = entry.getKey();
 					LivingEntity entity = (LivingEntity) Bukkit.getEntity(uuid);
@@ -110,7 +117,15 @@ public class HealthEffects implements Listener {
 						if (bleeding.cooldown < 1) {
 							double damage = bleeding.getDamage();
 							finalHealth = health - damage < 0 ? 0 : health - damage;
-							entity.setHealth(finalHealth);
+							if (entity.getHealth() > 0) {
+								entity.setHealth(finalHealth);
+								//fire status packet
+								net.minecraft.server.v1_15_R1.Entity ce = ((CraftEntity) entity).getHandle();
+								PacketPlayOutEntityStatus statusPacket = new PacketPlayOutEntityStatus(ce, (byte) 2);
+								for (Player p : Bukkit.getOnlinePlayers()) {
+									if (entity.getLocation().distance(p.getLocation()) < 30) ((CraftPlayer) p).getHandle().playerConnection.sendPacket(statusPacket);
+								}	
+							}
 							bleeding.setCooldown(ConfigManager.getTimeBetweanBleeding());
 						} 
 						bleedingList.add(bleeding);
@@ -125,13 +140,25 @@ public class HealthEffects implements Listener {
 					if (bleedingMap.containsKey(uuid)) {
 						List<Bleeding> oldBleeding = new ArrayList<>(bleedingMap.get(uuid));
 						List<Bleeding> finalBleeding = new ArrayList<>();
+						List<UUID> addedBleedUUIDs = new ArrayList<>();
 						for (Bleeding bleeding : bleedingList) {
 							UUID bUUID = bleeding.getUniqueID();
 							int count = 0;
 							for (Bleeding old : oldBleeding) {
-								if (bUUID.equals(old.getUniqueID())) oldBleeding.set(count, bleeding);
-								if (old.getTime() > 0) finalBleeding.add(oldBleeding.get(count));
+								if (bUUID.equals(old.getUniqueID())) {
+									oldBleeding.set(count, bleeding);
+									if (old.getTime() > 0) {
+										finalBleeding.add(oldBleeding.get(count));
+										addedBleedUUIDs.add(bUUID);
+									}
+									break;
+								}
 								count++;
+							}
+						}
+						for (Bleeding old : oldBleeding) {
+							if (!addedBleedUUIDs.contains(old.getUniqueID())) {
+								finalBleeding.add(old);
 							}
 						}
 						bleedingMap.replace(uuid, finalBleeding);

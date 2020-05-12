@@ -14,6 +14,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -23,6 +24,7 @@ import com.coding.sirjavlux.types.Ammo;
 import com.coding.sirjavlux.types.Mechanic;
 import com.coding.sirjavlux.types.Weapon;
 import com.coding.sirjavlux.types.WeaponType;
+import com.coding.sirjavlux.utils.ScopeUtils;
 import com.coding.sirjavlux.weapons.WeaponItem;
 import com.coding.sirjavlux.weapons.WeaponManager;
 
@@ -48,6 +50,33 @@ public class AsyncBulletHandler implements Listener {
 		lastClickInput.remove(uuid);
 	}
 	
+	@EventHandler 
+	public void playerSneak(PlayerToggleSneakEvent e) {
+		Player p = e.getPlayer();
+		ItemStack item = p.getInventory().getItemInMainHand();
+		//check if weapon
+		if (WeaponManager.isWeapon(item)) {
+			net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(item);
+			NBTTagCompound tagComp = NMSItem.getTag();
+			Weapon weapon = WeaponManager.getStoredWeapon(tagComp.getString("name"));
+			UUID uuid = p.getUniqueId();
+			lastClickInput.replace(uuid, System.currentTimeMillis());
+			
+			if (!Main.getWeaponReloadHandler().isReloading(p)) {
+				Mechanic mec = weapon.getShiftMechanic();
+				if (e.isSneaking()) {
+					if (mec == null) return;
+					if (mec.equals(Mechanic.SHOOT)) startFireWeapon(p.getUniqueId(), item);
+					else if (mec.equals(Mechanic.SCOPE)) if (!ScopeUtils.isScoped(p)) ScopeUtils.scope(p, weapon.getScopeAmount());
+				}
+				else if (!e.isSneaking()) {
+					if (mec == null) return;
+					if (mec.equals(Mechanic.SCOPE)) ;
+				}
+			}	
+		}
+	}
+	
 	@EventHandler
 	public void playerInteractEvent(PlayerInteractEvent e) {
 		Player p = e.getPlayer();
@@ -64,23 +93,27 @@ public class AsyncBulletHandler implements Listener {
 			if (!Main.getWeaponReloadHandler().isReloading(p)) {
 				if ((action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK)) && p.isSneaking()) {
 					Mechanic mec = weapon.getShiftLeftMechanic();
+					if (mec == null) return;
 					if (mec.equals(Mechanic.SHOOT)) startFireWeapon(p.getUniqueId(), item);
+					else if (mec.equals(Mechanic.SCOPE)) if (!ScopeUtils.isScoped(p)) ScopeUtils.scope(p, weapon.getScopeAmount()); else ScopeUtils.unscope(p);
 				}
 				else if ((action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) && p.isSneaking()) {
 					Mechanic mec = weapon.getShiftRightMechanic();
+					if (mec == null) return;
 					if (mec.equals(Mechanic.SHOOT)) startFireWeapon(p.getUniqueId(), item);
+					else if (mec.equals(Mechanic.SCOPE)) if (!ScopeUtils.isScoped(p)) ScopeUtils.scope(p, weapon.getScopeAmount()); else ScopeUtils.unscope(p);
 				}
 				else if (action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK)) {
 					Mechanic mec = weapon.getLeftMechanic();
+					if (mec == null) return;
 					if (mec.equals(Mechanic.SHOOT)) startFireWeapon(p.getUniqueId(), item);
+					else if (mec.equals(Mechanic.SCOPE)) if (!ScopeUtils.isScoped(p)) ScopeUtils.scope(p, weapon.getScopeAmount()); else ScopeUtils.unscope(p);
 				}
 				else if (action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) {
 					Mechanic mec = weapon.getRightMechanic();
+					if (mec == null) return;
 					if (mec.equals(Mechanic.SHOOT)) startFireWeapon(p.getUniqueId(), item);
-				}
-				else if (p.isSneaking()) {
-					Mechanic mec = weapon.getShiftMechanic();
-					if (mec.equals(Mechanic.SHOOT)) startFireWeapon(p.getUniqueId(), item);
+					else if (mec.equals(Mechanic.SCOPE)) if (!ScopeUtils.isScoped(p)) ScopeUtils.scope(p, weapon.getScopeAmount()); else ScopeUtils.unscope(p);
 				}
 			}
 		}
