@@ -74,9 +74,10 @@ public class Projectile extends EntitySnowball {
 		Material mat = block.getType();
 		//check if hit location has potential target
 		if (movingobjectposition.getType().equals(EnumMovingObjectType.BLOCK)) {
+			boolean passTrough = false;
 			//if block is air check block in front
+			org.bukkit.util.Vector dirVector = hitLoc.toVector().subtract(playerLoc.toVector());
 			if (mat.equals(Material.AIR)) {
-				org.bukkit.util.Vector dirVector = hitLoc.toVector().subtract(playerLoc.toVector());
 				dirVector.normalize();
 				dirVector.setX(dirVector.getX() / 10);
 				dirVector.setY(dirVector.getY() / 10);
@@ -84,14 +85,43 @@ public class Projectile extends EntitySnowball {
 				Location newHitLoc = hitLoc.toVector().add(dirVector).toLocation(bukkitWorld);
 				block = newHitLoc.getBlock();
 				mat = block.getType();
-				if (mat.equals(Material.AIR)) return;
+				if (mat.equals(Material.AIR)) passTrough = true;
 			}
-			if (ConfigManager.getIgnoredBlocks().contains(mat)) return;
+			if (ConfigManager.getIgnoredBlocks().contains(mat)) passTrough = true;
 			//check if open fence gate
 			else if (block.getBlockData() instanceof Gate) {
 				Gate gate = (Gate) block.getBlockData();
-				if (gate.isOpen()) return;
+				if (gate.isOpen()) passTrough = true;
 			} 
+			//check if entity inside block
+			if (passTrough) {
+				double accuracy = 20;
+				Collection<Entity> entities = new ArrayList<>();
+				for (int i = 0; i < accuracy; i++) {
+					Location loc = hitLoc.clone().add(dirVector.clone().multiply((1 / accuracy) * i));
+					entities.addAll(loc.getWorld().getNearbyEntities(loc, 1 / 20, 1 / 20, 1 / 20));
+				}
+				LivingEntity closest = null;
+				for (Entity entity : entities) {
+					if (entity instanceof LivingEntity) {
+						if (closest == null) closest = (LivingEntity) entity;
+						else if (closest.getLocation().distance(hitLoc) > entity.getLocation().distance(hitLoc)) closest = (LivingEntity) entity;
+					}
+				}
+				//hurt closest target if not null
+				if (closest != null) {
+					hitEntities.add(closest);
+					CraftEntity craftEntity = this.getBukkitEntity();
+					org.bukkit.entity.Projectile projectile = (org.bukkit.entity.Projectile) craftEntity;
+					double speed = entityDamageEvent(closest, projectile);
+					bulletSpeed = speed;
+					//collateral if speed is greater than 0
+					if (speed > 0) {
+						projectile.setVelocity(projectile.getVelocity().normalize().multiply(bulletSpeed));
+						return;
+					}
+				} else return;
+			}
 		} 
 		
 		/*///////////////////////////////////

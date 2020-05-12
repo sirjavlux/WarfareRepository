@@ -6,7 +6,6 @@ import java.util.Random;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
@@ -25,7 +24,7 @@ import net.minecraft.server.v1_15_R1.World;
 
 public class ProjectileManager {
 
-	private static Set<EnumPlayerTeleportFlags> teleportFlags = new HashSet<>(Arrays.asList(EnumPlayerTeleportFlags.X, EnumPlayerTeleportFlags.Y, EnumPlayerTeleportFlags.Z));
+	private static Set<EnumPlayerTeleportFlags> teleportFlags = new HashSet<>(Arrays.asList(EnumPlayerTeleportFlags.X, EnumPlayerTeleportFlags.Y, EnumPlayerTeleportFlags.Z, EnumPlayerTeleportFlags.X_ROT, EnumPlayerTeleportFlags.Y_ROT));
 	
 	public static void fireProjectile(Player p, Weapon weapon, Ammo ammo) {
 		EntityPlayer eP = ((CraftPlayer) p).getHandle();
@@ -46,15 +45,10 @@ public class ProjectileManager {
 				double recoil = ammo.getRecoil();
 				double recoilRed = weapon.getRecoilReduction();
 				double finalRecoil = recoil - recoilRed < 0 ? 0 : recoil - recoilRed;
-				Location pLoc = p.getLocation();
-				float yaw = pLoc.getYaw();
-				float pitch = pLoc.getPitch();
 				float yawRecMod = (float) (finalRecoil * yawModifier);
 				float yawAdd = -yawModifier + r.nextFloat() * (yawRecMod - -yawModifier);
 				float pitchAdd = (float) (finalRecoil - yawAdd) * -1f;
-				yaw += yawAdd;
-				pitch += pitchAdd;
-				PacketPlayOutPosition packet = new PacketPlayOutPosition(0.0, 0.0, 0.0, yaw, pitch, teleportFlags, 0);
+				PacketPlayOutPosition packet = new PacketPlayOutPosition(0.0, 0.0, 0.0, yawAdd, pitchAdd, teleportFlags, 0);
 			    ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
 			}
 			//manage knockback
