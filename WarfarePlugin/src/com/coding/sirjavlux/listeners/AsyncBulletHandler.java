@@ -226,7 +226,7 @@ public class AsyncBulletHandler implements Listener {
 	private void shootBullet(Player p, WeaponItem weapon, Ammo ammo) {
 		//shoot bullet if weapon and ammo are valid
 		if (ammo != null && weapon != null) {
-			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(getBulletChatColor(weapon) + "" + ChatColor.BOLD + String.valueOf(weapon.getBarrelAmmo().size() + weapon.getMagazineItem().getRounds().size() - 1)));
+			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(getBulletChatColor(weapon) + "" + ChatColor.BOLD + String.valueOf(weapon.getBarrelAmmo().size() + (weapon.getMagazineItem() != null ? weapon.getMagazineItem().getRounds().size() : 0) - 1)));
 			ProjectileManager.fireProjectile(p, weapon.getWeapon(), ammo);
 			lastShot.replace(p.getUniqueId(), System.currentTimeMillis());
 		}
@@ -234,8 +234,8 @@ public class AsyncBulletHandler implements Listener {
 	
 	private ChatColor getBulletChatColor(WeaponItem weapon) {
 		ChatColor color = ChatColor.GREEN;
-		int currentAmmo = weapon.getBarrelAmmo().size() + weapon.getMagazineItem().getRounds().size() - 1;
-		int maxAmmo = weapon.getWeapon().getBarrelAmmoCap() + weapon.getMagazineItem().getMagazine().getAmmoCapasity();
+		int currentAmmo = weapon.getBarrelAmmo().size() + (weapon.getMagazineItem() != null ? weapon.getMagazineItem().getRounds().size() : 0) - 1;
+		int maxAmmo = weapon.getWeapon().getBarrelAmmoCap() + (weapon.getMagazineItem() != null ? weapon.getMagazineItem().getMagazine().getAmmoCapasity() : 0);
 		float diff = (float) currentAmmo / (float) maxAmmo;
 		if (diff < 0.50f && diff >= 0.15f) color = ChatColor.YELLOW;
 		else if (diff < 0.15f) color = ChatColor.RED;

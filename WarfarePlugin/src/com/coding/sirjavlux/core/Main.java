@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.coding.sirjavlux.commands.CommandManager;
+import com.coding.sirjavlux.effectUtils.ParticleSpawner;
 import com.coding.sirjavlux.health.HealthEffects;
 import com.coding.sirjavlux.listeners.AsyncBulletHandler;
 import com.coding.sirjavlux.listeners.InventoryListener;
@@ -19,6 +20,7 @@ public class Main extends JavaPlugin {
 	private static AsyncBulletHandler bulletHandler;
 	private static HealthEffects healthEffects;
 	private static WeaponReloadHandler weaponReloadHandler;
+	private ParticleSpawner particleSpawner;
 	
 	@Override
 	public void onEnable() {
@@ -29,7 +31,7 @@ public class Main extends JavaPlugin {
 		healthEffects = new HealthEffects();
 		bulletHandler = new AsyncBulletHandler();
 		weaponReloadHandler = new WeaponReloadHandler();
-		
+		particleSpawner = new ParticleSpawner();
 		//load listeners
 		Bukkit.getPluginManager().registerEvents(bulletHandler, this);
 		Bukkit.getPluginManager().registerEvents(new InventoryListener(), this);
@@ -71,5 +73,9 @@ public class Main extends JavaPlugin {
 	
 	public static WeaponReloadHandler getWeaponReloadHandler() {
 		return weaponReloadHandler;
+	}
+	
+	public ParticleSpawner getParticleSpawner() {
+		return particleSpawner;
 	}
 }

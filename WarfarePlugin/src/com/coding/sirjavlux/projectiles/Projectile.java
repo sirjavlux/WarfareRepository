@@ -20,6 +20,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
 import com.coding.sirjavlux.core.ConfigManager;
+import com.coding.sirjavlux.effects.Effect;
+import com.coding.sirjavlux.effects.ExplosiveEffect;
+import com.coding.sirjavlux.effects.IncindiaryEffect;
 import com.coding.sirjavlux.events.BulletHitEvent;
 import com.coding.sirjavlux.events.EntityDamagedByBulletEvent;
 import com.coding.sirjavlux.health.HealthEffects;
@@ -157,7 +160,7 @@ public class Projectile extends EntitySnowball {
 				}
 			}
 		}
-		projectileHitEvent();
+		projectileHitEvent(hitLoc);
 		this.killEntity();
 		return;
     }
@@ -264,7 +267,7 @@ public class Projectile extends EntitySnowball {
 	/*///////////////////////////////////
 	 * Projectile hit event
 	 *///////////////////////////////////
-	private void projectileHitEvent() {
+	private void projectileHitEvent(Location loc) {
 		CraftEntity craftEntity = this.getBukkitEntity();
 		org.bukkit.entity.Projectile projectile = (org.bukkit.entity.Projectile) craftEntity;
 		BulletHitEvent event = new BulletHitEvent(ammo, projectile);
@@ -274,11 +277,15 @@ public class Projectile extends EntitySnowball {
 			Ammo eventAmmo = event.getAmmo();
 			AmmoType type = eventAmmo.getAmmoType();
 			switch (type) {
-			case Explosive:
+			case Explosive: 
+				Effect effect = new ExplosiveEffect(loc, ammo.getExplotionDamage(), ammo.getExplotionRange(), ammo.getExplotionRange(), ammo.getExplosionFireTicks(), ammo.getExplotionDrop(), (LivingEntity) projectile.getShooter());
+				effect.playEffect();
 				break;
 			case Flame:
 				break;
-			case Incindiary:
+			case Incindiary: 
+				effect = new IncindiaryEffect(loc, 0, ammo.getExplotionDamage(), ammo.getExplotionRange(), ammo.getExplotionRange() / 10, ammo.getExplosionFireTicks(), 9, ammo.getExplotionDrop(), (LivingEntity) projectile.getShooter());
+				effect.playEffect();
 				break;
 			case Regular:
 				break;
