@@ -20,6 +20,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
 import com.coding.sirjavlux.core.ConfigManager;
+import com.coding.sirjavlux.core.Main;
 import com.coding.sirjavlux.effects.Effect;
 import com.coding.sirjavlux.effects.ExplosiveEffect;
 import com.coding.sirjavlux.effects.IncindiaryEffect;
@@ -63,6 +64,10 @@ public class Projectile extends EntitySnowball {
 		this.hitEntities = new ArrayList<>();
 		entity.setVelocity(p.getEyeLocation().getDirection().normalize().multiply(bulletSpeed));
 		entity.setCustomNameVisible(false);
+		if (ammo.getAmmoType().equals(AmmoType.Flame)) {
+			this.setInvisible(true);
+			Main.getInstance().getParticleSpawner().addFlameProjectileEffect(this);
+		}
 		updateName();
 	}
 
@@ -187,6 +192,8 @@ public class Projectile extends EntitySnowball {
 				for (Player p : Bukkit.getOnlinePlayers()) {
 					if (entity.getLocation().distance(p.getLocation()) < 30) ((CraftPlayer) p).getHandle().playerConnection.sendPacket(statusPacket);
 				}
+				//burn entity if possible
+				entity.setFireTicks(ammo.getHitBurnTicks());
 				//deal knock back
 				double knockback = event.getAmmo().getKnockBack();
 				Location entityLoc = entity.getLocation();

@@ -6,10 +6,13 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -20,6 +23,7 @@ public class ParticleSpawner {
 	
 	public ParticleSpawner() {
 		startEffectSpawner();
+		startFlameProjectileEffectSpawner();
 	}
 	
 	HashMap<UUID, Effect> effects = new HashMap<>();
@@ -75,6 +79,36 @@ public class ParticleSpawner {
 	
 	public void addEffect(Effect effect) {
 		effects.put(UUID.randomUUID(), effect);
+	}
+	
+	private HashMap<UUID, UUID> projectiles = new HashMap<>();
+	
+	public void addFlameProjectileEffect(com.coding.sirjavlux.projectiles.Projectile projectile) {
+		projectiles.put(projectile.getUniqueID(), ((Player) ((Projectile) projectile.getBukkitEntity()).getShooter()).getUniqueId());
+	}
+	
+	private void startFlameProjectileEffectSpawner() {
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				List<UUID> removeProjectiles = new ArrayList<>();
+				for (Entry<UUID, UUID> entry : projectiles.entrySet()) {
+					UUID projectilesUUID = entry.getKey();
+					UUID playerUUID = entry.getValue();
+					if (Bukkit.getEntity(projectilesUUID) != null) {
+						Entity projectile = Bukkit.getEntity(projectilesUUID);
+						Location loc = projectile.getLocation();
+						if (Bukkit.getOfflinePlayer(playerUUID).isOnline()) if (Bukkit.getPlayer(playerUUID).getEyeLocation().distance(loc) < 0.4) continue;
+						loc.getWorld().spawnParticle(Particle.FLAME, loc, 0, 0, 0, 0);
+						continue;
+					}
+					removeProjectiles.add(projectilesUUID);
+				}
+				for (UUID projectile : removeProjectiles) {
+					projectiles.remove(projectile);
+				}
+			}
+		}.runTaskTimerAsynchronously(Main.getPlugin(Main.class), 1, 1);
 	}
 	
 	private void spawnParticle(EffectParticle particle) {

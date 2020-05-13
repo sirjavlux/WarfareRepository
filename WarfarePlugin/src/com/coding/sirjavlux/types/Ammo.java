@@ -26,8 +26,9 @@ public class Ammo {
 	private int customModel; 
 	private int explosionFireTicks;
 	private float spread;
+	private int hitBurnTicks;
 	
-	public Ammo(String name, String cal, Material mat, double damage, double armorPen, String[] lore, String displayName, double speed, int maxStackSize, Material shootMat, AmmoType type, int splitBulletAmount, double explosionRange, double explotionDamage, double explotionDamageDrop, double knockBack, double armorDamage, double recoil, double knockback, int customModel, int explosionFireTicks, float spread) {
+	public Ammo(String name, String cal, Material mat, double damage, double armorPen, String[] lore, String displayName, double speed, int maxStackSize, Material shootMat, AmmoType type, int splitBulletAmount, double explosionRange, double explotionDamage, double explotionDamageDrop, double knockBack, double armorDamage, double recoil, double knockback, int customModel, int explosionFireTicks, float spread, int hitBurnTicks) {
 		this.name = name;
 		this.cal = cal;
 		this.mat = mat;
@@ -50,6 +51,7 @@ public class Ammo {
 		this.customModel = customModel;
 		this.explosionFireTicks = explosionFireTicks;
 		this.spread = spread;
+		this.hitBurnTicks = hitBurnTicks;
 	}
 	
 	public String getName() { return name; }
@@ -74,4 +76,5 @@ public class Ammo {
 	public int getCustomModelData() { return customModel; }
 	public int getExplosionFireTicks() { return explosionFireTicks; }
 	public float getBulletSpread() { return spread; }
+	public int getHitBurnTicks() { return hitBurnTicks; }
 }
