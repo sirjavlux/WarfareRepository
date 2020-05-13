@@ -92,7 +92,7 @@ public class ParticleSpawner {
 			@Override
 			public void run() {
 				List<UUID> removeProjectiles = new ArrayList<>();
-				for (Entry<UUID, UUID> entry : projectiles.entrySet()) {
+				for (Entry<UUID, UUID> entry : new HashMap<>(projectiles).entrySet()) {
 					UUID projectilesUUID = entry.getKey();
 					UUID playerUUID = entry.getValue();
 					if (Bukkit.getEntity(projectilesUUID) != null) {

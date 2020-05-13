@@ -432,7 +432,6 @@ public class WeaponLoader extends WeaponManager{
 	
 	private static void printGoodBadFiles(List<String> good, List<String> bad, String loadedName) {
 		System.out.println(loadedName + " loaded!");
-		System.out.print(loadedName + ": ");
 		int count = 0;
 		for (String str : good) {
 			Bukkit.getServer().getConsoleSender().sendMessage((count > 0 ? ", " : "") + ChatColor.GREEN + str);
