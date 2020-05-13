@@ -413,9 +413,11 @@ public class WeaponLoader extends WeaponManager{
 			int customModel = conf.contains("custom-model-data") ? conf.getInt("custom-model-data") : 0;
 			//explosion fire ticks
 			int fireTicks = conf.contains("explosion-fire-ticks") ? conf.getInt("explosion-fire-ticks") : 0;
+			//spread
+			float spread = (float) (conf.contains("bullet-spread") ? conf.getDouble("bullet-spread") : 0);
 			
 			//add ammunition to map
-			Ammo ammo = new Ammo(name, caliber, mat, damage, armorPen, lore, displayName, speed, maxStackSize, shootMat, type, splitBulletAmount, explosionRange, explosionDamage, explosionDamageDrop, knockBack, armorDamage, recoil, knockback, customModel, fireTicks);
+			Ammo ammo = new Ammo(name, caliber, mat, damage, armorPen, lore, displayName, speed, maxStackSize, shootMat, type, splitBulletAmount, explosionRange, explosionDamage, explosionDamageDrop, knockBack, armorDamage, recoil, knockback, customModel, fireTicks, spread);
 			WeaponManager.ammoStored.put(name, ammo);
 			
 			badAmmo.remove(file.getName());

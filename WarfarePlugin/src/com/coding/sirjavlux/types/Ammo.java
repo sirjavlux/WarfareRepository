@@ -25,8 +25,9 @@ public class Ammo {
 	private double knockback;
 	private int customModel; 
 	private int explosionFireTicks;
+	private float spread;
 	
-	public Ammo(String name, String cal, Material mat, double damage, double armorPen, String[] lore, String displayName, double speed, int maxStackSize, Material shootMat, AmmoType type, int splitBulletAmount, double explosionRange, double explotionDamage, double explotionDamageDrop, double knockBack, double armorDamage, double recoil, double knockback, int customModel, int explosionFireTicks) {
+	public Ammo(String name, String cal, Material mat, double damage, double armorPen, String[] lore, String displayName, double speed, int maxStackSize, Material shootMat, AmmoType type, int splitBulletAmount, double explosionRange, double explotionDamage, double explotionDamageDrop, double knockBack, double armorDamage, double recoil, double knockback, int customModel, int explosionFireTicks, float spread) {
 		this.name = name;
 		this.cal = cal;
 		this.mat = mat;
@@ -48,6 +49,7 @@ public class Ammo {
 		this.knockback = knockback;
 		this.customModel = customModel;
 		this.explosionFireTicks = explosionFireTicks;
+		this.spread = spread;
 	}
 	
 	public String getName() { return name; }
@@ -71,4 +73,5 @@ public class Ammo {
 	public double getKnockback() { return knockback; }
 	public int getCustomModelData() { return customModel; }
 	public int getExplosionFireTicks() { return explosionFireTicks; }
+	public float getBulletSpread() { return spread; }
 }

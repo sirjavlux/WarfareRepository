@@ -15,11 +15,13 @@ import org.bukkit.util.Vector;
 import com.coding.sirjavlux.core.ConfigManager;
 import com.coding.sirjavlux.events.BulletFireEvent;
 import com.coding.sirjavlux.types.Ammo;
+import com.coding.sirjavlux.types.AmmoType;
 import com.coding.sirjavlux.types.Weapon;
 
 import net.minecraft.server.v1_15_R1.EntityPlayer;
 import net.minecraft.server.v1_15_R1.PacketPlayOutPosition;
 import net.minecraft.server.v1_15_R1.PacketPlayOutPosition.EnumPlayerTeleportFlags;
+import net.minecraft.server.v1_15_R1.Vec3D;
 import net.minecraft.server.v1_15_R1.World;
 
 public class ProjectileManager {
@@ -36,8 +38,21 @@ public class ProjectileManager {
 		
 		if (!event.isCancelled()) {
 			//shoot projectile
-			Projectile ptile = new Projectile(w, eP, CraftItemStack.asNMSCopy(item), weapon, event.getAmmo());
-			CustomEntitySnowballRegistry.spawnEntity(ptile, w);
+			if (ammo.getAmmoType().equals(AmmoType.Split)) {
+				for (int i = 0; i < ammo.getSplitBulletAmount(); i++) {
+					Projectile ptile = new Projectile(w, eP, CraftItemStack.asNMSCopy(item), weapon, event.getAmmo());
+					Vec3D dir = ptile.getMot();
+					Random r = new Random();
+					double randomX = 1 - ammo.getBulletSpread() + (1 + ammo.getBulletSpread() - (1 - ammo.getBulletSpread())) * r.nextDouble();
+					double randomY = 1 - ammo.getBulletSpread() * 2 + (1 + ammo.getBulletSpread() * 2 - (1 - ammo.getBulletSpread() * 2)) * r.nextDouble();
+					double randomZ = 1 - ammo.getBulletSpread() + (1 + ammo.getBulletSpread() - (1 - ammo.getBulletSpread())) * r.nextDouble();
+					ptile.setMot(dir.add((dir.getX() * randomX) - dir.getX(), (dir.getY() * randomY) - dir.getY(), (dir.getZ() * randomZ) - dir.getZ()));
+					CustomEntitySnowballRegistry.spawnEntity(ptile, w);
+				}
+ 			} else {
+ 				Projectile ptile = new Projectile(w, eP, CraftItemStack.asNMSCopy(item), weapon, event.getAmmo());
+ 				CustomEntitySnowballRegistry.spawnEntity(ptile, w);
+ 			}
 			//manage recoil
 			if (ConfigManager.recoilEnabled()) {
 				float yawModifier = ConfigManager.getRecoilYawModifier();
