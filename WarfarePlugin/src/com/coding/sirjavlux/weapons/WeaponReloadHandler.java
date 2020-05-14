@@ -1,7 +1,9 @@
 package com.coding.sirjavlux.weapons;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.UUID;
 
@@ -13,6 +15,8 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -192,29 +196,47 @@ public class WeaponReloadHandler implements Listener {
 		return reloads.containsKey(p.getUniqueId()) ? true : false;
 	}
 	
+	private static List<UUID> playersOpenIv = new ArrayList<>();
+	
+	@EventHandler 
+	public void ivClick(InventoryClickEvent e) {
+		Player p = (Player) e.getWhoClicked();
+		UUID uuid = p.getUniqueId();
+		if (!playersOpenIv.contains(uuid)) playersOpenIv.add(uuid);
+	}
+	
+	@EventHandler 
+	public void ivClose(InventoryCloseEvent e) {
+		Player p = (Player) e.getPlayer();
+		UUID uuid = p.getUniqueId();
+		if (playersOpenIv.contains(uuid)) playersOpenIv.remove(uuid);
+	}
+	
 	@EventHandler
 	public void playerDropItem(PlayerDropItemEvent e) {
 		Item drop = e.getItemDrop();
+		Player p = e.getPlayer();
 		ItemStack item = drop.getItemStack();
-		if (WeaponManager.isWeapon(item)) {
-			net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(item);
-			NBTTagCompound tagComp = NMSItem.getTag();
-			UUID uuid = UUID.fromString(tagComp.getString("uuid"));
-			Player p = e.getPlayer();
-			WeaponItem weaponItem = WeaponManager.getWeaponItem(uuid);
-			Weapon weapon = weaponItem.getWeapon();
-			//if weapon uses magazines
-			if (weapon.requiresMagazine()) {
-				Reload reload = new Reload(weaponItem, item, ReloadType.Magazine);
-				reloads.put(p.getUniqueId(), reload);
-			}
-			//if not using magazines
-			else {
-				Reload reload = new Reload(weaponItem, item, ReloadType.Single);
-				reloads.put(p.getUniqueId(), reload);
-			}
-			e.setCancelled(true);
-			return;
+		if (!playersOpenIv.contains(p.getUniqueId())) {
+			if (WeaponManager.isWeapon(item)) {
+				net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(item);
+				NBTTagCompound tagComp = NMSItem.getTag();
+				UUID uuid = UUID.fromString(tagComp.getString("uuid"));
+				WeaponItem weaponItem = WeaponManager.getWeaponItem(uuid);
+				Weapon weapon = weaponItem.getWeapon();
+				//if weapon uses magazines
+				if (weapon.requiresMagazine()) {
+					Reload reload = new Reload(weaponItem, item, ReloadType.Magazine);
+					reloads.put(p.getUniqueId(), reload);
+				}
+				//if not using magazines
+				else {
+					Reload reload = new Reload(weaponItem, item, ReloadType.Single);
+					reloads.put(p.getUniqueId(), reload);
+				}
+				e.setCancelled(true);
+				return;
+			}		
 		}
 	}
 	
