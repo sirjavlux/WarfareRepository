@@ -47,11 +47,11 @@ public class ProjectileManager {
 					double randomY = 1 - ammo.getBulletSpread() * 2 + (1 + ammo.getBulletSpread() * 2 - (1 - ammo.getBulletSpread() * 2)) * r.nextDouble();
 					double randomZ = 1 - ammo.getBulletSpread() + (1 + ammo.getBulletSpread() - (1 - ammo.getBulletSpread())) * r.nextDouble();
 					ptile.setMot(dir.add((dir.getX() * randomX) - dir.getX(), (dir.getY() * randomY) - dir.getY(), (dir.getZ() * randomZ) - dir.getZ()));
-					CustomEntitySnowballRegistry.spawnEntity(ptile, w);
+					CustomEntitySnowballRegistry.spawnEntity(ptile, w, ammo);
 				}
  			} else {
  				Projectile ptile = new Projectile(w, eP, CraftItemStack.asNMSCopy(item), weapon, event.getAmmo());
- 				CustomEntitySnowballRegistry.spawnEntity(ptile, w);
+ 				CustomEntitySnowballRegistry.spawnEntity(ptile, w, ammo);
  			}
 			//manage recoil
 			if (ConfigManager.recoilEnabled()) {

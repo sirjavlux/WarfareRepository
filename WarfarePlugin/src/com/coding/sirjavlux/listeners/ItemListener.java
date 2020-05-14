@@ -7,15 +7,18 @@ import java.util.UUID;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCreativeEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import com.coding.sirjavlux.types.Ammo;
+import com.coding.sirjavlux.utils.ScopeUtils;
 import com.coding.sirjavlux.weapons.MagazineItem;
 import com.coding.sirjavlux.weapons.WeaponItem;
 import com.coding.sirjavlux.weapons.WeaponManager;
@@ -306,5 +309,15 @@ public class ItemListener implements Listener {
 				}
 			}
 		}
+	}
+	
+	/*/////////////////////////
+	 * SWITCH ITEMBAR SLOT
+	 */////////////////////////
+	
+	@EventHandler
+	public void switchHand(PlayerSwapHandItemsEvent e) {
+		Player p = e.getPlayer();
+		if (ScopeUtils.isScoped(p)) ScopeUtils.unscope(p);
 	}
 }

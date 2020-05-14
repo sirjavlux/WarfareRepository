@@ -27,5 +27,5 @@ public interface Effect {
 	public List<EffectParticle> getParticles();
 	public void setParticles(List<EffectParticle> particles);
 	public Location getLocation();
-	public List<Location> getDamageLocations();
+	public List<DamageCuboid> getDamageLocations();
 }

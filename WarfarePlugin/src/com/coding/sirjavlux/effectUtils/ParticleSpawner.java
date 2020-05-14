@@ -17,6 +17,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.coding.sirjavlux.core.Main;
+import com.coding.sirjavlux.effects.DamageCuboid;
 import com.coding.sirjavlux.effects.Effect;
 
 public class ParticleSpawner {
@@ -50,8 +51,8 @@ public class ParticleSpawner {
 					List<LivingEntity> entityList = new ArrayList<>();
 					//if specific location based
 					if (!effect.getDamageLocations().isEmpty()) {
-						for (Location loc : effect.getDamageLocations()) {
-							for (Entity entity : loc.getWorld().getNearbyEntities(loc.getBlock().getLocation().add(0.5, 0, 0.5), 0.7, 0.5, 0.7)) {
+						for (DamageCuboid cuboid : effect.getDamageLocations()) {
+							for (Entity entity : cuboid.getEntitiesInsideCuboid()) {
 								if (entity instanceof LivingEntity) entityList.add((LivingEntity) entity);
 							}
 						}

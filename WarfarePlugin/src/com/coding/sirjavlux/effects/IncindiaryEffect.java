@@ -26,7 +26,7 @@ public class IncindiaryEffect implements Effect {
 	private int duration, fireTicks, cooldown, startCooldown, intensity;
 	private List<EffectParticle> particles;
 	private Location loc;
-	private List<Location> damageLocations;
+	private List<DamageCuboid> damageLocations;
 	private List<LivingEntity> entities;
 	private LivingEntity entity;
 	private UUID uuid;
@@ -192,7 +192,7 @@ public class IncindiaryEffect implements Effect {
 	}
 
 	@Override
-	public List<Location> getDamageLocations() {
+	public List<DamageCuboid> getDamageLocations() {
 		return this.damageLocations;
 	}
 }
