@@ -110,17 +110,19 @@ public class Projectile extends EntitySnowball {
 			//check if entity inside block
 			if (passTrough) {
 				double accuracy = 20;
-				Collection<Entity> entities = new ArrayList<>();
-				for (int i = 0; i < accuracy; i++) {
-					Location loc = hitLoc.clone().add(dirVector.clone().multiply((1 / accuracy) * i));
-					entities.addAll(loc.getWorld().getNearbyEntities(loc, 1 / 20, 1 / 20, 1 / 20));
-				}
 				LivingEntity closest = null;
-				for (Entity entity : entities) {
-					if (entity instanceof LivingEntity) {
-						if (closest == null) closest = (LivingEntity) entity;
-						else if (closest.getLocation().distance(hitLoc) > entity.getLocation().distance(hitLoc)) closest = (LivingEntity) entity;
+				Player p = (Player) this.getShooter().getBukkitEntity();
+				for (int i = 0; i < accuracy; i++) {
+					Collection<Entity> entities = new ArrayList<>();
+					Location loc = hitLoc.clone().add(dirVector.clone().multiply((1 / accuracy) * i));
+					entities.addAll(loc.getWorld().getNearbyEntities(loc, 1 / 20, 2, 1 / 20));
+					for (Entity entity : entities) {
+						if (entity instanceof LivingEntity && !p.getUniqueId().equals(entity.getUniqueId())) {
+							if (closest == null) closest = (LivingEntity) entity;
+							else if (closest.getLocation().distance(hitLoc) > entity.getLocation().distance(hitLoc)) closest = (LivingEntity) entity;
+						}
 					}
+					if (closest != null) break;
 				}
 				//hurt closest target if not null
 				if (closest != null) {

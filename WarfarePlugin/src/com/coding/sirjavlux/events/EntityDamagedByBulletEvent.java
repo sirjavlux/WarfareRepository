@@ -57,7 +57,7 @@ public class EntityDamagedByBulletEvent extends Event implements Cancellable {
 		this.pen = pen;
 		//get other body part then chest if zombie, player or skeleton
 		Vector pDir = projectile.getLocation().getDirection();
-		this.hitPart = isBodyPartRegistrable(damaged) ? getHitBodyPart(projectile.getLocation(), damaged.getLocation(), pDir) : BodyPart.Chest;
+		this.hitPart = isBodyPartRegistrable(damaged) ? getHitBodyPart(projectile.getLocation(), damaged.getLocation(), pDir, damaged) : BodyPart.Chest;
 		this.protectingPiece = getHitArmorPice();
 		this.damage = calculateDamage(damaged, ammo.getDamage() * Double.parseDouble(hitPart.toString()), pen);
     }
@@ -186,7 +186,7 @@ public class EntityDamagedByBulletEvent extends Event implements Cancellable {
 		}
 	}
 	
-	protected BodyPart getHitBodyPart(Location hitLoc, Location pLoc, Vector oldDir) {
+	protected BodyPart getHitBodyPart(Location hitLoc, Location pLoc, Vector oldDir, LivingEntity entity) {
 		BodyPart hitBodyPart = BodyPart.Chest;
 		
 		double oldDirY = oldDir.getY();
@@ -206,10 +206,21 @@ public class EntityDamagedByBulletEvent extends Event implements Cancellable {
 		l2 = hitLoc.clone();
 		l2.setY(0);
 		
+		double headHeight = 1.5;
+		double chestHeight = 0.8;
+		
+		if (entity instanceof Player) {
+			Player target = (Player) entity;
+			if (target.isSneaking()) {
+				headHeight -= 0.4;
+				chestHeight -= 0.4;
+			}
+		}
+		
 		//above waist
-		if (hitLoc.getY() - pLoc.getY() > 0.8) {
+		if (hitLoc.getY() - pLoc.getY() > chestHeight) {
 			//check if headshot
-			if (hitLoc.getY() - pLoc.getY() > 1.5) {
+			if (hitLoc.getY() - pLoc.getY() > headHeight) {
 				//System.out.println("headshot");
 				hitBodyPart = BodyPart.Head;
 			} 

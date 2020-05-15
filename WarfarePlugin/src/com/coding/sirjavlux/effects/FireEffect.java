@@ -88,7 +88,7 @@ public class FireEffect implements Effect {
 				boolean groundHit = false;
 				int fallCount = 0;
 				int fallDuration = 0;
-				double modifier = 0.04;
+				double modifier = 0.1;
 				//create fallVectors
 				Location locBelow = center.clone().subtract(0, 0.1, 0);
 				Vector dir = locBelow.toVector().subtract(center.toVector()).normalize();
@@ -106,7 +106,7 @@ public class FireEffect implements Effect {
 					//break loop
 					if ((!blockBelow.getType().isAir() && !blockBelow.isEmpty() && !blockBelow.isLiquid() && !blockBelow.isPassable()) || (double) fallCount / (double) intensity > 100) {
 						//if no bottom, play set particles
-						if (fallCount / intensity > 100) {
+						if (fallCount / intensity > 12) {
 							setParticles(particles);
 							Main.getInstance().getParticleSpawner().addEffect(getEffect());
 							return;
