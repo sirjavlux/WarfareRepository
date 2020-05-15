@@ -1,4 +1,4 @@
-name: rifleammo
+name: rocketammo
 display-name: "&eRifle-Ammo &75.45x39"
 lore: 
     - "&7This ammo is usable for weapons"
@@ -6,22 +6,27 @@ lore:
     - "&7caliber 5.45x39!"
 #This is used to load magazines and weapons with the matching caliber
 caliber: "5.45x39"
-material: STONE
-damage: 2
-armor-penetration: 0.2
-max-stack-size: 40
-armor-damage: 16
+material: DIAMOND_BLOCK
+damage: 8
+armor-penetration: 0.02
+max-stack-size: 10
+armor-damage: 30
 #This is the ammo type, valid types are Regular, Split, Incindiary, Flame, Explosive
-type: Regular
-recoil: 2.3
-knockback: 0.15
+type: Explosive
+recoil: 6
+knockback: 0.25
 custom-model-data: 0
-speed: 2.6
+speed: 1.8
 #explosion settings on hit
 explosion-fire-ticks: 0
-explosion-range: 0
-explosion-damage-drop: 0
-explosion-damage: 0
+explosion-range: 2.8
+explosion-damage-drop: 0.23
+explosion-damage: 13
 #spread if split type
 bullet-spread: 0
 split-bullet-amount: 0
+#bullet trail
+trail:
+    r: 255
+    g: 255
+    b: 255

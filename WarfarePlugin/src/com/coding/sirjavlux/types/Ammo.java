@@ -1,5 +1,6 @@
 package com.coding.sirjavlux.types;
 
+import org.bukkit.Color;
 import org.bukkit.Material;
 
 public class Ammo {
@@ -27,8 +28,9 @@ public class Ammo {
 	private int explosionFireTicks;
 	private float spread;
 	private int hitBurnTicks;
+	private Color trail;
 	
-	public Ammo(String name, String cal, Material mat, double damage, double armorPen, String[] lore, String displayName, double speed, int maxStackSize, Material shootMat, AmmoType type, int splitBulletAmount, double explosionRange, double explotionDamage, double explotionDamageDrop, double knockBack, double armorDamage, double recoil, double knockback, int customModel, int explosionFireTicks, float spread, int hitBurnTicks) {
+	public Ammo(String name, String cal, Material mat, double damage, double armorPen, String[] lore, String displayName, double speed, int maxStackSize, Material shootMat, AmmoType type, int splitBulletAmount, double explosionRange, double explotionDamage, double explotionDamageDrop, double knockBack, double armorDamage, double recoil, double knockback, int customModel, int explosionFireTicks, float spread, int hitBurnTicks, Color trail) {
 		this.name = name;
 		this.cal = cal;
 		this.mat = mat;
@@ -52,6 +54,7 @@ public class Ammo {
 		this.explosionFireTicks = explosionFireTicks;
 		this.spread = spread;
 		this.hitBurnTicks = hitBurnTicks;
+		this.trail = trail;
 	}
 	
 	public String getName() { return name; }
@@ -77,4 +80,5 @@ public class Ammo {
 	public int getExplosionFireTicks() { return explosionFireTicks; }
 	public float getBulletSpread() { return spread; }
 	public int getHitBurnTicks() { return hitBurnTicks; }
+	public Color getTrail() { return trail; }
 }

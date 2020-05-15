@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -38,6 +39,7 @@ public class WeaponLoader extends WeaponManager{
 			
 			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/ammunition/sniper_ammo.yml", "Ammo/sniper_ammo.yml");
 			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/ammunition/rifle_ammo.yml", "Ammo/rifle_ammo.yml");
+			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/ammunition/rocket_ammo.yml", "Ammo/rocket_ammo.yml");
 		}
 		loadAmmunitionConfigs();
 		
@@ -423,9 +425,17 @@ public class WeaponLoader extends WeaponManager{
 			float spread = (float) (conf.contains("bullet-spread") ? conf.getDouble("bullet-spread") : 0);
 			//hitBurnTicks
 			int hitBurnTicks = conf.contains("hit-burn-ticks") ? conf.getInt("hit-burn-ticks") : 0;
+			//trail
+			Color trail = null;
+			if (conf.contains("trail.r") && conf.contains("trail.g") && conf.contains("trail.b")) {
+				int r = conf.getInt("trail.r");
+				int g = conf.getInt("trail.g");
+				int b = conf.getInt("trail.b");
+				trail = Color.fromBGR(b, g, r);
+			}
 			
 			//add ammunition to map
-			Ammo ammo = new Ammo(name, caliber, mat, damage, armorPen, lore, displayName, speed, maxStackSize, shootMat, type, splitBulletAmount, explosionRange, explosionDamage, explosionDamageDrop, knockBack, armorDamage, recoil, knockback, customModel, fireTicks, spread, hitBurnTicks);
+			Ammo ammo = new Ammo(name, caliber, mat, damage, armorPen, lore, displayName, speed, maxStackSize, shootMat, type, splitBulletAmount, explosionRange, explosionDamage, explosionDamageDrop, knockBack, armorDamage, recoil, knockback, customModel, fireTicks, spread, hitBurnTicks, trail);
 			WeaponManager.ammoStored.put(name, ammo);
 			
 			badAmmo.remove(file.getName());

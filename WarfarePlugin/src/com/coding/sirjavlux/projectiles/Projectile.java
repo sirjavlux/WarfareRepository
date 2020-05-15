@@ -49,6 +49,10 @@ public class Projectile extends EntitySnowball {
 	List<LivingEntity> hitEntities;
 	Block block;
 	
+	public Ammo getAmmo() {
+		return ammo;
+	}
+	
 	public Projectile(net.minecraft.server.v1_15_R1.World world, EntityLiving e, ItemStack item, Weapon weapon, Ammo ammo) {
 		super(world, e);
 		
@@ -67,6 +71,8 @@ public class Projectile extends EntitySnowball {
 		if (ammo.getAmmoType().equals(AmmoType.Flame)) {
 			this.setInvisible(true);
 			Main.getInstance().getParticleSpawner().addFlameProjectileEffect(this);
+		} else if (ammo.getTrail() != null) {
+			Main.getInstance().getParticleSpawner().addProjectileTrailEffect(this);
 		}
 		updateName();
 	}

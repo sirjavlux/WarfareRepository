@@ -1,6 +1,7 @@
 package com.coding.sirjavlux.listeners;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -176,6 +177,7 @@ public class ItemListener implements Listener {
 					//if no mag
 					else {
 						List<Ammo> rounds = weaponItem.getBarrelAmmo();
+						if (rounds == null) rounds = new ArrayList<>();
 						Ammo ammo = null;
 						int amount = 0;
 						for (Ammo round : new ArrayList<Ammo>(rounds)) {
@@ -256,12 +258,14 @@ public class ItemListener implements Listener {
 				List<Ammo> rounds = magItem.getRounds();
 				Ammo ammo = null;
 				int amount = 0;
-				for (Ammo round : new ArrayList<Ammo>(rounds)) {
+				List<Ammo> roundsTemp = new ArrayList<Ammo>(rounds);
+				Collections.reverse(roundsTemp);
+				for (Ammo round : roundsTemp) {
 					if (amount == 0) ammo = round;
 					if (round.getName() != ammo.getName()) break;
 					else if (amount >= ammo.getMaxStackSize()) break;
 					else {
-						rounds.remove(0);
+						rounds.remove(rounds.size() - 1);
 						amount++;
 					}
 				}

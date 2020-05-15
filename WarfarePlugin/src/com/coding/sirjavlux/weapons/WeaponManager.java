@@ -137,6 +137,7 @@ public class WeaponManager {
 			WeaponItem weaponItem = getWeaponItem(uuid);
 			//generate and update barrel ammo string
 			List<Ammo> barrelAmmoList = weaponItem.getBarrelAmmo();
+			if (barrelAmmoList == null) barrelAmmoList = new ArrayList<>();
 			StringBuilder barrelAmmo = new StringBuilder(barrelAmmoList.size() < 1 ? "" : barrelAmmoList.get(0).getName());
 			for (int i = 1; i < barrelAmmoList.size(); i++) barrelAmmo.append("," + barrelAmmoList.get(i).getName());
 			tagComp.setString("barrelAmmo", barrelAmmo.toString());

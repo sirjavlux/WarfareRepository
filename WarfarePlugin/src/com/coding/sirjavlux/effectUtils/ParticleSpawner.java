@@ -7,8 +7,10 @@ import java.util.Map.Entry;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
+import org.bukkit.Particle.DustOptions;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -25,6 +27,7 @@ public class ParticleSpawner {
 	public ParticleSpawner() {
 		startEffectSpawner();
 		startFlameProjectileEffectSpawner();
+		startProjectileTrailEffectSpawner();
 	}
 	
 	HashMap<UUID, Effect> effects = new HashMap<>();
@@ -107,6 +110,38 @@ public class ParticleSpawner {
 				}
 				for (UUID projectile : removeProjectiles) {
 					projectiles.remove(projectile);
+				}
+			}
+		}.runTaskTimerAsynchronously(Main.getPlugin(Main.class), 1, 1);
+	}
+	
+	private HashMap<com.coding.sirjavlux.projectiles.Projectile, UUID> trails = new HashMap<>();
+	
+	public void addProjectileTrailEffect(com.coding.sirjavlux.projectiles.Projectile projectile) {
+		trails.put(projectile, ((Player) ((Projectile) projectile.getBukkitEntity()).getShooter()).getUniqueId());
+	}
+	
+	private void startProjectileTrailEffectSpawner() {
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				List<com.coding.sirjavlux.projectiles.Projectile> removeProjectiles = new ArrayList<>();
+				for (Entry<com.coding.sirjavlux.projectiles.Projectile, UUID> entry : new HashMap<>(trails).entrySet()) {
+					com.coding.sirjavlux.projectiles.Projectile projectile = entry.getKey();
+					UUID playerUUID = entry.getValue();
+					if (projectile.isAlive()) {
+						Entity entity = projectile.getBukkitEntity();
+						Location loc = entity.getLocation();
+						if (Bukkit.getOfflinePlayer(playerUUID).isOnline()) if (Bukkit.getPlayer(playerUUID).getEyeLocation().distance(loc) < 0.4) continue;
+						Color color = projectile.getAmmo().getTrail() != null ? projectile.getAmmo().getTrail() : Color.WHITE;
+						DustOptions dustop = new DustOptions(color, 1.2f);
+						loc.getWorld().spawnParticle(Particle.REDSTONE, loc, 0, dustop);
+						continue;
+					}
+					removeProjectiles.add(projectile);
+				}
+				for (com.coding.sirjavlux.projectiles.Projectile projectile : removeProjectiles) {
+					trails.remove(projectile);
 				}
 			}
 		}.runTaskTimerAsynchronously(Main.getPlugin(Main.class), 1, 1);
