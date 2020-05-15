@@ -91,31 +91,43 @@ public class AsyncBulletHandler implements Listener {
 			Weapon weapon = WeaponManager.getStoredWeapon(tagComp.getString("name"));
 			UUID uuid = p.getUniqueId();
 			lastClickInput.replace(uuid, System.currentTimeMillis());
-			
+			WeaponItem weaponItem = WeaponManager.getWeaponItem(UUID.fromString(tagComp.getString("uuid")));
 			if (!Main.getWeaponReloadHandler().isReloading(p)) {
 				if ((action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK)) && p.isSneaking()) {
 					Mechanic mec = weapon.getShiftLeftMechanic();
 					if (mec == null) return;
 					if (mec.equals(Mechanic.SHOOT)) startFireWeapon(p.getUniqueId(), item);
-					else if (mec.equals(Mechanic.SCOPE)) if (!ScopeUtils.isScoped(p)) ScopeUtils.scope(p, weapon.getScopeAmount()); else ScopeUtils.unscope(p);
+					else if (mec.equals(Mechanic.SCOPE)) {
+						if (!ScopeUtils.isScoped(p)) ScopeUtils.scope(p, weapon.getScopeAmount()); else ScopeUtils.unscope(p);
+						weaponItem.hardUpdate(item, p);
+					}
 				}
 				else if ((action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) && p.isSneaking()) {
 					Mechanic mec = weapon.getShiftRightMechanic();
 					if (mec == null) return;
 					if (mec.equals(Mechanic.SHOOT)) startFireWeapon(p.getUniqueId(), item);
-					else if (mec.equals(Mechanic.SCOPE)) if (!ScopeUtils.isScoped(p)) ScopeUtils.scope(p, weapon.getScopeAmount()); else ScopeUtils.unscope(p);
+					else if (mec.equals(Mechanic.SCOPE)) {
+						if (!ScopeUtils.isScoped(p)) ScopeUtils.scope(p, weapon.getScopeAmount()); else ScopeUtils.unscope(p);
+						weaponItem.hardUpdate(item, p);
+					}
 				}
 				else if (action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK)) {
 					Mechanic mec = weapon.getLeftMechanic();
 					if (mec == null) return;
 					if (mec.equals(Mechanic.SHOOT)) startFireWeapon(p.getUniqueId(), item);
-					else if (mec.equals(Mechanic.SCOPE)) if (!ScopeUtils.isScoped(p)) ScopeUtils.scope(p, weapon.getScopeAmount()); else ScopeUtils.unscope(p);
+					else if (mec.equals(Mechanic.SCOPE)) {
+						if (!ScopeUtils.isScoped(p)) ScopeUtils.scope(p, weapon.getScopeAmount()); else ScopeUtils.unscope(p);
+						weaponItem.hardUpdate(item, p);
+					}
 				}
 				else if (action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) {
 					Mechanic mec = weapon.getRightMechanic();
 					if (mec == null) return;
 					if (mec.equals(Mechanic.SHOOT)) startFireWeapon(p.getUniqueId(), item);
-					else if (mec.equals(Mechanic.SCOPE)) if (!ScopeUtils.isScoped(p)) ScopeUtils.scope(p, weapon.getScopeAmount()); else ScopeUtils.unscope(p);
+					else if (mec.equals(Mechanic.SCOPE)) {
+						if (!ScopeUtils.isScoped(p)) ScopeUtils.scope(p, weapon.getScopeAmount()); else ScopeUtils.unscope(p);
+						weaponItem.hardUpdate(item, p);
+					}
 				}
 			}
 		}
@@ -154,7 +166,7 @@ public class AsyncBulletHandler implements Listener {
     	    					UUID wUUID = UUID.fromString(tagTemp.getString("uuid"));
     	    					if (wUUID.equals(uuid)) {
         	    	    			activeWeapon.saveData(item, p, count);
-        	    	    			activeWeapon.hardUpdate(item);
+        	    	    			activeWeapon.hardUpdate(item, p);
     	    					}
     	    				}
     	    				count++;
@@ -172,7 +184,7 @@ public class AsyncBulletHandler implements Listener {
     	    					UUID wUUID = UUID.fromString(tagTemp.getString("uuid"));
     	    					if (wUUID.equals(uuid)) {
         	    	    			activeWeapon.saveData(item, p, count);
-        	    	    			activeWeapon.hardUpdate(item);
+        	    	    			activeWeapon.hardUpdate(item, p);
     	    					}
     	    				}
     	    				count++;
@@ -182,7 +194,7 @@ public class AsyncBulletHandler implements Listener {
     	    		}
     	    		else if ((System.currentTimeMillis() - lastClickInput.get(uuid)) / 50 > 4 && !weapon.getType().equals(WeaponType.Burst)) {
     	    			activeWeapon.resetBurst();
-    	    			activeWeapon.hardUpdate(hand);
+    	    			activeWeapon.hardUpdate(hand, p);
     	    			activeWeapon.saveData(hand, p, p.getInventory().getHeldItemSlot());
     	    			activeWeapons.remove(uuid);
 						continue;
@@ -214,7 +226,7 @@ public class AsyncBulletHandler implements Listener {
     	    		boolean isEmpty = activeWeapon.removeBullet();
     	    		activeWeapon.update(hand);
     	    		if (isEmpty) {
-    	    			activeWeapon.hardUpdate(hand);
+    	    			activeWeapon.hardUpdate(hand, p);
     	    			activeWeapon.saveData(hand, p, p.getInventory().getHeldItemSlot());
     	    			activeWeapons.remove(uuid);
     	    		}
@@ -268,7 +280,7 @@ public class AsyncBulletHandler implements Listener {
 					if (ammo != null) {
 						shootBullet(p, weaponItem, ammo);
 						weaponItem.removeBullet();
-						weaponItem.hardUpdate(item);
+						weaponItem.hardUpdate(item, p);
 						weaponItem.saveData(item, p, p.getInventory().getHeldItemSlot());
 					} else {
 						p.sendMessage(ChatColor.RED + "Reload, ammunition empty!");

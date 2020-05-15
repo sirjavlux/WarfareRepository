@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -79,7 +78,7 @@ public class ItemListener implements Listener {
 		ItemStack item = e.getCurrentItem();
 		Inventory iv = e.getClickedInventory();
 		ClickType click = e.getClick();
-		HumanEntity p = e.getWhoClicked();
+		Player p = (Player) e.getWhoClicked();
 		
 		/*///////////////////////////////
 		 * UNLOAD AND LOAD WEAPON
@@ -116,7 +115,7 @@ public class ItemListener implements Listener {
 						magItem.setRounds(rounds);
 						weaponItem.setBarrelAmmo(barrelRounds);
 						weaponItem.setMagazineItem(magItem);
-						weaponItem.hardUpdate(item);
+						weaponItem.hardUpdate(item, p);
 						weaponItem.updateNextAmmo();
 						iv.setItem(e.getSlot(), WeaponManager.saveWeaponData(item));
 						p.setItemOnCursor(new ItemStack(Material.AIR));
@@ -148,7 +147,7 @@ public class ItemListener implements Listener {
 								p.setItemOnCursor(ammoItem);
 							}
 							else p.setItemOnCursor(new ItemStack(Material.AIR));
-							weaponItem.hardUpdate(item);
+							weaponItem.hardUpdate(item, p);
 							weaponItem.updateNextAmmo();
 							iv.setItem(e.getSlot(), WeaponManager.saveWeaponData(item));
 							cancel = true;	
@@ -169,7 +168,7 @@ public class ItemListener implements Listener {
 						magItem.update(mag);
 						weaponItem.setMagazineItem(null);
 						p.setItemOnCursor(mag);
-						weaponItem.hardUpdate(item);
+						weaponItem.hardUpdate(item, p);
 						weaponItem.updateNextAmmo();
 						iv.setItem(e.getSlot(), WeaponManager.saveWeaponData(item));
 						cancel = true;
@@ -191,7 +190,7 @@ public class ItemListener implements Listener {
 						if (ammo != null) {
 							weaponItem.setBarrelAmmo(rounds);
 							p.setItemOnCursor(WeaponManager.generateAmmo(ammo, amount));
-							weaponItem.hardUpdate(item);
+							weaponItem.hardUpdate(item, p);
 							weaponItem.updateNextAmmo();
 							iv.setItem(e.getSlot(), WeaponManager.saveWeaponData(item));
 							cancel = true;	

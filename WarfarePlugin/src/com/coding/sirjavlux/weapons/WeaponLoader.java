@@ -228,9 +228,15 @@ public class WeaponLoader extends WeaponManager{
 			try { shift = Mechanic.valueOf(conf.getString("actions.shift").toUpperCase()); } catch (Exception e) {}
 			//scope amount
 			float scope = (float) (conf.contains("scope") ? conf.getDouble("scope") : -0.2);
+			//scoped material
+			String scopeMatS = conf.contains("scope-material") ? conf.getString("scope-material") : null;
+			Material scopeMat = mat;
+			try { scopeMat = Material.valueOf(scopeMatS.toUpperCase()); } catch (Exception e) { }
+			//scoped model data
+			int scopeModelData = conf.contains("scope-custom-model-data") ? conf.getInt("scope-custom-model-data") : 0;
 			
 			//create weapon
-			Weapon weapon = new Weapon(type, mat, magReq, name, smokeOffset, smokeEnabled, smokeIntensity, damage, lore, displayName, defaultMag, loadedByDefault, reqMag, barrelAmmoCap, caliber, fireRate, preLoadAmmo, burstAmount, burstSpeed, recoilRed, knockbackRed, reloadSpeed, customModel, right, shiftRight, left, shiftLeft, shift, scope);
+			Weapon weapon = new Weapon(type, mat, magReq, name, smokeOffset, smokeEnabled, smokeIntensity, damage, lore, displayName, defaultMag, loadedByDefault, reqMag, barrelAmmoCap, caliber, fireRate, preLoadAmmo, burstAmount, burstSpeed, recoilRed, knockbackRed, reloadSpeed, customModel, right, shiftRight, left, shiftLeft, shift, scope, scopeMat, scopeModelData);
 			weaponStored.put(name, weapon);
 			badWeapons.remove(file.getName());
 			goodWeapons.add(file.getName());

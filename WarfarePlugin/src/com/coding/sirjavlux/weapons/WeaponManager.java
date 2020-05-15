@@ -255,10 +255,10 @@ public class WeaponManager {
 	 *////////////////////////////////
 	public static void givePlayerWeapon(Player p, Weapon weapon) {
 		//give item
-		inventoryHandler.giveToPlayer(p, generateWeapon(weapon), p.getLocation());
+		inventoryHandler.giveToPlayer(p, generateWeapon(weapon, p), p.getLocation());
 	}
 	
-	public static ItemStack generateWeapon(Weapon weapon) {
+	public static ItemStack generateWeapon(Weapon weapon, Player p) {
 		ItemStack wItem = new ItemStack(weapon.getMat());
 		//add nms tags
 		net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(wItem);
@@ -281,7 +281,7 @@ public class WeaponManager {
 		}
 		weaponItems.put(wUUID, weaponItem);
 		//update display data of item
-		weaponItem.hardUpdate(wItem);
+		weaponItem.hardUpdate(wItem, p);
 		wItem = saveWeaponData(wItem);
 		return wItem;
 	}

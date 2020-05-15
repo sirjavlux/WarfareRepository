@@ -5,7 +5,7 @@ import org.bukkit.Material;
 public class Weapon {
 	
 	private WeaponType type;
-	private Material mat;
+	private Material mat, scopeMat;
 	private Magazine[] magReq;
 	private String name;
 	private double[] smokeOffset;
@@ -26,11 +26,11 @@ public class Weapon {
 	private double recoilRed;
 	private double knockbackRed;
 	private int reloadSpeed;
-	private int customModel;
+	private int customModel, scopeModelData;
 	private Mechanic right, shiftRight, left, shiftLeft, shift;
 	private float scope;
 	
-	public Weapon (WeaponType type, Material mat, Magazine[] magReq, String name, double[] smokeOffset, boolean smokeEnabled, double smokeIntensity, double damage, String[] lore, String displayName, Magazine defaultMag, boolean loadedByDefault, boolean reqMag, int barrelAmmoCap, String caliber, double fireRate, Ammo preloadAmmo, int burstAmount, double burstSpeed, double recoilRed, double knockbackRed, int reloadSpeed, int customModel, Mechanic right, Mechanic shiftRight, Mechanic left, Mechanic shiftLeft, Mechanic shift, float scope) {
+	public Weapon (WeaponType type, Material mat, Magazine[] magReq, String name, double[] smokeOffset, boolean smokeEnabled, double smokeIntensity, double damage, String[] lore, String displayName, Magazine defaultMag, boolean loadedByDefault, boolean reqMag, int barrelAmmoCap, String caliber, double fireRate, Ammo preloadAmmo, int burstAmount, double burstSpeed, double recoilRed, double knockbackRed, int reloadSpeed, int customModel, Mechanic right, Mechanic shiftRight, Mechanic left, Mechanic shiftLeft, Mechanic shift, float scope, Material scopeMat, int scopeModelData) {
 		this.type = type;
 		this.mat = mat;
 		this.magReq = magReq;
@@ -60,6 +60,8 @@ public class Weapon {
 		this.shiftLeft = shiftLeft;
 		this.shiftRight = shiftRight;
 		this.scope = scope;
+		this.scopeMat = scopeMat;
+		this.scopeModelData = scopeModelData;
 	}
 	
 	public WeaponType getType() { return type; }
@@ -91,4 +93,6 @@ public class Weapon {
 	public Mechanic getShiftLeftMechanic() { return shiftLeft; }
 	public Mechanic getShiftMechanic() { return shift; }
 	public float getScopeAmount() { return scope; }
+	public Material getScopeMaterial() { return scopeMat; }
+	public int getScopeModelData() { return scopeModelData; }
 }

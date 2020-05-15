@@ -22,7 +22,9 @@ public class CommandManager implements CommandExecutor {
 			}
 			String command = args[0].toUpperCase();
 			switch (command) {
-			case "GIVE": GiveCommand.execute(sender, cmd, label, args);
+			case "GIVE": 
+				if (sender.hasPermission("wf.give")) GiveCommand.execute(sender, cmd, label, args);
+				else sender.sendMessage(ChatColor.RED + "You didn't have permission to use this command!");
 				break;
 			default: sender.sendMessage(ChatColor.GRAY + "The entered command " + ChatColor.RED + input + ChatColor.GRAY + " wasn't valid, try wf for help.");
 				break;

@@ -12,6 +12,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import com.coding.sirjavlux.types.Ammo;
 import com.coding.sirjavlux.types.Weapon;
 import com.coding.sirjavlux.types.WeaponType;
+import com.coding.sirjavlux.utils.ScopeUtils;
 
 public class WeaponItem {
 	
@@ -103,7 +104,7 @@ public class WeaponItem {
 		item.setItemMeta(meta);
 	}
 	
-	public void hardUpdate(ItemStack item) {
+	public void hardUpdate(ItemStack item, Player p) {
 		ItemMeta meta = item.getItemMeta();
 		int magAmmo = getBarrelAmmo().size();
 		int maxAmmo = weapon.getBarrelAmmoCap();
@@ -129,7 +130,13 @@ public class WeaponItem {
 		
 		//set custom texture
 		meta.setUnbreakable(true);
-		
+		if (ScopeUtils.isScoped(p)) {
+			item.setType(weapon.getScopeMaterial());
+			meta.setCustomModelData(weapon.getScopeModelData());
+		} else {
+			item.setType(weapon.getMat());
+			meta.setCustomModelData(weapon.getCustomModelData());
+		}
 		item.setItemMeta(meta);
 	}
 	

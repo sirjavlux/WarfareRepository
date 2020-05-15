@@ -120,7 +120,7 @@ public class WeaponReloadHandler implements Listener {
 												iv.setItem(slot, new ItemStack(oldItem));
 											}
 											weaponItem.setMagazineItem(magItem);
-											weaponItem.hardUpdate(heldItem);
+											weaponItem.hardUpdate(heldItem, p);
 											weaponItem.updateNextAmmo();
 										} else {
 											remove = false;
@@ -153,7 +153,7 @@ public class WeaponReloadHandler implements Listener {
 									if (ammo != null && time <= 0) {
 										weaponItem.getBarrelAmmo().add(ammo);
 										weaponItem.updateNextAmmo();
-										weaponItem.hardUpdate(heldItem);
+										weaponItem.hardUpdate(heldItem, p);
 										int ammoItemAmount = ammoItemStack.getAmount();
 										if (ammoItemAmount > 1) ammoItemStack.setAmount(ammoItemAmount - 1);
 										else ammoItemStack = new ItemStack(Material.AIR);
