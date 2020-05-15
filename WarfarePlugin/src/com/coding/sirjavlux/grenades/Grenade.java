@@ -3,7 +3,6 @@ package com.coding.sirjavlux.grenades;
 import java.util.List;
 
 import org.bukkit.Material;
-import org.bukkit.Sound;
 
 public class Grenade {
 
@@ -13,9 +12,9 @@ public class Grenade {
 	private List<String> lore;
 	private String displayName, name;
 	private double explosionRange, explosionDamage, explosionDamageDrop, speed;
-	private Sound explodeSound, throwSound;
+	private String explodeSound, throwSound;
 	
-	public Grenade(Material mat, int modelData, List<String> lore, String displayName, GrenadeType type, String name, double explosionRange, double explosionDamage, double explosionDamageDrop, int fireTicks, double speed, int maxStackSize, int duration, Sound explodeSound, Sound throwSound) {
+	public Grenade(Material mat, int modelData, List<String> lore, String displayName, GrenadeType type, String name, double explosionRange, double explosionDamage, double explosionDamageDrop, int fireTicks, double speed, int maxStackSize, int duration, String explodeSound, String throwSound) {
 		this.mat = mat;
 		this.modelData = modelData;
 		this.lore = lore;
@@ -46,6 +45,6 @@ public class Grenade {
 	public double getSpeed() { return speed; }
 	public int getMaxStackSize() { return maxStackSize; }
 	public int getDuration() { return duration; }
-	public Sound getExplodeSound() { return explodeSound; }
-	public Sound getThrowSound() { return throwSound; }
+	public String getExplodeSound() { return explodeSound; }
+	public String getThrowSound() { return throwSound; }
 }

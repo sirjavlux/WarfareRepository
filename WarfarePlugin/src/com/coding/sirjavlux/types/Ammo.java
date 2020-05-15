@@ -2,7 +2,6 @@ package com.coding.sirjavlux.types;
 
 import org.bukkit.Color;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 
 public class Ammo {
 	
@@ -30,9 +29,9 @@ public class Ammo {
 	private float spread;
 	private int hitBurnTicks;
 	private Color trail;
-	private Sound hitGround, hitFlesh, hitArmor, explodeSound, trailSound;
+	private String hitGround, hitFlesh, hitArmor, explodeSound, trailSound;
 	
-	public Ammo(String name, String cal, Material mat, double damage, double armorPen, String[] lore, String displayName, double speed, int maxStackSize, Material shootMat, AmmoType type, int splitBulletAmount, double explosionRange, double explotionDamage, double explotionDamageDrop, double knockBack, double armorDamage, double recoil, double knockback, int customModel, int explosionFireTicks, float spread, int hitBurnTicks, Color trail, Sound hitGround, Sound hitFlesh, Sound hitArmor, Sound explodeSound, Sound trailSound) {
+	public Ammo(String name, String cal, Material mat, double damage, double armorPen, String[] lore, String displayName, double speed, int maxStackSize, Material shootMat, AmmoType type, int splitBulletAmount, double explosionRange, double explotionDamage, double explotionDamageDrop, double knockBack, double armorDamage, double recoil, double knockback, int customModel, int explosionFireTicks, float spread, int hitBurnTicks, Color trail, String hitGround, String hitFlesh, String hitArmor, String explodeSound, String trailSound) {
 		this.name = name;
 		this.cal = cal;
 		this.mat = mat;
@@ -88,9 +87,9 @@ public class Ammo {
 	public float getBulletSpread() { return spread; }
 	public int getHitBurnTicks() { return hitBurnTicks; }
 	public Color getTrail() { return trail; }
-	public Sound getHitGroundSound() { return hitGround; }
-	public Sound getHitFleshSound() { return hitFlesh; }
-	public Sound getHitArmorSound() { return hitArmor; }
-	public Sound getExplodeSound() { return explodeSound; }
-	public Sound getTrailSound() { return trailSound; }
+	public String getHitGroundSound() { return hitGround; }
+	public String getHitFleshSound() { return hitFlesh; }
+	public String getHitArmorSound() { return hitArmor; }
+	public String getExplodeSound() { return explodeSound; }
+	public String getTrailSound() { return trailSound; }
 }

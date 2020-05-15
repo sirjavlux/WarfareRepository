@@ -1,7 +1,6 @@
 package com.coding.sirjavlux.types;
 
 import org.bukkit.Material;
-import org.bukkit.Sound;
 
 public class Weapon {
 	
@@ -30,9 +29,9 @@ public class Weapon {
 	private int customModel, scopeModelData;
 	private Mechanic right, shiftRight, left, shiftLeft, shift;
 	private float scope;
-	private Sound scopeSound, shootSound, reloadSound, afterShotSound, finishedReloadSound;
+	private String scopeSound, shootSound, reloadSound, afterShotSound, finishedReloadSound;
 	
-	public Weapon (WeaponType type, Material mat, Magazine[] magReq, String name, double[] smokeOffset, boolean smokeEnabled, double smokeIntensity, double damage, String[] lore, String displayName, Magazine defaultMag, boolean loadedByDefault, boolean reqMag, int barrelAmmoCap, String caliber, double fireRate, Ammo preloadAmmo, int burstAmount, double burstSpeed, double recoilRed, double knockbackRed, int reloadSpeed, int customModel, Mechanic right, Mechanic shiftRight, Mechanic left, Mechanic shiftLeft, Mechanic shift, float scope, Material scopeMat, int scopeModelData, Sound scopeSound, Sound shootSound, Sound reloadSound, Sound afterShotSound, Sound finishedReloadSound) {
+	public Weapon (WeaponType type, Material mat, Magazine[] magReq, String name, double[] smokeOffset, boolean smokeEnabled, double smokeIntensity, double damage, String[] lore, String displayName, Magazine defaultMag, boolean loadedByDefault, boolean reqMag, int barrelAmmoCap, String caliber, double fireRate, Ammo preloadAmmo, int burstAmount, double burstSpeed, double recoilRed, double knockbackRed, int reloadSpeed, int customModel, Mechanic right, Mechanic shiftRight, Mechanic left, Mechanic shiftLeft, Mechanic shift, float scope, Material scopeMat, int scopeModelData, String scopeSound, String shootSound, String reloadSound, String afterShotSound, String finishedReloadSound) {
 		this.type = type;
 		this.mat = mat;
 		this.magReq = magReq;
@@ -102,9 +101,9 @@ public class Weapon {
 	public float getScopeAmount() { return scope; }
 	public Material getScopeMaterial() { return scopeMat; }
 	public int getScopeModelData() { return scopeModelData; }
-	public Sound getScopeSound() { return scopeSound; }
-	public Sound getShootSound() { return shootSound; }
-	public Sound getReloadSound() { return reloadSound; }
-	public Sound getFinishedReloadSound() { return finishedReloadSound; }
-	public Sound getAfterShotSound() { return afterShotSound; }
+	public String getScopeSound() { return scopeSound; }
+	public String getShootSound() { return shootSound; }
+	public String getReloadSound() { return reloadSound; }
+	public String getFinishedReloadSound() { return finishedReloadSound; }
+	public String getAfterShotSound() { return afterShotSound; }
 }

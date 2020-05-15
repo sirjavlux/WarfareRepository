@@ -1,7 +1,6 @@
 package com.coding.sirjavlux.types;
 
 import org.bukkit.Material;
-import org.bukkit.Sound;
 
 public class Magazine {
 	
@@ -12,9 +11,9 @@ public class Magazine {
 	private String displayName;
 	private String[] lore;
 	private int customModel;
-	private Sound addAmmoSound, removeAmmoSound;
+	private String addAmmoSound, removeAmmoSound;
 	
-	public Magazine(String caliber, int ammoCap, String name, Material mat, String displayName, String[] lore, int customModel, Sound addAmmoSound, Sound removeAmmoSound) {
+	public Magazine(String caliber, int ammoCap, String name, Material mat, String displayName, String[] lore, int customModel, String addAmmoSound, String removeAmmoSound) {
 		this.ammoCap = ammoCap;
 		this.caliber = caliber;
 		this.name = name;
@@ -33,6 +32,6 @@ public class Magazine {
 	public String getDisplayName() { return displayName; }
 	public String[] getLore() { return lore; }
 	public int getCustomModelData() { return customModel; }
-	public Sound getAddAmmoSound() { return addAmmoSound; }
-	public Sound getRemoveAmmoSound() { return removeAmmoSound; }
+	public String getAddAmmoSound() { return addAmmoSound; }
+	public String getRemoveAmmoSound() { return removeAmmoSound; }
 }

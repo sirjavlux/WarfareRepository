@@ -7,7 +7,6 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -107,11 +106,9 @@ public class GrenadeLoader extends GrenadeManager {
 			//duration
 			int duration = conf.contains("duration") ? conf.getInt("duration") : 60;
 			//explode sound
-			Sound explodeSound = Sound.ENTITY_GENERIC_EXPLODE;
-			try { explodeSound = Sound.valueOf("explode-sound"); } catch (Exception e) { }
+			String explodeSound = conf.contains("explode-sound") ? conf.getString("explode-sound") : "entity.generic.explode";
 			//throw sound
-			Sound throwSound = Sound.ENTITY_SPLASH_POTION_THROW;
-			try { throwSound = Sound.valueOf("throw-sound"); } catch (Exception e) { }
+			String throwSound = conf.contains("throw-sound") ? conf.getString("throw-sound") : "entity.splash_potion.throw";
 			
 			Grenade grenade = new Grenade(mat, modelData, lore, displayName, type, name, explosionRange, explosionDamage, explosionDamageDrop, fireTicks, speed, maxStackSize, duration, explodeSound, throwSound);
 			GrenadeManager.grenades.put(name, grenade);

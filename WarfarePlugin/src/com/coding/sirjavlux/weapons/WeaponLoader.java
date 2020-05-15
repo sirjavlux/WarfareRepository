@@ -8,7 +8,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -238,20 +237,15 @@ public class WeaponLoader extends WeaponManager{
 			//scoped model data
 			int scopeModelData = conf.contains("scope-custom-model-data") ? conf.getInt("scope-custom-model-data") : 0;
 			//scope sound
-			Sound scopeSound = Sound.BLOCK_WOOD_HIT;
-			try { scopeSound = Sound.valueOf("scope-sound"); } catch (Exception e) { }
+			String scopeSound = conf.contains("scope-sound") ? conf.getString("scope-sound") : "block.wood.hit";
 			//shoot sound
-			Sound shootSound = Sound.BLOCK_METAL_PLACE;
-			try { shootSound = Sound.valueOf("shoot-sound"); } catch (Exception e) { }
+			String shootSound = conf.contains("shoot-sound") ? conf.getString("shoot-sound") : "block.grass.place";
 			//reload sound
-			Sound reloadSound = Sound.BLOCK_STONE_BUTTON_CLICK_ON;
-			try { reloadSound = Sound.valueOf("reload-sound"); } catch (Exception e) { }
+			String reloadSound = conf.contains("reload-sound") ? conf.getString("reload-sound") : "block.stone_button.click_on";
 			//after shot sound
-			Sound afterShotSound = null;
-			try { afterShotSound = Sound.valueOf("after-shot-sound"); } catch (Exception e) { }
+			String afterShotSound = conf.contains("after-shot-sound") ? conf.getString("after-shot-sound") : null;
 			//after reload sound
-			Sound finishedReloadSound = Sound.BLOCK_STONE_BUTTON_CLICK_OFF;
-			try { finishedReloadSound = Sound.valueOf("finished-reload-sound"); } catch (Exception e) { }
+			String finishedReloadSound = conf.contains("finished-reload-sound") ? conf.getString("finished-reload-sound") : "block.stone_button.click_on";
 			
 			//create weapon
 			Weapon weapon = new Weapon(type, mat, magReq, name, smokeOffset, smokeEnabled, smokeIntensity, damage, lore, displayName, defaultMag, loadedByDefault, reqMag, barrelAmmoCap, caliber, fireRate, preLoadAmmo, burstAmount, burstSpeed, recoilRed, knockbackRed, reloadSpeed, customModel, right, shiftRight, left, shiftLeft, shift, scope, scopeMat, scopeModelData, scopeSound, shootSound, reloadSound, afterShotSound, finishedReloadSound);
@@ -328,11 +322,9 @@ public class WeaponLoader extends WeaponManager{
 			//custom model data
 			int customModel = conf.contains("custom-model-data") ? conf.getInt("custom-model-data") : 0;
 			//add ammo sound
-			Sound addAmmo = Sound.BLOCK_STONE_BUTTON_CLICK_ON;
-			try { addAmmo = Sound.valueOf("add-ammo-sound"); } catch (Exception e) { }
+			String addAmmo = conf.contains("add-ammo-sound") ? conf.getString("add-ammo-sound") : "block.stone_button.click_on";
 			//remove ammo sound
-			Sound removeAmmo = Sound.BLOCK_STONE_BUTTON_CLICK_ON;
-			try { removeAmmo = Sound.valueOf("remove-ammo-sound"); } catch (Exception e) { }
+			String removeAmmo = conf.contains("remove-ammo-sound") ? conf.getString("remove-ammo-sound") : "block.stone_button.click_on";
 			
 			//add mag to map
 			Magazine mag = new Magazine(caliber, ammoCap, name, mat, displayName, lore, customModel, addAmmo, removeAmmo);
@@ -456,20 +448,15 @@ public class WeaponLoader extends WeaponManager{
 				trail = Color.fromBGR(b, g, r);
 			}
 			//bullet hit ground sound
-			Sound hitGround = Sound.BLOCK_GRASS_HIT;
-			try { hitGround = Sound.valueOf("hit-ground-sound"); } catch (Exception e) { }
+			String hitGround = conf.contains("hit-ground-sound") ? conf.getString("hit-ground-sound") : "block.grass.hit";
 			//bullet hit flesh sound
-			Sound hitFlesh = Sound.BLOCK_SLIME_BLOCK_STEP;
-			try { hitFlesh = Sound.valueOf("hit-flesh-sound"); } catch (Exception e) { }
+			String hitFlesh = conf.contains("hit-flesh-sound") ? conf.getString("hit-flesh-sound") : "block.slime_block.break";
 			//bullet hit armor sound
-			Sound hitArmor = Sound.BLOCK_ANVIL_LAND;
-			try { hitArmor = Sound.valueOf("hit-armor-sound"); } catch (Exception e) { }
+			String hitArmor = conf.contains("hit-armor-sound") ? conf.getString("hit-armor-sound") : "block.anvil.land";
 			//explode sound
-			Sound explodeSound = Sound.ENTITY_GENERIC_EXPLODE;
-			try { explodeSound = Sound.valueOf("explode-sound"); } catch (Exception e) { }
+			String explodeSound = conf.contains("explode-sound") ? conf.getString("explode-sound") : "entity.generic.explode";
 			//explode sound
-			Sound trailSound = Sound.ENTITY_FIREWORK_ROCKET_LAUNCH;
-			try { trailSound = Sound.valueOf("trail-sound"); } catch (Exception e) { }
+			String trailSound = conf.contains("trail-sound") ? conf.getString("trail-sound") : "entity.firework_rocket.launch";
 			
 			//add ammunition to map
 			Ammo ammo = new Ammo(name, caliber, mat, damage, armorPen, lore, displayName, speed, maxStackSize, shootMat, type, splitBulletAmount, explosionRange, explosionDamage, explosionDamageDrop, knockBack, armorDamage, recoil, knockback, customModel, fireTicks, spread, hitBurnTicks, trail, hitGround, hitFlesh, hitArmor, explodeSound, trailSound);

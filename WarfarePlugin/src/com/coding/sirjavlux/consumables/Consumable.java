@@ -3,7 +3,6 @@ package com.coding.sirjavlux.consumables;
 import java.util.List;
 
 import org.bukkit.Material;
-import org.bukkit.Sound;
 
 public class Consumable {
 
@@ -13,9 +12,9 @@ public class Consumable {
 	private String displayName, name;
 	private double heal, walkSpeed;
 	private boolean splint, bandage, concussion;
-	private Sound useSound, finishSound;
+	private String useSound, finishSound;
 	
-	public Consumable(Material mat, int modelData, List<String> lore, String displayName, String name, double heal, boolean splint, boolean bandage, boolean concussion, int uses, int useTime, double walkSpeed, Sound useSound, Sound finishSound) {
+	public Consumable(Material mat, int modelData, List<String> lore, String displayName, String name, double heal, boolean splint, boolean bandage, boolean concussion, int uses, int useTime, double walkSpeed, String useSound, String finishSound) {
 		this.mat = mat;
 		this.modelData = modelData;
 		this.lore = lore;
@@ -44,6 +43,6 @@ public class Consumable {
 	public int getMaxUses() { return uses; }
 	public int getUseTime() { return useTime; }
 	public double getWalkSpeed() { return walkSpeed; }
-	public Sound getUseSound() { return useSound; }
-	public Sound getFinishSound() { return finishSound; }
+	public String getUseSound() { return useSound; }
+	public String getFinishSound() { return finishSound; }
 }
