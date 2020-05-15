@@ -244,6 +244,7 @@ public class ItemListener implements Listener {
 						} else {
 							p.setItemOnCursor(new ItemStack(Material.AIR));
 						}
+						p.playSound(p.getLocation(), magItem.getMagazine().getAddAmmoSound(), 1, 1);
 						e.setCancelled(true);
 						return;
 					}
@@ -274,6 +275,7 @@ public class ItemListener implements Listener {
 					magItem.update(item);
 					iv.setItem(e.getSlot(), WeaponManager.saveMagazineData(item));
 					p.setItemOnCursor(WeaponManager.generateAmmo(ammo, amount));
+					p.playSound(p.getLocation(), magItem.getMagazine().getRemoveAmmoSound(), 1, 1);
 					e.setCancelled(true);
 					return;
 				}

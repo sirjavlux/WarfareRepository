@@ -327,9 +327,15 @@ public class WeaponLoader extends WeaponManager{
 			lore = loreList.toArray(lore);
 			//custom model data
 			int customModel = conf.contains("custom-model-data") ? conf.getInt("custom-model-data") : 0;
+			//add ammo sound
+			Sound addAmmo = Sound.BLOCK_STONE_BUTTON_CLICK_ON;
+			try { addAmmo = Sound.valueOf("add-ammo-sound"); } catch (Exception e) { }
+			//remove ammo sound
+			Sound removeAmmo = Sound.BLOCK_STONE_BUTTON_CLICK_ON;
+			try { removeAmmo = Sound.valueOf("remove-ammo-sound"); } catch (Exception e) { }
 			
 			//add mag to map
-			Magazine mag = new Magazine(caliber, ammoCap, name, mat, displayName, lore, customModel);
+			Magazine mag = new Magazine(caliber, ammoCap, name, mat, displayName, lore, customModel, addAmmo, removeAmmo);
 			WeaponManager.magazineStored.put(name, mag);
 			
 			badMags.remove(file.getName());
@@ -449,9 +455,18 @@ public class WeaponLoader extends WeaponManager{
 				int b = conf.getInt("trail.b");
 				trail = Color.fromBGR(b, g, r);
 			}
+			//bullet hit ground sound
+			Sound hitGround = Sound.BLOCK_GRASS_HIT;
+			try { hitGround = Sound.valueOf("hit-ground-sound"); } catch (Exception e) { }
+			//bullet hit flesh sound
+			Sound hitFlesh = Sound.BLOCK_SLIME_BLOCK_STEP;
+			try { hitFlesh = Sound.valueOf("hit-flesh-sound"); } catch (Exception e) { }
+			//bullet hit armor sound
+			Sound hitArmor = Sound.BLOCK_ANVIL_LAND;
+			try { hitArmor = Sound.valueOf("hit-armor-sound"); } catch (Exception e) { }
 			
 			//add ammunition to map
-			Ammo ammo = new Ammo(name, caliber, mat, damage, armorPen, lore, displayName, speed, maxStackSize, shootMat, type, splitBulletAmount, explosionRange, explosionDamage, explosionDamageDrop, knockBack, armorDamage, recoil, knockback, customModel, fireTicks, spread, hitBurnTicks, trail);
+			Ammo ammo = new Ammo(name, caliber, mat, damage, armorPen, lore, displayName, speed, maxStackSize, shootMat, type, splitBulletAmount, explosionRange, explosionDamage, explosionDamageDrop, knockBack, armorDamage, recoil, knockback, customModel, fireTicks, spread, hitBurnTicks, trail, hitGround, hitFlesh, hitArmor);
 			WeaponManager.ammoStored.put(name, ammo);
 			
 			badAmmo.remove(file.getName());

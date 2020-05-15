@@ -270,6 +270,10 @@ public class Projectile extends EntitySnowball {
 			penetration -= (armorProt * penRed) + penetration * entityPenRed;
 			double penSpeedReduc = speedRed * 1 - (penetration * ammo.getArmorPenetration()) + 1 - (penetration * ammo.getArmorPenetration());
 			speed -= ammo.getSpeed() * penSpeedReduc;
+			//play sounds
+			Location loc = entity.getLocation();
+			if (armorProt > 0) loc.getWorld().playSound(loc, ammo.getHitArmorSound(), 1.5f, 1);
+			else loc.getWorld().playSound(loc, ammo.getHitFleshSound(), 1, 1);
 		} else {
 			speed = 0;
 		}		
@@ -287,6 +291,7 @@ public class Projectile extends EntitySnowball {
 		Bukkit.getPluginManager().callEvent(event);
 		
 		if (!event.isCancelled()) {
+			loc.getWorld().playSound(loc, ammo.getHitGroundSound(), 0.27f, 1);
 			Ammo eventAmmo = event.getAmmo();
 			AmmoType type = eventAmmo.getAmmoType();
 			switch (type) {

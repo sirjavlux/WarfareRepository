@@ -25,3 +25,7 @@ explosion-damage: 0
 #spread if split type
 bullet-spread: 0
 split-bullet-amount: 0
+#sounds
+hit-ground-sound:
+hit-flesh-sound:
+hit-armor-sound:

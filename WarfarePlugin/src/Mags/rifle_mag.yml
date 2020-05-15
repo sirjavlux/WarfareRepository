@@ -8,3 +8,6 @@ lore:
     - "%ammo% / %max-ammo%"
 display-name: "&e&lRifle Magazine &75.45x39"
 custom-model-data: 0
+#sounds
+add-ammo-sound:
+remove-ammo-sound:

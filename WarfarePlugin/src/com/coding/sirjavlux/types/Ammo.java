@@ -2,6 +2,7 @@ package com.coding.sirjavlux.types;
 
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 
 public class Ammo {
 	
@@ -29,8 +30,9 @@ public class Ammo {
 	private float spread;
 	private int hitBurnTicks;
 	private Color trail;
+	private Sound hitGround, hitFlesh, hitArmor;
 	
-	public Ammo(String name, String cal, Material mat, double damage, double armorPen, String[] lore, String displayName, double speed, int maxStackSize, Material shootMat, AmmoType type, int splitBulletAmount, double explosionRange, double explotionDamage, double explotionDamageDrop, double knockBack, double armorDamage, double recoil, double knockback, int customModel, int explosionFireTicks, float spread, int hitBurnTicks, Color trail) {
+	public Ammo(String name, String cal, Material mat, double damage, double armorPen, String[] lore, String displayName, double speed, int maxStackSize, Material shootMat, AmmoType type, int splitBulletAmount, double explosionRange, double explotionDamage, double explotionDamageDrop, double knockBack, double armorDamage, double recoil, double knockback, int customModel, int explosionFireTicks, float spread, int hitBurnTicks, Color trail, Sound hitGround, Sound hitFlesh, Sound hitArmor) {
 		this.name = name;
 		this.cal = cal;
 		this.mat = mat;
@@ -55,6 +57,9 @@ public class Ammo {
 		this.spread = spread;
 		this.hitBurnTicks = hitBurnTicks;
 		this.trail = trail;
+		this.hitGround = hitGround;
+		this.hitFlesh = hitFlesh;
+		this.hitArmor = hitArmor;
 	}
 	
 	public String getName() { return name; }
@@ -81,4 +86,7 @@ public class Ammo {
 	public float getBulletSpread() { return spread; }
 	public int getHitBurnTicks() { return hitBurnTicks; }
 	public Color getTrail() { return trail; }
+	public Sound getHitGroundSound() { return hitGround; }
+	public Sound getHitFleshSound() { return hitFlesh; }
+	public Sound getHitArmorSound() { return hitArmor; }
 }
