@@ -27,13 +27,14 @@ import net.minecraft.server.v1_15_R1.PacketPlayOutEntityStatus;
 public class ExplosiveEffect implements Effect {
 
 	private double damage, radius, height, damageRed;
-	private int duration, fireTicks, cooldown, startCooldown;
+	private int duration, fireTicks;
 	private List<EffectParticle> particles;
 	private Location loc;
 	private List<DamageCuboid> damageLocations;
 	private List<LivingEntity> entities;
 	private LivingEntity entity;
 	private UUID uuid;
+	private boolean hasDamaged;
 	
 	public ExplosiveEffect(Location loc, double damage, double radius, double height, int fireTicks, double damageRed, LivingEntity entity) {
 		this.damage = damage;
@@ -44,12 +45,11 @@ public class ExplosiveEffect implements Effect {
 		this.loc = loc;
 		this.damageRed = damageRed;
 		this.entity = entity;
+		this.hasDamaged = false;
 		particles = new ArrayList<>();
 		damageLocations = new ArrayList<>();
 		entities = new ArrayList<>();
 		uuid = UUID.randomUUID();
-		startCooldown = 1;
-		cooldown = startCooldown;
 	}
 	
 	private Effect getEffect() {
@@ -75,11 +75,11 @@ public class ExplosiveEffect implements Effect {
 				}
 				int delay = 0;
 				int count = 0;
-				int explosionSize = (int) ((radius * intensity));
+				int explosionSize = (int) (((radius * (double) intensity) / 2.4));
 				int rgb = 255;
 				//create additional follow up particles
 				for (int i = 0; i < explosionSize; i++) {
-					if (count % 5 == 0) {
+					if (count % 6 == 0) {
 						delay++;
 					}
 					for (Entry<Vector, List<EffectParticle>> entry : particleMap.entrySet()) {
@@ -88,7 +88,7 @@ public class ExplosiveEffect implements Effect {
 						EffectParticle lastParticle = list.get(list.size() - 1);
 						
 						Location partLoc = lastParticle.getLocation().clone();
-						partLoc = partLoc.toVector().add(new Vector(dir.getX() / 7.5, dir.getY() / 11, dir.getZ() / 7.5)).toLocation(loc.getWorld());
+						partLoc = partLoc.toVector().add(new Vector(dir.getX() / 5, dir.getY() / 10, dir.getZ() / 5)).toLocation(loc.getWorld());
 						EffectParticle newParticle = new EffectParticle(partLoc, Particle.REDSTONE, 0, uuid);
 						newParticle.setDustOptions(new Particle.DustOptions(Color.fromBGR(rgb, rgb, rgb), (float) (0.4 + (delay / 5.8))));
 						newParticle.setDelay(delay);
@@ -103,7 +103,7 @@ public class ExplosiveEffect implements Effect {
 				List<EffectParticle> particles = new ArrayList<>();
 				for (Entry<Vector, List<EffectParticle>> entry : particleMap.entrySet()) particles.addAll(entry.getValue());
 				//create directional explosion particles
-				for (int i = 0; i < intensity * 3; i++) {
+				for (int i = 0; i < intensity; i++) {
 					for (int i2 = 0; i2 < 2; i2++) {
 						Vector dir = (loc.clone().add(0, 1, 0).toVector()).subtract(FormulaUtils.getRandomLocation(loc.clone().add(0, 1, 0), 2).toVector()).normalize().multiply(0.1);
 						loc.getWorld().spawnParticle(Math.random() > 0.3 ? Particle.SMOKE_NORMAL : Particle.SMOKE_LARGE, loc, 0, dir.getX(), dir.getY(), dir.getZ());
@@ -118,12 +118,15 @@ public class ExplosiveEffect implements Effect {
 
 	@Override
 	public void damageEntities() {
-		cooldown--;
-		if (cooldown < 1) {
+		if (!hasDamaged) {
+			hasDamaged = true;
 			for (LivingEntity entity : entities) {
 				if (entity instanceof Player) if (!((Player) entity).isOnline()) continue; //continue if player and is not online
 				if (entity.getHealth() > 0 && (damage > 0 || fireTicks > 0)) {
-					double damage = this.damage * (damageRed / loc.distance(entity.getLocation()));
+					double damage = this.damage;
+					double distance = entity.getLocation().distance(loc) * 1.4;
+					double modifier = (1d / (1d - damageRed)) / Math.pow(1d / (1d - damageRed), 1 + distance);
+					damage = damage * modifier;
 					EntityDamagedByEffectEvent event = new EntityDamagedByEffectEvent(entity, this.entity, damage);
 					if (!event.isCancelled()) {
 						damage = event.getDamage();
@@ -139,7 +142,6 @@ public class ExplosiveEffect implements Effect {
 					}
 				}
 			}
-			cooldown = startCooldown;
 		}
 	}
 

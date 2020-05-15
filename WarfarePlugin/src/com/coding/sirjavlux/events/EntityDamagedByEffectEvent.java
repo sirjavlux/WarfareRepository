@@ -16,6 +16,7 @@ public class EntityDamagedByEffectEvent extends Event implements Cancellable {
 	
 	public EntityDamagedByEffectEvent(LivingEntity entity, LivingEntity damager, double damage) {
 		this.entity = entity;
+		this.damager = damager;
 		this.damage = calculateDamage(damage);
 	}
 	
@@ -32,7 +33,7 @@ public class EntityDamagedByEffectEvent extends Event implements Cancellable {
 			}
 		}
 		damage = damage - damage * armorProt;
-		return damage ;
+		return damage;
 	}
 	
 	/*/////////////////////////

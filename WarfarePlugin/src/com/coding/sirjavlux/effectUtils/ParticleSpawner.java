@@ -34,7 +34,7 @@ public class ParticleSpawner {
 			public void run() {
 				//play effects
 				HashMap<UUID, Effect> particleMap = new HashMap<>();
-				for (Entry<UUID, Effect> entry : effects.entrySet()) {
+				for (Entry<UUID, Effect> entry : new HashMap<>(effects).entrySet()) {
 					UUID particleUUID = entry.getKey();
 					Effect effect = entry.getValue();
 					List<EffectParticle> particles = effect.getParticles();

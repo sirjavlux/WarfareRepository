@@ -10,10 +10,12 @@ import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
 import com.coding.sirjavlux.core.ConfigManager;
 import com.coding.sirjavlux.events.BulletFireEvent;
+import com.coding.sirjavlux.grenades.Grenade;
 import com.coding.sirjavlux.types.Ammo;
 import com.coding.sirjavlux.types.AmmoType;
 import com.coding.sirjavlux.types.Weapon;
@@ -32,7 +34,6 @@ public class ProjectileManager {
 		EntityPlayer eP = ((CraftPlayer) p).getHandle();
 		World w = eP.getWorld();
 		ItemStack item = new ItemStack(ammo.getShootMaterial());
-		
 		BulletFireEvent event = new BulletFireEvent(ammo, p);
 		Bukkit.getPluginManager().callEvent(event);
 		
@@ -77,5 +78,15 @@ public class ProjectileManager {
 		}
 	}
 	
-	
+	public static void fireGrenadeProjectile(Player p, Grenade grenade) {
+		EntityPlayer eP = ((CraftPlayer) p).getHandle();
+		World w = eP.getWorld();
+		ItemStack item = new ItemStack(grenade.getMaterial());
+		ItemMeta meta = item.getItemMeta();
+		meta.setCustomModelData(grenade.getModelData());
+		item.setItemMeta(meta);
+		
+		GrenadeProjectile ptile = new GrenadeProjectile(w, eP, CraftItemStack.asNMSCopy(item), grenade);
+		CustomEntitySnowballRegistry.spawnEntity(ptile, w);
+	}
 }

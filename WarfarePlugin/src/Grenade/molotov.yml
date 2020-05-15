@@ -1,0 +1,16 @@
+name: molotov
+material: Emerald
+#valid types Flash, Fire, Smoke, Explosion
+type: Fire
+lore:
+    - "&7This grenade can be used"
+    - "&7for burning enemies and map control!"
+display-name: "&e&lMolotov Grenade"
+custom-model-data: 0
+explosion-range: 3.5
+explosion-damage: 3
+explosion-damage-drop: 0
+explosion-fire-ticks: 40
+speed: 0.65
+max-stack-size: 3
+duration: 500

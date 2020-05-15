@@ -14,14 +14,13 @@ import net.minecraft.server.v1_15_R1.Entity;
 import net.minecraft.server.v1_15_R1.PacketPlayOutEntityDestroy;
 import net.minecraft.server.v1_15_R1.World;
 
-public class CustomEntitySnowballRegistry {
-
-    private CustomEntitySnowballRegistry() {
-    }
+public abstract class CustomEntitySnowballRegistry {
 
     public static void registerCustomEntities() throws NoSuchFieldException, IllegalAccessException {
         registerEntity("FiredProjectile", 14, Projectile.class);
+        registerEntity("FiredGrenadeProjectile", 14, GrenadeProjectile.class);
     }
+    
     public static void spawnEntity(Entity entity, World world, Ammo ammo) {
         world.addEntity(entity);
         if (ammo.getAmmoType().equals(AmmoType.Flame)) {
@@ -30,6 +29,10 @@ public class CustomEntitySnowballRegistry {
     		    ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
     		}	
         }
+    }
+    
+    public static void spawnEntity(Entity entity, World world) {
+        world.addEntity(entity);
     }
     
     @SuppressWarnings({ "unchecked", "rawtypes" })

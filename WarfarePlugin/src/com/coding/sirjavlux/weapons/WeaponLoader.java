@@ -441,6 +441,5 @@ public class WeaponLoader extends WeaponManager{
 			Bukkit.getServer().getConsoleSender().sendMessage((count > 0 ? ", " : "") + ChatColor.RED + str);
 			count++;
 		}
-		System.out.print("\n");
 	}
 }

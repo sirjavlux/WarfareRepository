@@ -1,0 +1,19 @@
+name: grizly
+material: BOWL
+#placeholders %uses%
+lore:
+    - "&7Uses left &e%uses%"
+    - ""
+    - "&7The all around med-kit."
+    - "&7It's used as broken leg splint,"
+    - "&7bandaging injuries, help against concussion"
+    - "&7and heals you for &c10 &7health!"
+display-name: "&6&lGrizly Med-Kit"
+custom-model-data: 0
+heal: 10
+splint: true
+bandage: true
+concussion: true
+uses: 5
+use-time: 65
+walk-speed: 0.04

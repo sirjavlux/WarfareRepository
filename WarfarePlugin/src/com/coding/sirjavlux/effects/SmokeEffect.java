@@ -13,6 +13,7 @@ import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 import com.coding.sirjavlux.core.Main;
 import com.coding.sirjavlux.effectUtils.EffectParticle;
@@ -28,20 +29,38 @@ public class SmokeEffect implements Effect {
 	private List<DamageCuboid> damageLocations;
 	private List<LivingEntity> entities;
 	private UUID uuid;
+	private Vector projectileDir;
 	
-	public SmokeEffect(Location loc, int duration, double damage, double radius, double height, int fireTicks) {
+	public SmokeEffect(Location loc, int duration, double damage, double radius, double height, int fireTicks, Vector projectileDir) {
 		this.damage = damage;
 		this.radius = radius;
 		this.height = height;
 		this.fireTicks = fireTicks;
 		this.duration = duration;
 		this.loc = loc;
+		this.projectileDir = projectileDir;
 		particles = new ArrayList<>();
 		damageLocations = new ArrayList<>();
 		entities = new ArrayList<>();
 		uuid = UUID.randomUUID();
 		startCooldown = 4;
 		cooldown = startCooldown;
+		calculateCenterLocation();
+	}
+	
+	public void calculateCenterLocation() {
+		//fix loc
+		boolean isSolid = true;
+		Location temp = loc.clone();
+		int count = 0;
+		while (isSolid) {
+			temp.subtract(projectileDir.clone().normalize().multiply(1d / 2d));
+			if (temp.getBlock().isPassable()) {
+				loc = temp;
+				isSolid = false;
+			} else if (count > 5) isSolid = false;
+			count++;
+		}
 	}
 	
 	private Effect getEffect() {

@@ -91,7 +91,10 @@ public class IncindiaryEffect implements Effect {
 			for (LivingEntity entity : entities) {
 				if (entity instanceof Player) if (!((Player) entity).isOnline()) continue; //continue if player and is not online
 				if (entity.getHealth() > 0 && (damage > 0 || fireTicks > 0)) {
-					double damage = this.damage * (damageRed / loc.distance(entity.getLocation()));
+					double damage = this.damage;
+					double distance = entity.getLocation().distance(loc) * 1.4;
+					double modifier = (1d / (1d - damageRed)) / Math.pow(1d / (1d - damageRed), 1 + distance);
+					damage = damage * modifier;
 					EntityDamagedByEffectEvent event = new EntityDamagedByEffectEvent(entity, this.entity, damage);
 					if (!event.isCancelled()) {
 						damage = event.getDamage();

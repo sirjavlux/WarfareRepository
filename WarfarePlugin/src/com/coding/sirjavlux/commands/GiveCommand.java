@@ -9,6 +9,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.coding.sirjavlux.consumables.Consumable;
+import com.coding.sirjavlux.consumables.ConsumableManager;
+import com.coding.sirjavlux.grenades.Grenade;
+import com.coding.sirjavlux.grenades.GrenadeManager;
 import com.coding.sirjavlux.types.Ammo;
 import com.coding.sirjavlux.types.Magazine;
 import com.coding.sirjavlux.types.Weapon;
@@ -20,7 +24,9 @@ public class GiveCommand extends CommandManager {
 	protected static enum types {
 		AMMO,
 		WEAPON,
-		MAGAZINE
+		MAGAZINE,
+		GRENADE,
+		CONSUMABLE
 	}
 	
 	protected static void execute(CommandSender sender, Command cmd, String label, String[] args) {
@@ -96,6 +102,22 @@ public class GiveCommand extends CommandManager {
 			}
 			Ammo ammo = WeaponManager.getStoredAmmo(name);
 			WeaponManager.giveAmmo(target, ammo, amount);
+			break;
+		case GRENADE:
+			if (!GrenadeManager.isGrenade(name)) {
+				sender.sendMessage(ChatColor.GRAY + "The entered grenade name " + ChatColor.RED + name + ChatColor.GRAY + " wasn't valid!");
+				return;
+			}
+			Grenade grenade = GrenadeManager.getStoredGrenade(name);
+			GrenadeManager.giveGrenade(target, grenade, amount);
+			break;
+		case CONSUMABLE:
+			if (!ConsumableManager.isConsumable(name)) {
+				sender.sendMessage(ChatColor.GRAY + "The entered consumable name " + ChatColor.RED + name + ChatColor.GRAY + " wasn't valid!");
+				return;
+			}
+			Consumable consumable = ConsumableManager.getStoredConsumable(name);
+			ConsumableManager.giveConsumable(target, consumable, amount);
 			break;
 		}
 	}

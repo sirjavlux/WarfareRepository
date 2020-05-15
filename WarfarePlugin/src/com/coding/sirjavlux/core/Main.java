@@ -5,7 +5,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.coding.sirjavlux.commands.CommandManager;
+import com.coding.sirjavlux.consumables.ConsumableListener;
+import com.coding.sirjavlux.consumables.ConsumableLoader;
+import com.coding.sirjavlux.consumables.ConsumableManager;
 import com.coding.sirjavlux.effectUtils.ParticleSpawner;
+import com.coding.sirjavlux.grenades.GrenadeListener;
+import com.coding.sirjavlux.grenades.GrenadeLoader;
 import com.coding.sirjavlux.health.HealthEffects;
 import com.coding.sirjavlux.listeners.AsyncBulletHandler;
 import com.coding.sirjavlux.listeners.InventoryListener;
@@ -32,19 +37,24 @@ public class Main extends JavaPlugin {
 		bulletHandler = new AsyncBulletHandler();
 		weaponReloadHandler = new WeaponReloadHandler();
 		particleSpawner = new ParticleSpawner();
+		ConsumableManager.startConsumableRunnable();
 		//load listeners
 		Bukkit.getPluginManager().registerEvents(bulletHandler, this);
 		Bukkit.getPluginManager().registerEvents(new InventoryListener(), this);
 		Bukkit.getPluginManager().registerEvents(new PlayerListener(), this);
 		Bukkit.getPluginManager().registerEvents(new ItemListener(), this);
+		Bukkit.getPluginManager().registerEvents(new ConsumableListener(), this);
+		Bukkit.getPluginManager().registerEvents(new GrenadeListener(), this);
 		Bukkit.getPluginManager().registerEvents(healthEffects, this);
 		Bukkit.getPluginManager().registerEvents(weaponReloadHandler, this);
 		
 		//commands
 		this.getCommand("wf").setExecutor(new CommandManager());
 		
-		//load weapon files
+		//load files
 		WeaponLoader.loadFiles();
+		ConsumableLoader.loadFiles();
+		GrenadeLoader.loadFiles();
 		
 		//load config
 		ConfigManager.loadConfig(this.getConfig());

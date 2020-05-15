@@ -128,11 +128,9 @@ public class WeaponItem {
 		meta.setLore(loreList);
 		
 		//set custom texture
-		meta.setCustomModelData(weapon.getCustomModelData());
 		meta.setUnbreakable(true);
 		
 		item.setItemMeta(meta);
-		item.setType(weapon.getMat());
 	}
 	
 	public void saveData(ItemStack item, Player p, int slot) {

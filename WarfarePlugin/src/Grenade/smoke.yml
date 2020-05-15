@@ -1,0 +1,16 @@
+name: smoke
+material: IRON_INGOT
+#valid types Flash, Fire, Smoke, Explosion
+type: Smoke
+lore:
+    - "&7This grenade can be used"
+    - "&7for cover or distractions!"
+display-name: "&e&lSmoke Grenade"
+custom-model-data: 0
+explosion-range: 5
+explosion-damage: 0
+explosion-damage-drop: 0
+explosion-fire-ticks: 0
+speed: 0.65
+max-stack-size: 3
+duration: 1000
