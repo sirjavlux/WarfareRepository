@@ -25,6 +25,7 @@ public class GrenadeListener implements Listener {
 		if ((item != null) && (action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK) || action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK))) {
 			Grenade grenade = GrenadeManager.getGrenadeFromItem(item);
 			if (grenade != null) {
+				p.playSound(p.getLocation(), grenade.getThrowSound(), 1, 1);
 				ProjectileManager.fireGrenadeProjectile(p, grenade);
 				//reduce item stack
 				if (item.getAmount() > 1) {

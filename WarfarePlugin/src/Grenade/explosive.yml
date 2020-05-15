@@ -14,3 +14,6 @@ explosion-fire-ticks: 0
 speed: 0.65
 max-stack-size: 3
 duration: 0
+#sounds
+explode-sound:
+throw-sound:

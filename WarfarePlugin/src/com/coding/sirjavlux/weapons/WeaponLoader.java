@@ -464,9 +464,15 @@ public class WeaponLoader extends WeaponManager{
 			//bullet hit armor sound
 			Sound hitArmor = Sound.BLOCK_ANVIL_LAND;
 			try { hitArmor = Sound.valueOf("hit-armor-sound"); } catch (Exception e) { }
+			//explode sound
+			Sound explodeSound = Sound.ENTITY_GENERIC_EXPLODE;
+			try { explodeSound = Sound.valueOf("explode-sound"); } catch (Exception e) { }
+			//explode sound
+			Sound trailSound = Sound.ENTITY_FIREWORK_ROCKET_LAUNCH;
+			try { trailSound = Sound.valueOf("trail-sound"); } catch (Exception e) { }
 			
 			//add ammunition to map
-			Ammo ammo = new Ammo(name, caliber, mat, damage, armorPen, lore, displayName, speed, maxStackSize, shootMat, type, splitBulletAmount, explosionRange, explosionDamage, explosionDamageDrop, knockBack, armorDamage, recoil, knockback, customModel, fireTicks, spread, hitBurnTicks, trail, hitGround, hitFlesh, hitArmor);
+			Ammo ammo = new Ammo(name, caliber, mat, damage, armorPen, lore, displayName, speed, maxStackSize, shootMat, type, splitBulletAmount, explosionRange, explosionDamage, explosionDamageDrop, knockBack, armorDamage, recoil, knockback, customModel, fireTicks, spread, hitBurnTicks, trail, hitGround, hitFlesh, hitArmor, explodeSound, trailSound);
 			WeaponManager.ammoStored.put(name, ammo);
 			
 			badAmmo.remove(file.getName());

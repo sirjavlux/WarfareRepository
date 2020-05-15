@@ -17,3 +17,6 @@ concussion: true
 uses: 5
 use-time: 65
 walk-speed: 0.04
+#sounds
+use-sound:
+finish-sound:

@@ -296,12 +296,14 @@ public class Projectile extends EntitySnowball {
 			AmmoType type = eventAmmo.getAmmoType();
 			switch (type) {
 			case Explosive: 
+				loc.getWorld().playSound(loc, ammo.getExplodeSound(), 3.7f, 1);
 				Effect effect = new ExplosiveEffect(loc, ammo.getExplotionDamage(), ammo.getExplotionRange(), ammo.getExplotionRange(), ammo.getExplosionFireTicks(), ammo.getExplotionDrop(), (LivingEntity) projectile.getShooter());
 				effect.playEffect();
 				break;
 			case Flame:
 				break;
 			case Incindiary: 
+				loc.getWorld().playSound(loc, ammo.getExplodeSound(), 2.9f, 1);
 				effect = new IncindiaryEffect(loc, 0, ammo.getExplotionDamage(), ammo.getExplotionRange(), ammo.getExplotionRange() / 10, ammo.getExplosionFireTicks(), 9, ammo.getExplotionDrop(), (LivingEntity) projectile.getShooter());
 				effect.playEffect();
 				break;

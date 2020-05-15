@@ -7,6 +7,7 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -92,8 +93,14 @@ public class ConsumableLoader extends ConsumableManager {
 			int useTime = conf.contains("use-time") ? conf.getInt("use-time") : 0;
 			//walk speed
 			double walkSpeed = conf.contains("walk-speed") ? conf.getDouble("walk-speed") : 0.2;
+			//use sound
+			Sound useSound = Sound.BLOCK_BEACON_AMBIENT;
+			try { useSound = Sound.valueOf("use-sound"); } catch (Exception e) { }
+			//finish sound
+			Sound finishSound = Sound.BLOCK_ANVIL_USE;
+			try { finishSound = Sound.valueOf("finish-sound"); } catch (Exception e) { }
 			
-			Consumable consumable = new Consumable(mat, modelData, lore, displayName, name, heal, splint, bandage, concussion, uses, useTime, walkSpeed);
+			Consumable consumable = new Consumable(mat, modelData, lore, displayName, name, heal, splint, bandage, concussion, uses, useTime, walkSpeed, useSound, finishSound);
 			ConsumableManager.consumables.put(name, consumable);
 			
 			badMags.remove(file.getName());

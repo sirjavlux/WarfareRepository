@@ -189,6 +189,7 @@ public class ConsumableManager {
 					}
 					//remove time
 					if (con.timeLeft > 0) {
+						if (con.timeLeft % 10 == 0 && con.timeLeft > 20) p.playSound(p.getLocation(), consumable.getUseSound(), 1, 1);
 						p.setWalkSpeed((float) consumable.getWalkSpeed());
 						DecimalFormat format = new DecimalFormat("###########0.0");
 						double time = (double) (con.timeLeft / (20d / runnableSpeed)) - runnableSpeed / (20d / runnableSpeed);
@@ -211,6 +212,7 @@ public class ConsumableManager {
 						}
 						p.setWalkSpeed(0.2f);
 						removableUUIDs.add(uuid);
+						p.playSound(p.getLocation(), consumable.getFinishSound(), 1, 1);
 						p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(ChatColor.translateAlternateColorCodes('&', ChatColor.GRAY + "" + ChatColor.BOLD + "Successfully used " + consumable.getDisplayName() + ChatColor.GRAY + ChatColor.BOLD + "!")));
 					}
 				}

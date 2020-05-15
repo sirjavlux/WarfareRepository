@@ -29,3 +29,5 @@ split-bullet-amount: 0
 hit-ground-sound:
 hit-flesh-sound:
 hit-armor-sound:
+explode-sound:
+trail-sound:

@@ -125,6 +125,7 @@ public class ParticleSpawner {
 		new BukkitRunnable() {
 			@Override
 			public void run() {
+				int tick = (int) (System.currentTimeMillis() / 50);
 				List<com.coding.sirjavlux.projectiles.Projectile> removeProjectiles = new ArrayList<>();
 				for (Entry<com.coding.sirjavlux.projectiles.Projectile, UUID> entry : new HashMap<>(trails).entrySet()) {
 					com.coding.sirjavlux.projectiles.Projectile projectile = entry.getKey();
@@ -136,6 +137,7 @@ public class ParticleSpawner {
 						Color color = projectile.getAmmo().getTrail() != null ? projectile.getAmmo().getTrail() : Color.WHITE;
 						DustOptions dustop = new DustOptions(color, 1.2f);
 						loc.getWorld().spawnParticle(Particle.REDSTONE, loc, 0, dustop);
+						if (tick % 4 == 0) loc.getWorld().playSound(loc, projectile.getAmmo().getTrailSound(), 1, 1);
 						continue;
 					}
 					removeProjectiles.add(projectile);

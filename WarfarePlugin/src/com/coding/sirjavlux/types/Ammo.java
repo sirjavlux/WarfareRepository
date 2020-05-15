@@ -30,9 +30,9 @@ public class Ammo {
 	private float spread;
 	private int hitBurnTicks;
 	private Color trail;
-	private Sound hitGround, hitFlesh, hitArmor;
+	private Sound hitGround, hitFlesh, hitArmor, explodeSound, trailSound;
 	
-	public Ammo(String name, String cal, Material mat, double damage, double armorPen, String[] lore, String displayName, double speed, int maxStackSize, Material shootMat, AmmoType type, int splitBulletAmount, double explosionRange, double explotionDamage, double explotionDamageDrop, double knockBack, double armorDamage, double recoil, double knockback, int customModel, int explosionFireTicks, float spread, int hitBurnTicks, Color trail, Sound hitGround, Sound hitFlesh, Sound hitArmor) {
+	public Ammo(String name, String cal, Material mat, double damage, double armorPen, String[] lore, String displayName, double speed, int maxStackSize, Material shootMat, AmmoType type, int splitBulletAmount, double explosionRange, double explotionDamage, double explotionDamageDrop, double knockBack, double armorDamage, double recoil, double knockback, int customModel, int explosionFireTicks, float spread, int hitBurnTicks, Color trail, Sound hitGround, Sound hitFlesh, Sound hitArmor, Sound explodeSound, Sound trailSound) {
 		this.name = name;
 		this.cal = cal;
 		this.mat = mat;
@@ -60,6 +60,8 @@ public class Ammo {
 		this.hitGround = hitGround;
 		this.hitFlesh = hitFlesh;
 		this.hitArmor = hitArmor;
+		this.explodeSound = explodeSound;
+		this.trailSound = trailSound;
 	}
 	
 	public String getName() { return name; }
@@ -89,4 +91,6 @@ public class Ammo {
 	public Sound getHitGroundSound() { return hitGround; }
 	public Sound getHitFleshSound() { return hitFlesh; }
 	public Sound getHitArmorSound() { return hitArmor; }
+	public Sound getExplodeSound() { return explodeSound; }
+	public Sound getTrailSound() { return trailSound; }
 }

@@ -39,6 +39,7 @@ public class GrenadeProjectile extends EntitySnowball {
 	@Override
     protected void a(MovingObjectPosition movingobjectposition) {
 		Location hitLoc = new Location(bukkitWorld, movingobjectposition.getPos().getX(), movingobjectposition.getPos().getY(), movingobjectposition.getPos().getZ());
+		hitLoc.getWorld().playSound(hitLoc, grenade.getExplodeSound(), 5, 1);
 		switch (grenade.getType()) {
 		case Fire: 
 			Effect effect = new FireEffect(hitLoc, grenade.getDuration(), grenade.getExplosionDamage(), grenade.getExplosionRange(), 0.2, grenade.getFireTicks(), (int) (4d * grenade.getExplosionRange()), grenade.getExplosionDamageDrop(), p, this.getBukkitEntity().getVelocity());
