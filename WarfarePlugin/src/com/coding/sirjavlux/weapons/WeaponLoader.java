@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
@@ -236,9 +237,24 @@ public class WeaponLoader extends WeaponManager{
 			try { scopeMat = Material.valueOf(scopeMatS.toUpperCase()); } catch (Exception e) { }
 			//scoped model data
 			int scopeModelData = conf.contains("scope-custom-model-data") ? conf.getInt("scope-custom-model-data") : 0;
+			//scope sound
+			Sound scopeSound = Sound.BLOCK_WOOD_HIT;
+			try { scopeSound = Sound.valueOf("scope-sound"); } catch (Exception e) { }
+			//shoot sound
+			Sound shootSound = Sound.BLOCK_METAL_PLACE;
+			try { shootSound = Sound.valueOf("shoot-sound"); } catch (Exception e) { }
+			//reload sound
+			Sound reloadSound = Sound.BLOCK_STONE_BUTTON_CLICK_ON;
+			try { reloadSound = Sound.valueOf("reload-sound"); } catch (Exception e) { }
+			//after shot sound
+			Sound afterShotSound = null;
+			try { afterShotSound = Sound.valueOf("after-shot-sound"); } catch (Exception e) { }
+			//after reload sound
+			Sound finishedReloadSound = Sound.BLOCK_STONE_BUTTON_CLICK_OFF;
+			try { finishedReloadSound = Sound.valueOf("finished-reload-sound"); } catch (Exception e) { }
 			
 			//create weapon
-			Weapon weapon = new Weapon(type, mat, magReq, name, smokeOffset, smokeEnabled, smokeIntensity, damage, lore, displayName, defaultMag, loadedByDefault, reqMag, barrelAmmoCap, caliber, fireRate, preLoadAmmo, burstAmount, burstSpeed, recoilRed, knockbackRed, reloadSpeed, customModel, right, shiftRight, left, shiftLeft, shift, scope, scopeMat, scopeModelData);
+			Weapon weapon = new Weapon(type, mat, magReq, name, smokeOffset, smokeEnabled, smokeIntensity, damage, lore, displayName, defaultMag, loadedByDefault, reqMag, barrelAmmoCap, caliber, fireRate, preLoadAmmo, burstAmount, burstSpeed, recoilRed, knockbackRed, reloadSpeed, customModel, right, shiftRight, left, shiftLeft, shift, scope, scopeMat, scopeModelData, scopeSound, shootSound, reloadSound, afterShotSound, finishedReloadSound);
 			weaponStored.put(name, weapon);
 			badWeapons.remove(file.getName());
 			goodWeapons.add(file.getName());

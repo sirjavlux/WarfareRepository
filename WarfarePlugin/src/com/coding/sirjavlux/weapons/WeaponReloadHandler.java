@@ -65,6 +65,7 @@ public class WeaponReloadHandler implements Listener {
 							net.minecraft.server.v1_15_R1.ItemStack NMSItemH = CraftItemStack.asNMSCopy(heldItem);
 							NBTTagCompound tagCompH = NMSItemH.getTag();
 							UUID uuid2 = UUID.fromString(tagCompH.getString("uuid"));
+							Weapon weapon = WeaponManager.getStoredWeapon(tagCompH.getString("name"));
 							if (uuid1.equals(uuid2)) {
 								//reload weapon
 								switch (reload.getType()) {
@@ -124,6 +125,7 @@ public class WeaponReloadHandler implements Listener {
 											weaponItem.updateNextAmmo();
 										} else {
 											remove = false;
+											if (time % 8 == 0) p.playSound(p.getLocation(), weapon.getReloadSound(), 1, 1);
 										}
 									}									
 									break;
@@ -159,6 +161,7 @@ public class WeaponReloadHandler implements Listener {
 										else ammoItemStack = new ItemStack(Material.AIR);
 										iv.setItem(slot, ammoItemStack);
 										if (weaponItem.getBarrelAmmo().size() < weaponItem.getWeapon().getBarrelAmmoCap()) {
+											p.playSound(p.getLocation(), weapon.getReloadSound(), 1, 1);
 											time = weaponItem.getWeapon().getReloadSpeed();
 											remove = false;
 										}
@@ -174,6 +177,12 @@ public class WeaponReloadHandler implements Listener {
 						if (time <= 0 && Bukkit.getOfflinePlayer(uuid).isOnline()) {
 							Player p = Bukkit.getPlayer(uuid);
 							p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(ChatColor.GRAY + "" + ChatColor.BOLD + "Reload Complete"));
+							if (WeaponManager.isWeapon(item)) {
+								net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(item);
+								NBTTagCompound tagComp = NMSItem.getTag();
+								Weapon weapon = WeaponManager.getStoredWeapon(tagComp.getString("name"));
+								p.playSound(p.getLocation(), weapon.getFinishedReloadSound(), 1, 1);
+							}
 						}
 						continue;
 					} 

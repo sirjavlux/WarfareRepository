@@ -35,3 +35,9 @@ actions:
     right: shoot
     shift_left: scope
     shift_right: shoot
+#sounds
+scope-sound: 
+shoot-sound:
+reload-sound:
+after-shot-sound:
+finished-reload-sound:

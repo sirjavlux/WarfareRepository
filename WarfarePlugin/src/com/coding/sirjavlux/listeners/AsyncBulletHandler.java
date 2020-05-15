@@ -241,6 +241,8 @@ public class AsyncBulletHandler implements Listener {
 			p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(getBulletChatColor(weapon) + "" + ChatColor.BOLD + String.valueOf(weapon.getBarrelAmmo().size() + (weapon.getMagazineItem() != null ? weapon.getMagazineItem().getRounds().size() : 0) - 1)));
 			ProjectileManager.fireProjectile(p, weapon.getWeapon(), ammo);
 			lastShot.replace(p.getUniqueId(), System.currentTimeMillis());
+			p.getWorld().playSound(p.getLocation(), weapon.getWeapon().getShootSound(), 50, 1);
+			p.playSound(p.getLocation(), weapon.getWeapon().getAfterShotSound(), 1, 1);
 		}
 	}
 	
