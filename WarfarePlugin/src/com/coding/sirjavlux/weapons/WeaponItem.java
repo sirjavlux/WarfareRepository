@@ -101,6 +101,15 @@ public class WeaponItem {
 				.replaceAll("%max-ammo%", String.valueOf(maxAmmo)));
 		meta.setDisplayName(displayName);
 		
+		//lore
+		String[] lore = weapon.getLore();
+		List<String> loreList = new ArrayList<>();
+		for (int i = 0; i < lore.length; i++) {
+			loreList.add(ChatColor.translateAlternateColorCodes('&', lore[i].replaceAll("%ammo%", String.valueOf(magAmmo))
+					.replaceAll("%max-ammo%", String.valueOf(maxAmmo))));
+		}
+		meta.setLore(loreList);
+		
 		item.setItemMeta(meta);
 	}
 	

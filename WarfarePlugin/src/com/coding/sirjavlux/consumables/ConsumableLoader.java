@@ -31,6 +31,11 @@ public class ConsumableLoader extends ConsumableManager {
 			ammoFile.mkdir();
 			
 			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/consumables/grizly-medkit.yml", "Consumable/grizly-medkit.yml");
+			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/consumables/splint.yml", "Consumable/splint.yml");
+			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/consumables/bandage.yml", "Consumable/bandage.yml");
+			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/consumables/first-aid-kit.yml", "Consumable/first-aid-kit.yml");
+			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/consumables/health-restoration.yml", "Consumable/health-restoration.yml");
+			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/consumables/aspirin.yml", "Consumable/aspirin.yml");
 		}
 		loadConsumables();
 	}

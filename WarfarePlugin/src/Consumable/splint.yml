@@ -1,0 +1,18 @@
+name: splint
+material: BOWL
+#placeholders %uses%
+lore:
+    - "&7Uses left &e%uses%"
+    - ""
+    - "&7This is a splint which can"
+    - "&7be used to speed up things"
+    - "&7when you have a broken leg."
+display-name: "&8&lSplint"
+custom-model-data: 0
+heal: 0
+splint: true
+bandage: false
+concussion: false
+uses: 1
+use-time: 50
+walk-speed: 0.07

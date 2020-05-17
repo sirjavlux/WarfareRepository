@@ -1,0 +1,17 @@
+name: aspirin
+material: BOWL
+#placeholders %uses%
+lore:
+    - "&7Uses left &e%uses%"
+    - ""
+    - "&7This aspirin is used to ease up"
+    - "&7headaches and concussion damage."
+display-name: "&9&lAspirin"
+custom-model-data: 0
+heal: 0
+splint: false
+bandage: false
+concussion: true
+uses: 4
+use-time: 30
+walk-speed: 0.16

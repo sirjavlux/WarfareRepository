@@ -1,0 +1,18 @@
+name: firstaid
+material: BOWL
+#placeholders %uses%
+lore:
+    - "&7Uses left &e%uses%"
+    - ""
+    - "&7This kit is a fast and easy to use"
+    - "&7first aid kit, it can stop bleading"
+    - "&7and heals the player for &c7 &7health."
+display-name: "&e&lFirst Aid Kit"
+custom-model-data: 0
+heal: 6
+splint: false
+bandage: true
+concussion: false
+uses: 2
+use-time: 45
+walk-speed: 0.1
