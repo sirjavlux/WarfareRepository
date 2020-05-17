@@ -6,6 +6,8 @@ import java.util.Random;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
@@ -74,6 +76,16 @@ public class ProjectileManager {
 				double velToAdd = knockback - knockbackRed < 0 ? 0 : knockback - knockbackRed;
 				Vector vel = p.getEyeLocation().getDirection().normalize().multiply(velToAdd);
 				p.setVelocity(p.getVelocity().subtract(vel));
+			}
+			//spawn smoke from barrel
+			if (weapon.isSmokeEnabled()) {
+				Location loc = p.getEyeLocation().clone();
+				Vector dir = loc.getDirection().normalize().clone();
+				loc = loc.add(dir.multiply(1.2));
+				for (int i = 1; i < 3; i++) {
+					loc.getWorld().spawnParticle(Particle.SMOKE_NORMAL, loc.clone(), 0, 0, 0, 0);
+					loc = loc.add(dir.clone().multiply((i * i) / 11));
+				}
 			}
 		}
 	}

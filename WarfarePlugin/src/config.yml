@@ -59,7 +59,7 @@ projectile:
     damage-reduction:
         speed: 0.7
         penetration: 0.5
-
+    hide: true
 ###################
 # DAMAGE SETTINGS #
 ###################

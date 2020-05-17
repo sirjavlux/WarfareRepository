@@ -240,7 +240,7 @@ public class WeaponLoader extends WeaponManager{
 			//scope sound
 			String scopeSound = conf.contains("scope-sound") ? conf.getString("scope-sound") : "block.wood.hit";
 			//shoot sound
-			String shootSound = conf.contains("shoot-sound") ? conf.getString("shoot-sound") : "block.grass.place";
+			String shootSound = conf.contains("shoot-sound") ? conf.getString("shoot-sound") : "block.iron.hit";
 			//reload sound
 			String reloadSound = conf.contains("reload-sound") ? conf.getString("reload-sound") : "block.stone_button.click_on";
 			//after shot sound
@@ -449,7 +449,7 @@ public class WeaponLoader extends WeaponManager{
 				trail = Color.fromBGR(b, g, r);
 			}
 			//bullet hit ground sound
-			String hitGround = conf.contains("hit-ground-sound") ? conf.getString("hit-ground-sound") : "block.grass.hit";
+			String hitGround = conf.contains("hit-ground-sound") ? conf.getString("hit-ground-sound") : "";
 			//bullet hit flesh sound
 			String hitFlesh = conf.contains("hit-flesh-sound") ? conf.getString("hit-flesh-sound") : "block.slime_block.break";
 			//bullet hit armor sound
@@ -457,7 +457,7 @@ public class WeaponLoader extends WeaponManager{
 			//explode sound
 			String explodeSound = conf.contains("explode-sound") ? conf.getString("explode-sound") : "entity.generic.explode";
 			//explode sound
-			String trailSound = conf.contains("trail-sound") ? conf.getString("trail-sound") : "entity.firework_rocket.launch";
+			String trailSound = conf.contains("trail-sound") ? conf.getString("trail-sound") : "";
 			
 			//add ammunition to map
 			Ammo ammo = new Ammo(name, caliber, mat, damage, armorPen, lore, displayName, speed, maxStackSize, shootMat, type, splitBulletAmount, explosionRange, explosionDamage, explosionDamageDrop, knockBack, armorDamage, recoil, knockback, customModel, fireTicks, spread, hitBurnTicks, trail, hitGround, hitFlesh, hitArmor, explodeSound, trailSound);

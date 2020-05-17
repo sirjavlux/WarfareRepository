@@ -67,6 +67,8 @@ public class ConfigManager {
 	private static boolean recoilEnabled;
 	private static boolean knockbackEnabled;
 	
+	private static boolean hideProjectiles;
+	
 	public static void loadConfig(FileConfiguration conf) {
 		//armor protection data
 		leatherHelmetProt = conf.contains("armor.protection.helmet.leather") ? conf.getDouble("armor.protection.helmet.leather") : 0.15;
@@ -110,6 +112,7 @@ public class ConfigManager {
 		penRedEntity = conf.contains("projectile.penetration-reduction.entity") ? conf.getDouble("projectile.penetration-reduction.entity") : 0.2;
 		damageRedSpeed = conf.contains("projectile.damage-reduction.speed") ? conf.getDouble("projectile.damage-reduction.speed") : 0.4;
 		damageRedPen = conf.contains("projectile.damage-reduction.penetration") ? conf.getDouble("projectile.damage-reduction.penetration") : 0.2;
+		hideProjectiles = conf.contains("projectile.hide") ? conf.getBoolean("projectile.hide") : true;
 		
 		//damage settings
 		damageBreakLegEnabled = conf.contains("damage.break-leg.enabled") ? conf.getBoolean("damage.break-leg.enabled") : true;
@@ -166,6 +169,7 @@ public class ConfigManager {
 	public static double getPenetrationReductionEntity() { return penRedEntity; }
 	public static double getDamageReductionSpeed() { return damageRedSpeed; }
 	public static double getDamageReductionPenetration() { return damageRedPen; }
+	public static boolean getHideProjectile() { return hideProjectiles; }
 	
 	public static double getItemArmorProtection(ItemStack item) {
 		double armorProt = 0;

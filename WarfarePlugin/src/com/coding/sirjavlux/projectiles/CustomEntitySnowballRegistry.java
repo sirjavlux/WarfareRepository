@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
+import com.coding.sirjavlux.core.ConfigManager;
 import com.coding.sirjavlux.types.Ammo;
 import com.coding.sirjavlux.types.AmmoType;
 
@@ -28,6 +29,11 @@ public abstract class CustomEntitySnowballRegistry {
     		    PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(entity.getBukkitEntity().getEntityId());
     		    ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
     		}	
+        } else if (ConfigManager.getHideProjectile() && (ammo.getAmmoType().equals(AmmoType.Regular) || ammo.getAmmoType().equals(AmmoType.Split))) {
+        	for(Player player : Bukkit.getServer().getOnlinePlayers()) {
+    		    PacketPlayOutEntityDestroy packet = new PacketPlayOutEntityDestroy(entity.getBukkitEntity().getEntityId());
+    		    ((CraftPlayer) player).getHandle().playerConnection.sendPacket(packet);
+    		}
         }
     }
     

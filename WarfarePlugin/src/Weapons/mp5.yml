@@ -2,7 +2,7 @@ name: mp5
 #valid types are BoltAction, SemiAuto, Auto, Burst
 type: Auto
 material: WOODEN_PICKAXE
-smoke-enabled: false
+smoke-enabled: true
 damage: 2.0
 #use & for color codes
 #valid placeholders are %ammo% %max-ammo%

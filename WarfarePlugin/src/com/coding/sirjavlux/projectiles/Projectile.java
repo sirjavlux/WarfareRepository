@@ -7,6 +7,8 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.type.Gate;
@@ -30,6 +32,7 @@ import com.coding.sirjavlux.health.HealthEffects;
 import com.coding.sirjavlux.types.Ammo;
 import com.coding.sirjavlux.types.AmmoType;
 import com.coding.sirjavlux.types.Weapon;
+import com.coding.sirjavlux.utils.SoundUtils;
 
 import net.minecraft.server.v1_15_R1.EntityLiving;
 import net.minecraft.server.v1_15_R1.EntitySnowball;
@@ -69,7 +72,6 @@ public class Projectile extends EntitySnowball {
 		entity.setVelocity(p.getEyeLocation().getDirection().normalize().multiply(bulletSpeed));
 		entity.setCustomNameVisible(false);
 		if (ammo.getAmmoType().equals(AmmoType.Flame)) {
-			this.setInvisible(true);
 			Main.getInstance().getParticleSpawner().addFlameProjectileEffect(this);
 		} else if (ammo.getTrail() != null) {
 			Main.getInstance().getParticleSpawner().addProjectileTrailEffect(this);
@@ -293,7 +295,15 @@ public class Projectile extends EntitySnowball {
 		Bukkit.getPluginManager().callEvent(event);
 		
 		if (!event.isCancelled()) {
-			loc.getWorld().playSound(loc, ammo.getHitGroundSound(), 0.27f, 1);
+			Block block = getHitBlock(loc);
+			try {
+				if (!ammo.getHitGroundSound().isEmpty()) {
+					loc.getWorld().playSound(loc, ammo.getHitGroundSound(), 0.27f, 1);
+				} else {
+					Sound sound = SoundUtils.getBlockBreakSound(block);
+					loc.getWorld().playSound(loc, sound, 0.45f, 1);
+				}
+			} catch(Exception e) { }
 			Ammo eventAmmo = event.getAmmo();
 			AmmoType type = eventAmmo.getAmmoType();
 			switch (type) {
@@ -309,12 +319,52 @@ public class Projectile extends EntitySnowball {
 				effect = new IncindiaryEffect(loc, 0, ammo.getExplotionDamage(), ammo.getExplotionRange(), ammo.getExplotionRange() / 10, ammo.getExplosionFireTicks(), 9, ammo.getExplotionDrop(), (LivingEntity) projectile.getShooter());
 				effect.playEffect();
 				break;
-			case Regular:
+			case Regular: 
+				loc.getWorld().spawnParticle(Particle.BLOCK_CRACK, getHitParticleLocation(loc), 3, block.getBlockData());
 				break;
 			case Split:
+				loc.getWorld().spawnParticle(Particle.BLOCK_CRACK, getHitParticleLocation(loc), 3, block.getBlockData());
 				break;
 			}
 		}
+	}
+	
+	public Location getHitParticleLocation(Location loc) {
+		Location placeLoc = loc.clone();
+		Vector dir = this.getBukkitEntity().getVelocity();
+		boolean isAir = false;
+		int count = 0;
+		while (!isAir) {
+			if (placeLoc.clone().subtract(0, 0.2, 0).getBlock().getType() == Material.AIR || count > 30) {
+				isAir = true;
+			} else {
+				placeLoc.subtract(dir.clone().normalize().multiply(0.1));
+			}
+			count++;
+		}
+		return placeLoc;
+	}
+	
+	public Block getHitBlock(Location loc) {
+		Block block = loc.getBlock();
+		Location tempLoc = loc.clone();
+		if (loc.getBlock().getType() != Material.AIR) block = loc.getBlock();
+		else {
+			Vector dir = this.getBukkitEntity().getVelocity();
+			boolean isBlock = false;
+			int count = 0;
+			while (!isBlock) {
+				if (tempLoc.getBlock().getType() != Material.AIR) {
+					block = loc.getBlock();
+					break;
+				} else {
+					if (count > 15) break;
+					tempLoc = tempLoc.add(dir.clone().normalize().multiply(0.2));
+					count++;	
+				}
+			}
+		}
+		return block;
 	}
 	
 	/*///////////////////////////////////
