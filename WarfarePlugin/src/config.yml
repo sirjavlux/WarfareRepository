@@ -92,6 +92,6 @@ damage:
 shooting:
     recoil:
         enabled: true
-        yaw-modifier: 0.2
+        yaw-modifier: 0.35
     knockback:
         enabled: true

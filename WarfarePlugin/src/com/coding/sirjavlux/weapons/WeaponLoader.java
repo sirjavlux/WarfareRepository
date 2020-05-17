@@ -37,9 +37,10 @@ public class WeaponLoader extends WeaponManager{
 			System.out.println("Loading ammunition presets...");
 			ammoFile.mkdir();
 			
-			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/ammunition/sniper_ammo.yml", "Ammo/sniper_ammo.yml");
-			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/ammunition/rifle_ammo.yml", "Ammo/rifle_ammo.yml");
-			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/ammunition/rocket_ammo.yml", "Ammo/rocket_ammo.yml");
+			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/ammunition/9x19luger.yml", "Ammo/9x19luger.yml");
+			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/ammunition/9x19pso.yml", "Ammo/9x19pso.yml");
+			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/ammunition/9x19pst.yml", "Ammo/9x19pst.yml");
+			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/ammunition/9x19tracer.yml", "Ammo/9x19tracer.yml");
 		}
 		loadAmmunitionConfigs();
 		
@@ -50,7 +51,8 @@ public class WeaponLoader extends WeaponManager{
 			System.out.println("Loading magazine presets...");
 			magsFile.mkdir();
 			
-			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/magazines/rifle_mag.yml", "Mags/rifle_mag.yml");
+			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/magazines/mp5mag15.yml", "Mags/mp5mag15.yml");
+			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/magazines/mp5mag30.yml", "Mags/mp5mag30.yml");
 		}
 		loadMagazineConfigs();
 		
@@ -61,8 +63,7 @@ public class WeaponLoader extends WeaponManager{
 			System.out.println("Loading weapon presets...");
 			weaponsFile.mkdir();
 			
-			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/weapons/auto_weapon.yml", "Weapons/auto_weapon.yml");
-			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/weapons/sniper.yml", "Weapons/sniper.yml");
+			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/weapons/mp5.yml", "Weapons/mp5.yml");
 		}
 		loadWeaponConfigs();
 	}

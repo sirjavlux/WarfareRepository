@@ -1,0 +1,32 @@
+name: 9x19luger
+display-name: "&7&l9x19mm Luger"
+lore: 
+    - ""
+    - "&7This ammo is usable for weapons"
+    - "&7and magazines using the "
+    - "&7caliber 9x19mm!"
+    - ""
+    - "&7Damage &c4"
+    - "&7Armor Damage &c6"
+    - "&7Armor Penetration &c0.1"
+#This is used to load magazines and weapons with the matching caliber
+caliber: "9x19parabellum"
+material: STONE
+damage: 4
+armor-penetration: 0.1
+max-stack-size: 40
+armor-damage: 6
+#This is the ammo type, valid types are Regular, Split, Incindiary, Flame, Explosive
+type: Regular
+recoil: 2.2
+knockback: 0.05
+custom-model-data: 0
+speed: 5
+#explosion settings on hit
+explosion-fire-ticks: 0
+explosion-range: 0
+explosion-damage-drop: 0
+explosion-damage: 0
+#spread if split type
+bullet-spread: 0
+split-bullet-amount: 0

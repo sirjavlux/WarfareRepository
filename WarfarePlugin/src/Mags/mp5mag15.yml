@@ -1,0 +1,12 @@
+name: mp5mag15
+material: GOLD_BLOCK
+caliber: "9x19parabellum"
+ammo-capasity: 15
+lore:
+    - ""
+    - "&7This magazine is mainly used"
+    - "&7for the sbubmachine gun MP5"
+    - ""
+    - "&e%ammo% &7/ &e%max-ammo%"
+display-name: "&9&lMP5 15-round &7&l9x19 &9&lMagazine"
+custom-model-data: 0
