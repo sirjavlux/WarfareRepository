@@ -84,7 +84,7 @@ public class ProjectileManager {
 				loc = loc.add(dir.multiply(1.2));
 				for (int i = 1; i < 3; i++) {
 					loc.getWorld().spawnParticle(Particle.SMOKE_NORMAL, loc.clone(), 0, 0, 0, 0);
-					loc = loc.add(dir.clone().multiply((i * i) / 11));
+					loc = loc.add(dir.clone().multiply((i * i) / 16));
 				}
 			}
 		}

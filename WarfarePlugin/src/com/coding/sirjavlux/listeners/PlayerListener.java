@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import org.bukkit.Location;
+import org.bukkit.entity.NPC;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -66,7 +67,7 @@ public class PlayerListener implements Listener {
 	
 	@EventHandler
 	public void playerDamageEvent(EntityDamageEvent e) {
-		if (e.getEntity() instanceof Player && e.getCause().equals(DamageCause.FALL)) {
+		if (e.getEntity() instanceof Player && e.getCause().equals(DamageCause.FALL) && !(e.getEntity() instanceof NPC)) {
 			Player p = (Player) e.getEntity();
 			UUID uuid = p.getUniqueId();
 			Location pLoc = p.getLocation();

@@ -11,6 +11,6 @@ explosion-range: 3.2
 explosion-damage: 13
 explosion-damage-drop: 0.23
 explosion-fire-ticks: 0
-speed: 0.65
+speed: 0.8
 max-stack-size: 3
 duration: 0

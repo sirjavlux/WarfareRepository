@@ -62,7 +62,7 @@ public class ConfigManager {
 	private static boolean damageOnlyPlayerBleeding;
 	private static int damageConcussionStrenght;
 	private static int damageBrokenLegStrenght;
-	
+	private static String breakLegSound, bleedSound, concussionSound;
 	private static float recoilYawModifier;
 	private static boolean recoilEnabled;
 	private static boolean knockbackEnabled;
@@ -131,6 +131,9 @@ public class ConfigManager {
 		damageOnlyPlayerBleeding = conf.contains("damage.bleeding.only-players") ? conf.getBoolean("damage.bleeding.only-players") : false;
 		damageConcussionStrenght = conf.contains("damage.concussion.strenght") ? conf.getInt("damage.concussion.strenght") : 0;
 		damageBrokenLegStrenght = conf.contains("damage.break-leg.strenght") ? conf.getInt("damage.break-leg.strenght") : 1;
+		breakLegSound = conf.contains("damage.break-leg.sound") ? conf.getString("damage.break-leg.sound") : "";
+		bleedSound = conf.contains("damage.bleeding.sound") ? conf.getString("damage.bleeding.sound") : "";
+		concussionSound = conf.contains("damage.concussion.sound") ? conf.getString("damage.concussion.sound") : "";
 		
 		//shooting settings
 		recoilYawModifier = (float) (conf.contains("shooting.recoil.yaw-modifier") ? conf.getDouble("shooting.recoil.yaw-modifier") : 0.2);
@@ -158,6 +161,9 @@ public class ConfigManager {
 	public static boolean getOnlyPlayerBleeding() { return damageOnlyPlayerBleeding; }
 	public static int getConcussionStrenght() { return damageConcussionStrenght; }
 	public static int getBrokenLegStrenght() { return damageBrokenLegStrenght; }
+	public static String getBleedingSound() { return bleedSound; }
+	public static String getBreakLegSound() { return breakLegSound; }
+	public static String getConcussionSound() { return concussionSound; }
 	
 	public static List<Material> getIgnoredBlocks() { return ignoredBlocks; }
 	public static boolean ignoreOpenGates() { return ignoreOpenGate; }

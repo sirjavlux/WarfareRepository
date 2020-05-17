@@ -171,19 +171,23 @@ public class HealthEffects implements Listener {
 	public static void breakLeg(Player p) {
 		UUID uuid = p.getUniqueId();
 		brokenLegTime.replace(uuid, ConfigManager.getBrokenLegTime());
+		p.playSound(p.getLocation(), ConfigManager.getBreakLegSound(), 1, 1);
 	}
 	
 	public static void concussion(Player p) {
 		UUID uuid = p.getUniqueId();
 		concussionTime.replace(uuid, ConfigManager.getConcussionTime());
+		p.playSound(p.getLocation(), ConfigManager.getConcussionSound(), 1, 1);
 	}
 	
 	public static void addBleeding(LivingEntity entity, double damage) {
 		UUID uuid = entity.getUniqueId();
 		if (entity instanceof Player && bleedingMap.containsKey(uuid)) {
+			Player p = (Player) entity;
 			List<Bleeding> list = bleedingMap.get(uuid);
 			list.add(new Bleeding(ConfigManager.getBleedingTime(), damage));
 			bleedingMap.replace(uuid, list);
+			p.playSound(p.getLocation(), ConfigManager.getBleedingSound(), 1, 1);
 		} else if (!ConfigManager.getOnlyPlayerBleeding()) {
 			if (!bleedingMap.containsKey(uuid)) bleedingMap.put(uuid, new ArrayList<Bleeding>());
 			List<Bleeding> list = bleedingMap.get(uuid);

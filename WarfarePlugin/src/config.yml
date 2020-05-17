@@ -64,20 +64,23 @@ projectile:
 # DAMAGE SETTINGS #
 ###################
 
-damage:
+damage:  
     break-leg:
+        sound: "entity.player.big_fall"
         enabled: true
         strenght: 1
         height: 4
         chance-per-legdamage: 0.02
         time-active-ticks: 24000
     concussion:
+        sound: ""
         enabled: true
         strenght: 0
         chance-hit-head: 0.08
         chance-per-headdamage: 0.013
         time-active-ticks: 12000
     bleeding:
+        sound: "entity.puffer_fish.flop"
         enabled: true
         only-players: false
         chance-per-damage: 0.024
