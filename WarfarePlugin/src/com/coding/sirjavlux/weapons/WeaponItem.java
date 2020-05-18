@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -110,6 +111,10 @@ public class WeaponItem {
 		}
 		meta.setLore(loreList);
 		
+		meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
+		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+		
 		item.setItemMeta(meta);
 	}
 	
@@ -146,6 +151,11 @@ public class WeaponItem {
 			item.setType(weapon.getMat());
 			meta.setCustomModelData(weapon.getCustomModelData());
 		}
+		
+		meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
+		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+		
 		item.setItemMeta(meta);
 	}
 	

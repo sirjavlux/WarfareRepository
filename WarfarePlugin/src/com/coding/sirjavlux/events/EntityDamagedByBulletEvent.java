@@ -23,6 +23,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
+import com.coding.sirjavlux.armors.Armor;
+import com.coding.sirjavlux.armors.ArmorManager;
 import com.coding.sirjavlux.core.ConfigManager;
 import com.coding.sirjavlux.projectiles.BodyPart;
 import com.coding.sirjavlux.types.Ammo;
@@ -43,6 +45,7 @@ public class EntityDamagedByBulletEvent extends Event implements Cancellable {
     private final double pen;
     private final ItemStack protectingPiece;
     private double armorProt;
+    private Armor armor;
     
     public EntityDamagedByBulletEvent(LivingEntity damaged, Projectile projectile, double pen) {
         this.damaged = damaged;
@@ -59,6 +62,9 @@ public class EntityDamagedByBulletEvent extends Event implements Cancellable {
 		Vector pDir = projectile.getLocation().getDirection();
 		this.hitPart = isBodyPartRegistrable(damaged) ? getHitBodyPart(projectile.getLocation(), damaged.getLocation(), pDir, damaged) : BodyPart.Chest;
 		this.protectingPiece = getHitArmorPice();
+		if (ArmorManager.isArmor(protectingPiece)) {
+			armor = ArmorManager.getArmorFromItem(protectingPiece);
+		}
 		this.damage = calculateDamage(damaged, ammo.getDamage() * Double.parseDouble(hitPart.toString()), pen);
     }
     
@@ -86,6 +92,13 @@ public class EntityDamagedByBulletEvent extends Event implements Cancellable {
 		//calculate damage protection
 		if (protectingPiece != null) {
 			this.armorProt = ConfigManager.getItemArmorProtection(protectingPiece);
+			if (armor != null) {
+				armorProt *= armor.getProtection() / 2.4; //calculate protectiopn depending on armor protection if custom armor item
+				float durability = ArmorManager.getDurability(protectingPiece);
+				float maxDurability = ArmorManager.getMaxDurability(protectingPiece);
+				float differance = durability / maxDurability;
+				armorProt *= differance;
+			}
 			armorProt = armorProt - armorProt * pen;
 			damage = damage - damage * armorProt;
 			double damageRedSpeed = 1 / ((1 - (((projectile.getVelocity().length() > ammo.getSpeed() ? ammo.getSpeed() : projectile.getVelocity().length()) * 100)) / (ammo.getSpeed() * 100)) / (1 / ConfigManager.getDamageReductionSpeed()));
@@ -109,6 +122,14 @@ public class EntityDamagedByBulletEvent extends Event implements Cancellable {
         return HANDLERS;
     }
 
+    public String getHitSound() {
+    	return armor != null ? armor.getHitArmorSound() : "";
+    }
+    
+    public Armor getArmor() {
+    	return armor;
+    }
+    
     public LivingEntity getEntity() {
         return this.damaged;
     }

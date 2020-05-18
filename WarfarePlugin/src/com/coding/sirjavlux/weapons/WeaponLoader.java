@@ -122,7 +122,7 @@ public class WeaponLoader extends WeaponManager{
 			try {
 				mat = Material.valueOf(matS.toUpperCase());
 			} catch (Exception e) {
-				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "The selected weapon " + matS + " in the ammunition " + name + " didn't exist!");
+				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "The selected material " + matS + " in the weapon " + name + " didn't exist!");
 				continue;
 			}
 			//smoke offset
@@ -452,15 +452,13 @@ public class WeaponLoader extends WeaponManager{
 			String hitGround = conf.contains("hit-ground-sound") ? conf.getString("hit-ground-sound") : "";
 			//bullet hit flesh sound
 			String hitFlesh = conf.contains("hit-flesh-sound") ? conf.getString("hit-flesh-sound") : "block.slime_block.break";
-			//bullet hit armor sound
-			String hitArmor = conf.contains("hit-armor-sound") ? conf.getString("hit-armor-sound") : "block.anvil.land";
 			//explode sound
 			String explodeSound = conf.contains("explode-sound") ? conf.getString("explode-sound") : "entity.generic.explode";
 			//explode sound
 			String trailSound = conf.contains("trail-sound") ? conf.getString("trail-sound") : "";
 			
 			//add ammunition to map
-			Ammo ammo = new Ammo(name, caliber, mat, damage, armorPen, lore, displayName, speed, maxStackSize, shootMat, type, splitBulletAmount, explosionRange, explosionDamage, explosionDamageDrop, knockBack, armorDamage, recoil, knockback, customModel, fireTicks, spread, hitBurnTicks, trail, hitGround, hitFlesh, hitArmor, explodeSound, trailSound);
+			Ammo ammo = new Ammo(name, caliber, mat, damage, armorPen, lore, displayName, speed, maxStackSize, shootMat, type, splitBulletAmount, explosionRange, explosionDamage, explosionDamageDrop, knockBack, armorDamage, recoil, knockback, customModel, fireTicks, spread, hitBurnTicks, trail, hitGround, hitFlesh, explodeSound, trailSound);
 			WeaponManager.ammoStored.put(name, ammo);
 			
 			badAmmo.remove(file.getName());

@@ -21,6 +21,7 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
+import com.coding.sirjavlux.armors.ArmorManager;
 import com.coding.sirjavlux.core.ConfigManager;
 import com.coding.sirjavlux.core.Main;
 import com.coding.sirjavlux.effects.Effect;
@@ -213,7 +214,7 @@ public class Projectile extends EntitySnowball {
 				entity.setVelocity(entity.getVelocity().add(knockDir.multiply(knockback / 3)));
 				//destroy armor depending on round armor damage
 				org.bukkit.inventory.ItemStack hitArmor = event.getHitArmorPiece();
-				if (hitArmor != null) {
+				if (hitArmor != null && event.getArmor() == null) {
 					if (hitArmor.getItemMeta() instanceof Damageable) {
 						double armorDamage = event.getAmmo().getArmorDamage();
 						Damageable damageableItem = ((Damageable) hitArmor.getItemMeta());
@@ -231,6 +232,18 @@ public class Projectile extends EntitySnowball {
 							break;
 						}
 					}	
+				} else if (hitArmor != null && event.getArmor() != null) {
+					double armorDamage = event.getAmmo().getArmorDamage();
+					int durability = ArmorManager.getDurability(hitArmor);
+					int finalDurability = (int) (durability - armorDamage < 0 ? 0 : durability - armorDamage);
+					switch(event.getHitBodyPart()) {
+					case Chest: entity.getEquipment().setChestplate(ArmorManager.setDurability(hitArmor, finalDurability));
+						break;
+					case Head: entity.getEquipment().setHelmet(ArmorManager.setDurability(hitArmor, finalDurability));
+						break;
+					case Leg: entity.getEquipment().setLeggings(ArmorManager.setDurability(hitArmor, finalDurability));
+						break;
+					}
 				}
 				//calculate concussion, broken legs, bleeding
 				double bleedingDamage = 0;
@@ -276,7 +289,7 @@ public class Projectile extends EntitySnowball {
 			speed -= ammo.getSpeed() * penSpeedReduc;
 			//play sounds
 			Location loc = entity.getLocation();
-			if (armorProt > 0) loc.getWorld().playSound(loc, ammo.getHitArmorSound(), 1.5f, 1);
+			if (armorProt > 0) loc.getWorld().playSound(loc, event.getHitSound(), 1.5f, 1);
 			else loc.getWorld().playSound(loc, ammo.getHitFleshSound(), 1, 1);
 		} else {
 			speed = 0;

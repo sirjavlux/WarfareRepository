@@ -29,9 +29,9 @@ public class Ammo {
 	private float spread;
 	private int hitBurnTicks;
 	private Color trail;
-	private String hitGround, hitFlesh, hitArmor, explodeSound, trailSound;
+	private String hitGround, hitFlesh, explodeSound, trailSound;
 	
-	public Ammo(String name, String cal, Material mat, double damage, double armorPen, String[] lore, String displayName, double speed, int maxStackSize, Material shootMat, AmmoType type, int splitBulletAmount, double explosionRange, double explotionDamage, double explotionDamageDrop, double knockBack, double armorDamage, double recoil, double knockback, int customModel, int explosionFireTicks, float spread, int hitBurnTicks, Color trail, String hitGround, String hitFlesh, String hitArmor, String explodeSound, String trailSound) {
+	public Ammo(String name, String cal, Material mat, double damage, double armorPen, String[] lore, String displayName, double speed, int maxStackSize, Material shootMat, AmmoType type, int splitBulletAmount, double explosionRange, double explotionDamage, double explotionDamageDrop, double knockBack, double armorDamage, double recoil, double knockback, int customModel, int explosionFireTicks, float spread, int hitBurnTicks, Color trail, String hitGround, String hitFlesh, String explodeSound, String trailSound) {
 		this.name = name;
 		this.cal = cal;
 		this.mat = mat;
@@ -58,7 +58,6 @@ public class Ammo {
 		this.trail = trail;
 		this.hitGround = hitGround;
 		this.hitFlesh = hitFlesh;
-		this.hitArmor = hitArmor;
 		this.explodeSound = explodeSound;
 		this.trailSound = trailSound;
 	}
@@ -89,7 +88,6 @@ public class Ammo {
 	public Color getTrail() { return trail; }
 	public String getHitGroundSound() { return hitGround; }
 	public String getHitFleshSound() { return hitFlesh; }
-	public String getHitArmorSound() { return hitArmor; }
 	public String getExplodeSound() { return explodeSound; }
 	public String getTrailSound() { return trailSound; }
 }

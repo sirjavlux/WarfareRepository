@@ -12,6 +12,7 @@ import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -121,6 +122,10 @@ public class GrenadeManager {
 			//set custom texture
 			meta.setCustomModelData(grenade.getModelData());
 			meta.setUnbreakable(true);
+			
+			meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
+			meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+			meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 			
 			item.setItemMeta(meta);
 			item.setType(grenade.getMaterial());

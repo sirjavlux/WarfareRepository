@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.ChatColor;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -72,6 +73,10 @@ public class MagazineItem {
 		//set custom texture
 		meta.setCustomModelData(mag.getCustomModelData());
 		meta.setUnbreakable(true);
+		
+		meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
+		meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+		meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 		
 		item.setItemMeta(meta);
 		item.setType(mag.getMaterial());

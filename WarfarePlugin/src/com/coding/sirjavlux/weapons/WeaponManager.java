@@ -8,6 +8,7 @@ import java.util.UUID;
 import org.bukkit.ChatColor;
 import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -381,6 +382,10 @@ public class WeaponManager {
 			//set custom texture
 			meta.setCustomModelData(ammo.getCustomModelData());
 			meta.setUnbreakable(true);
+			
+			meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
+			meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+			meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 			
 			item.setItemMeta(meta);
 			item.setType(ammo.getMaterial());
