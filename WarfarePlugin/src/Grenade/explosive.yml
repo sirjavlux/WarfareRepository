@@ -1,6 +1,6 @@
 name: explosive
 material: GOLD_INGOT
-#valid types Flash, Fire, Smoke, Explosion
+#valid types Flash, Fire, Smoke, Explosion, Flash_Delayed, Fire_Delayed, Smoke_Delayed, Explosion_Delayed
 type: Explosion
 lore:
     - "&7This grenade can be used"
@@ -14,3 +14,4 @@ explosion-fire-ticks: 0
 speed: 0.8
 max-stack-size: 3
 duration: 0
+timer: 80

@@ -11,6 +11,7 @@ import com.coding.sirjavlux.consumables.ConsumableManager;
 import com.coding.sirjavlux.effectUtils.ParticleSpawner;
 import com.coding.sirjavlux.grenades.GrenadeListener;
 import com.coding.sirjavlux.grenades.GrenadeLoader;
+import com.coding.sirjavlux.grenades.GrenadeManager;
 import com.coding.sirjavlux.health.HealthEffects;
 import com.coding.sirjavlux.listeners.AsyncBulletHandler;
 import com.coding.sirjavlux.listeners.InventoryListener;
@@ -38,6 +39,8 @@ public class Main extends JavaPlugin {
 		weaponReloadHandler = new WeaponReloadHandler();
 		particleSpawner = new ParticleSpawner();
 		ConsumableManager.startConsumableRunnable();
+		GrenadeManager.startGrenadeHandler();
+		
 		//load listeners
 		Bukkit.getPluginManager().registerEvents(bulletHandler, this);
 		Bukkit.getPluginManager().registerEvents(new InventoryListener(), this);

@@ -55,14 +55,14 @@ public class ParticleSpawner {
 					//if specific location based
 					if (!effect.getDamageLocations().isEmpty()) {
 						for (DamageCuboid cuboid : effect.getDamageLocations()) {
-							for (Entity entity : cuboid.getEntitiesInsideCuboid()) {
+							for (Entity entity : new ArrayList<>(cuboid.getEntitiesInsideCuboid())) {
 								if (entity instanceof LivingEntity) entityList.add((LivingEntity) entity);
 							}
 						}
 					} 
 					//if radius based
 					else {
-						for (Entity entity : effect.getLocation().getWorld().getNearbyEntities(effect.getLocation(), effect.getRadius(), effect.getHeight(), effect.getRadius())) {
+						for (Entity entity : new ArrayList<>(effect.getLocation().getWorld().getNearbyEntities(effect.getLocation(), effect.getRadius(), effect.getHeight(), effect.getRadius()))) {
 							if (entity instanceof LivingEntity) entityList.add((LivingEntity) entity);
 						}
 					}

@@ -104,13 +104,17 @@ public class GrenadeLoader extends GrenadeManager {
 			//stack size
 			int maxStackSize = conf.contains("max-stack-size") ? conf.getInt("max-stack-size") : 64;
 			//duration
-			int duration = conf.contains("duration") ? conf.getInt("duration") : 60;
+			int duration = conf.contains("duration") ? conf.getInt("duration") : 80;
 			//explode sound
 			String explodeSound = conf.contains("explode-sound") ? conf.getString("explode-sound") : "entity.generic.explode";
 			//throw sound
 			String throwSound = conf.contains("throw-sound") ? conf.getString("throw-sound") : "entity.splash_potion.throw";
+			//bounce sound
+			String bounceSound = conf.contains("bounce-sound") ? conf.getString("bounce-sound") : "";
+			//timer time
+			int timer = conf.contains("timer") ? conf.getInt("timer") : 95;
 			
-			Grenade grenade = new Grenade(mat, modelData, lore, displayName, type, name, explosionRange, explosionDamage, explosionDamageDrop, fireTicks, speed, maxStackSize, duration, explodeSound, throwSound);
+			Grenade grenade = new Grenade(mat, modelData, lore, displayName, type, name, explosionRange, explosionDamage, explosionDamageDrop, fireTicks, speed, maxStackSize, duration, explodeSound, throwSound, bounceSound, timer);
 			GrenadeManager.grenades.put(name, grenade);
 			
 			badMags.remove(file.getName());

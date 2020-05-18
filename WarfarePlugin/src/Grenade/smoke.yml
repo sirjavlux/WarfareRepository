@@ -1,7 +1,7 @@
 name: smoke
 material: IRON_INGOT
-#valid types Flash, Fire, Smoke, Explosion
-type: Smoke
+#valid types Flash, Fire, Smoke, Explosion, Flash_Delayed, Fire_Delayed, Smoke_Delayed, Explosion_Delayed
+type: Smoke_Delayed
 lore:
     - "&7This grenade can be used"
     - "&7for cover or distractions!"
@@ -14,3 +14,4 @@ explosion-fire-ticks: 0
 speed: 0.8
 max-stack-size: 3
 duration: 1000
+timer: 80

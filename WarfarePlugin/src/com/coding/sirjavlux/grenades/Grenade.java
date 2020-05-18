@@ -8,13 +8,13 @@ public class Grenade {
 
 	private GrenadeType type;
 	private Material mat;
-	private int modelData, fireTicks, maxStackSize, duration;
+	private int modelData, fireTicks, maxStackSize, duration, timer;
 	private List<String> lore;
 	private String displayName, name;
 	private double explosionRange, explosionDamage, explosionDamageDrop, speed;
-	private String explodeSound, throwSound;
+	private String explodeSound, throwSound, bounceSound;
 	
-	public Grenade(Material mat, int modelData, List<String> lore, String displayName, GrenadeType type, String name, double explosionRange, double explosionDamage, double explosionDamageDrop, int fireTicks, double speed, int maxStackSize, int duration, String explodeSound, String throwSound) {
+	public Grenade(Material mat, int modelData, List<String> lore, String displayName, GrenadeType type, String name, double explosionRange, double explosionDamage, double explosionDamageDrop, int fireTicks, double speed, int maxStackSize, int duration, String explodeSound, String throwSound, String bounceSound, int timer) {
 		this.mat = mat;
 		this.modelData = modelData;
 		this.lore = lore;
@@ -30,6 +30,8 @@ public class Grenade {
 		this.duration = duration;
 		this.explodeSound = explodeSound;
 		this.throwSound = throwSound;
+		this.bounceSound = bounceSound;
+		this.timer = timer;
 	}
 	
 	public Material getMaterial() { return mat; }
@@ -47,4 +49,6 @@ public class Grenade {
 	public int getDuration() { return duration; }
 	public String getExplodeSound() { return explodeSound; }
 	public String getThrowSound() { return throwSound; }
+	public String getBounceSound() { return bounceSound; }
+	public int getTimerTime() { return timer; }
 }

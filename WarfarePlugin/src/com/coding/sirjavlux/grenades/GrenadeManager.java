@@ -3,14 +3,25 @@ package com.coding.sirjavlux.grenades;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
+import com.coding.sirjavlux.core.Main;
+import com.coding.sirjavlux.effects.Effect;
+import com.coding.sirjavlux.effects.ExplosiveEffect;
+import com.coding.sirjavlux.effects.FireEffect;
+import com.coding.sirjavlux.effects.FlashEffect;
+import com.coding.sirjavlux.effects.SmokeEffect;
 import com.coding.sirjavlux.utils.inventoryHandler;
 
 import net.minecraft.server.v1_15_R1.NBTTagCompound;
@@ -114,5 +125,107 @@ public class GrenadeManager {
 			item.setItemMeta(meta);
 			item.setType(grenade.getMaterial());
 		}
+	}
+	
+	/*////////////////////////////
+	 *GRENADE HANDLER 
+	 *////////////////////////////
+	
+	private static HashMap<UUID, GrenadeTimer> grenadeTimers = new HashMap<>();
+	public static void startGrenadeHandler() {
+		final int runnableSpeed = 5;
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				List<UUID> removeGrenades = new ArrayList<>();
+				//go trough timers
+				for (Entry<UUID, GrenadeTimer> entry : new HashMap<>(grenadeTimers).entrySet()) {
+					GrenadeTimer timer = entry.getValue();
+					UUID uuid = entry.getKey();
+					Entity entity = Bukkit.getEntity(timer.getUniqueId());
+					int timeLeft = timer.getTimeLeft() - runnableSpeed;
+					if (timeLeft < 1) {
+						if (entity != null) {
+							if (!entity.isDead()) {
+								Grenade grenade = timer.getGrenade();
+								Location loc = entity.getLocation();
+								Player p = timer.getPlayer();
+								switch (grenade.getType()) {
+								case Fire_Delayed: 
+									loc.getWorld().playSound(loc, grenade.getExplodeSound(), 5, 1);
+									Effect effect = new FireEffect(new Location(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ()), grenade.getDuration(), grenade.getExplosionDamage(), grenade.getExplosionRange(), 0.2, grenade.getFireTicks(), (int) (4d * grenade.getExplosionRange()), grenade.getExplosionDamageDrop(), p, loc.getDirection().clone());
+									effect.playEffect();
+									break;
+								case Flash_Delayed: 
+									loc.getWorld().playSound(loc, grenade.getExplodeSound(), 5, 1);
+									effect = new FlashEffect(new Location(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ()), grenade.getDuration(), grenade.getExplosionDamage(), grenade.getExplosionRange(), grenade.getExplosionRange(), grenade.getFireTicks(), (int) (4d * grenade.getExplosionRange()), loc.getDirection().clone());
+									effect.playEffect();
+									break;
+								case Smoke_Delayed: 
+									loc.getWorld().playSound(loc, grenade.getExplodeSound(), 5, 1);
+									effect = new SmokeEffect(new Location(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ()), grenade.getDuration(), grenade.getExplosionDamage(), grenade.getExplosionRange(), grenade.getExplosionRange() * 0.72, grenade.getFireTicks(), loc.getDirection().clone());
+									effect.playEffect();
+									break;
+								case Explosion_Delayed:
+									loc.getWorld().playSound(loc, grenade.getExplodeSound(), 5, 1);
+									effect = new ExplosiveEffect(new Location(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ()), grenade.getExplosionDamage(), grenade.getExplosionRange(), grenade.getExplosionRange(), grenade.getFireTicks(), grenade.getExplosionDamageDrop(), p);
+									effect.playEffect();
+								default:
+									break;
+								}
+							}
+						}
+						removeGrenades.add(uuid);
+					} else {
+						timer.setTimeLeft(timeLeft);
+					}
+				}
+				//remove timers and kill entities
+				for (UUID uuid : removeGrenades) {
+					GrenadeTimer timer = grenadeTimers.get(uuid);
+					Entity entity = timer.getEntity();
+					if (entity != null) {
+						List<Entity> passengers = entity.getPassengers();
+						if (passengers.size() > 0) for (Entity passenger : passengers) passenger.remove();
+						entity.remove();
+					}
+					grenadeTimers.remove(uuid);
+				}
+			}
+		}.runTaskTimer(Main.getPlugin(Main.class), runnableSpeed, runnableSpeed);
+	}
+	
+	public static UUID addGrenadeTimer(UUID uuid, Grenade grenade, Player p) {
+		GrenadeTimer timer = new GrenadeTimer(uuid, grenade, p);
+		UUID timerUUID = UUID.randomUUID();
+		grenadeTimers.put(timerUUID, timer);
+		return timerUUID;
+	}
+	
+	public static GrenadeTimer getGrenadeTimer(UUID uuid) {
+		return grenadeTimers.containsKey(uuid) ? grenadeTimers.get(uuid) : null;
+	}
+	
+	public static class GrenadeTimer {
+		private Player p;
+		private int timeLeft;
+		private UUID uuid;
+		private Grenade grenade;
+		
+		public GrenadeTimer(UUID uuid, Grenade grenade, Player p) {
+			this.uuid = uuid;
+			this.grenade = grenade;
+			this.timeLeft = grenade.getTimerTime();
+			this.p = p;
+		}
+		
+		public UUID getUniqueId() { return uuid; }
+		public Grenade getGrenade() { return grenade; }
+		public Entity getEntity() { return Bukkit.getEntity(uuid); }
+		public int getTimeLeft() { return timeLeft; }
+		public Player getPlayer() { return p; }
+		
+		public void setTimeLeft(int time) { timeLeft = time; }
+		public void setUniqueId(UUID uuid) { this.uuid = uuid; }
 	}
 }
