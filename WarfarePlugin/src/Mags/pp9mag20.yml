@@ -1,0 +1,12 @@
+name: pp9mag20
+material: GOLD_BLOCK
+caliber: "9x18makarov"
+ammo-capasity: 20
+lore:
+    - ""
+    - "&7This magazine is mainly used"
+    - "&7for the sbubmachine gun PP-9"
+    - ""
+    - "&e%ammo% &7/ &e%max-ammo%"
+display-name: "&a&lPP-9 20-round &7&l9x19 &a&lMagazine"
+custom-model-data: 0

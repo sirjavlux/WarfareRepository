@@ -1,0 +1,12 @@
+name: pmmag
+material: GOLD_BLOCK
+caliber: "9x18makarov"
+ammo-capasity: 8
+lore:
+    - ""
+    - "&7This magazine is mainly used"
+    - "&7for the hand gun PM"
+    - ""
+    - "&e%ammo% &7/ &e%max-ammo%"
+display-name: "&a&lPM 8-round &7&l9x19 &a&lMagazine"
+custom-model-data: 0

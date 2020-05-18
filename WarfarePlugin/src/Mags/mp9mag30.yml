@@ -1,0 +1,12 @@
+name: mp9mag30
+material: GOLD_BLOCK
+caliber: "9x19parabellum"
+ammo-capasity: 30
+lore:
+    - ""
+    - "&7This magazine is mainly used"
+    - "&7for the sbubmachine gun MP9"
+    - ""
+    - "&e%ammo% &7/ &e%max-ammo%"
+display-name: "&a&lMP9 30-round &7&l9x19 &a&lMagazine"
+custom-model-data: 0

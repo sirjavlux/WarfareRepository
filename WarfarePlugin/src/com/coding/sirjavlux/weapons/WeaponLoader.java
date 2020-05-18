@@ -41,6 +41,10 @@ public class WeaponLoader extends WeaponManager{
 			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/ammunition/9x19pso.yml", "Ammo/9x19pso.yml");
 			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/ammunition/9x19pst.yml", "Ammo/9x19pst.yml");
 			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/ammunition/9x19tracer.yml", "Ammo/9x19tracer.yml");
+			
+			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/ammunition/9x189pgzh.yml", "Ammo/9x189pgzh.yml");
+			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/ammunition/9x18pbm.yml", "Ammo/9x18pbm.yml");
+			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/ammunition/9x18sp7gzh.yml", "Ammo/9x18sp7gzh.yml");
 		}
 		loadAmmunitionConfigs();
 		
@@ -53,6 +57,15 @@ public class WeaponLoader extends WeaponManager{
 			
 			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/magazines/mp5mag15.yml", "Mags/mp5mag15.yml");
 			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/magazines/mp5mag30.yml", "Mags/mp5mag30.yml");
+			
+			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/magazines/mp9mag15.yml", "Mags/mp9mag15.yml");
+			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/magazines/mp9mag25.yml", "Mags/mp9mag25.yml");
+			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/magazines/mp9mag30.yml", "Mags/mp9mag30.yml");
+			
+			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/magazines/pmmag.yml", "Mags/pmmag.yml");
+			
+			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/magazines/pp9mag20.yml", "Mags/pp9mag20.yml");
+			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/magazines/pp9mag30.yml", "Mags/pp9mag30.yml");
 		}
 		loadMagazineConfigs();
 		
@@ -64,6 +77,10 @@ public class WeaponLoader extends WeaponManager{
 			weaponsFile.mkdir();
 			
 			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/weapons/mp5.yml", "Weapons/mp5.yml");
+			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/weapons/mp9.yml", "Weapons/mp9.yml");
+			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/weapons/pp99klin.yml", "Weapons/pp99klin.yml");
+			
+			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/weapons/pm.yml", "Weapons/pm.yml");
 		}
 		loadWeaponConfigs();
 	}

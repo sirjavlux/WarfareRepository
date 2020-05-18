@@ -4,18 +4,18 @@ lore:
     - ""
     - "&7This ammo is usable for weapons"
     - "&7and magazines using the "
-    - "&7caliber 9x19mm!"
+    - "&7caliber 9x19mm Parabellum!"
     - ""
     - "&7When fired this round will show"
     - "&7a colored tracer."
     - ""
-    - "&7Damage &c3.4"
+    - "&7Damage &c4.8"
     - "&7Armor Damage &c4"
     - "&7Armor Penetration &c0.14"
 #This is used to load magazines and weapons with the matching caliber
 caliber: "9x19parabellum"
 material: STONE
-damage: 3.4
+damage: 4.8
 armor-penetration: 0.14
 max-stack-size: 40
 armor-damage: 4
@@ -24,7 +24,7 @@ type: Regular
 recoil: 1.8
 knockback: 0.05
 custom-model-data: 0
-speed: 3.9
+speed: 3.8
 #explosion settings on hit
 explosion-fire-ticks: 0
 explosion-range: 0

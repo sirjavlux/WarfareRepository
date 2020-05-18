@@ -1,0 +1,45 @@
+name: pp99klin
+#valid types are BoltAction, SemiAuto, Auto, Burst
+type: Auto
+material: WOODEN_PICKAXE
+smoke-enabled: true
+damage: 2.0
+#use & for color codes
+#valid placeholders are %ammo% %max-ammo%
+lore:
+    - ""
+    - "&7This weapon is a submachine gun"
+    - "&7which uses 9x19mm Makarov rounds as ammunition."
+    - ""
+    - "&7Fire Rate &c6"
+    - "&7Reload Speed &c17"
+    - "&7Recoil Reduction &c0.16"
+    - "&7Knockback Reduction &c0.18"
+    - ""
+    - "&e%ammo% &7/ &e%max-ammo%"
+display-name: "&e&lPP-9 Klin"
+loaded-by-default: true
+barrel-ammo-cap: 1
+require-mag: true
+default-magazine: "pp9mag30"
+magazine-required:
+    - "pp9mag30"
+    - "pp9mag20"
+barrel-caliber: "9x18makarov"
+pre-load-ammo: "9x189pgzh"
+fire-rate: 6
+recoil-reduction: 0.16
+knockback-reduction: 0.18
+reload-speed: 17
+custom-model-data: 0
+scope-material: STONE_PICKAXE
+scope-custom-model-data: 0
+scope: -0.06
+#valid actions are right, left, shift_right, shift_left, shift
+#valid mechanics are scope and shoot
+actions:
+    left: scope
+    shift: 
+    right: shoot
+    shift_left: scope
+    shift_right: shoot

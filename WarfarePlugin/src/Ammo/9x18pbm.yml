@@ -1,27 +1,27 @@
-name: 9x19pst
-display-name: "&7&l9x19mm Pst gzh"
+name: 9x18pbm
+display-name: "&7&l9x18mm PM PBM"
 lore: 
     - ""
     - "&7This ammo is usable for weapons"
     - "&7and magazines using the "
-    - "&7caliber 9x19mm Parabellum!"
+    - "&7caliber 9x18mm Makarov!"
     - ""
-    - "&7Damage &c4.5"
+    - "&7Damage &c3.6"
     - "&7Armor Damage &c5"
-    - "&7Armor Penetration &c0.18"
+    - "&7Armor Penetration &c0.22"
 #This is used to load magazines and weapons with the matching caliber
-caliber: "9x19parabellum"
+caliber: "9x18makarov"
 material: STONE
-damage: 3
-armor-penetration: 0.18
+damage: 3.6
+armor-penetration: 0.22
 max-stack-size: 40
 armor-damage: 5
 #This is the ammo type, valid types are Regular, Split, Incindiary, Flame, Explosive
 type: Regular
-recoil: 2.3
-knockback: 0.06
+recoil: 2.1
+knockback: 0.05
 custom-model-data: 0
-speed: 4.57
+speed: 5.19
 #explosion settings on hit
 explosion-fire-ticks: 0
 explosion-range: 0
