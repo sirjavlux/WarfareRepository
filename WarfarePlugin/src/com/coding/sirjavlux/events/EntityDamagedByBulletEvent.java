@@ -59,8 +59,7 @@ public class EntityDamagedByBulletEvent extends Event implements Cancellable {
         this.itemUsed = this.shooter instanceof Player ? ((Player) shooter).getInventory().getItemInMainHand() : null;
 		this.pen = pen;
 		//get other body part then chest if zombie, player or skeleton
-		Vector pDir = projectile.getLocation().getDirection();
-		this.hitPart = isBodyPartRegistrable(damaged) ? getHitBodyPart(projectile.getLocation(), damaged.getLocation(), pDir, damaged) : BodyPart.Chest;
+		this.hitPart = isBodyPartRegistrable(damaged) ? getCalculateHitBodyPart() : BodyPart.Chest;
 		this.protectingPiece = getHitArmorPice();
 		System.out.println("hit area " + hitPart.name());
 		if (ArmorManager.isArmor(protectingPiece)) {
@@ -208,31 +207,33 @@ public class EntityDamagedByBulletEvent extends Event implements Cancellable {
 		}
 	}
 	
-	protected BodyPart getHitBodyPart(Location hitLoc, Location pLoc, Vector oldDir, LivingEntity entity) {
+	protected BodyPart getCalculateHitBodyPart() {
 		BodyPart hitBodyPart = BodyPart.Chest;
 		
-		double oldDirY = oldDir.getY();
-		Location l1 = pLoc.clone();
-		Location l2 = hitLoc.clone();
-		l1.setY(0);
-		l2.setY(0);
-
-		//create projectile direction
-		Vector pDir = l1.toVector().subtract(l2.toVector());
-		pDir.setX(pDir.getX() / (l1.distance(l2) + l1.distance(l2)));
-		pDir.setZ(pDir.getZ() / (l1.distance(l2) + l1.distance(l2)));
-		double distance = l1.distance(l2) + l1.distance(l2) * ((1 - pDir.lengthSquared()) > 0 ? (1 - pDir.lengthSquared()) : (1 - pDir.lengthSquared()) * -1);
-		pDir.setY(oldDirY);
+		Location eLoc = damaged.getLocation();
+		Location loc = projectile.getLocation().clone();
+		Vector dir = projectile.getVelocity().clone().normalize();
 		
-		hitLoc = hitLoc.toVector().subtract(pDir.multiply(distance)).toLocation(pLoc.getWorld());
-		l2 = hitLoc.clone();
-		l2.setY(0);
+		int count = 0;
+		while (eLoc.clone().subtract(0, eLoc.getY(), 0).distance(loc.clone().subtract(0, loc.getY(), 0)) > 0.2) {
+			Location forward = loc.clone().add(dir.clone().multiply(0.03));
+			Location backward = loc.clone().subtract(dir.clone().multiply(0.03));
+			double dist1 = eLoc.clone().subtract(0, eLoc.getY(), 0).distance(forward.clone().subtract(0, forward.getY(), 0));
+			double dist2 = eLoc.clone().subtract(0, eLoc.getY(), 0).distance(backward.clone().subtract(0, backward.getY(), 0));
+			if (dist1 < dist2) {
+				loc.add(dir.clone().multiply(dist1 > 0.3 ? dist1 * 0.7 : 0.03));
+			} else loc.subtract(dir.clone().multiply(dist2 > 0.3 ? dist2 * 0.7 : 0.03));
+			if (count > 90) {
+				break;
+			}
+			count++;
+		}
 		
 		double headHeight = 1.5;
 		double chestHeight = 0.8;
 		
-		if (entity instanceof Player) {
-			Player target = (Player) entity;
+		if (damaged instanceof Player) {
+			Player target = (Player) damaged;
 			if (target.isSneaking()) {
 				headHeight -= 0.4;
 				chestHeight -= 0.4;
@@ -240,9 +241,9 @@ public class EntityDamagedByBulletEvent extends Event implements Cancellable {
 		}
 		
 		//above waist
-		if (hitLoc.getY() - pLoc.getY() > chestHeight) {
+		if (loc.getY() - eLoc.getY() > chestHeight) {
 			//check if headshot
-			if (hitLoc.getY() - pLoc.getY() > headHeight) {
+			if (loc.getY() - eLoc.getY() > headHeight) {
 				//System.out.println("headshot");
 				hitBodyPart = BodyPart.Head;
 			} 

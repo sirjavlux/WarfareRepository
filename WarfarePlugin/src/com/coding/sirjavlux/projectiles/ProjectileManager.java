@@ -21,6 +21,7 @@ import com.coding.sirjavlux.grenades.Grenade;
 import com.coding.sirjavlux.types.Ammo;
 import com.coding.sirjavlux.types.AmmoType;
 import com.coding.sirjavlux.types.Weapon;
+import com.coding.sirjavlux.utils.ScopeUtils;
 
 import net.minecraft.server.v1_15_R1.EntityPlayer;
 import net.minecraft.server.v1_15_R1.PacketPlayOutPosition;
@@ -66,6 +67,10 @@ public class ProjectileManager {
 				float yawRecMod = (float) (finalRecoil * yawModifier);
 				float yawAdd = -yawModifier + r.nextFloat() * (yawRecMod - -yawModifier);
 				float pitchAdd = (float) (finalRecoil - yawAdd) * -1f;
+				if (ScopeUtils.isScoped(p)) {
+					yawAdd *= 0.62;
+					pitchAdd *= 0.62;
+				}
 				PacketPlayOutPosition packet = new PacketPlayOutPosition(0.0, 0.0, 0.0, yawAdd, pitchAdd, teleportFlags, 0);
 			    ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
 			}

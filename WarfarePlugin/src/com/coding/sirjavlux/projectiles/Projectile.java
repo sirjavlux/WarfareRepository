@@ -86,20 +86,20 @@ public class Projectile extends EntitySnowball {
 		 * check if hit block should be ignored
 		 *//////////////////////////////////////////
 		Location hitLoc = new Location(bukkitWorld, movingobjectposition.getPos().getX(), movingobjectposition.getPos().getY(), movingobjectposition.getPos().getZ());
-		Location hitBlockLoc = hitLoc.getBlock().getLocation().add(0.5, 0.5, 0.5);
+		Location hitBlockLoc = hitLoc.clone().getBlock().getLocation().add(0.5, 0.5, 0.5);
 		block = hitBlockLoc.getBlock();
 		Material mat = block.getType();
 		//check if hit location has potential target
 		if (movingobjectposition.getType().equals(EnumMovingObjectType.BLOCK)) {
 			boolean passTrough = false;
 			//if block is air check block in front
-			org.bukkit.util.Vector dirVector = hitLoc.toVector().subtract(playerLoc.toVector());
+			org.bukkit.util.Vector dirVector = hitLoc.clone().toVector().subtract(playerLoc.toVector());
 			if (mat.equals(Material.AIR)) {
 				dirVector.normalize();
 				dirVector.setX(dirVector.getX() / 10);
 				dirVector.setY(dirVector.getY() / 10);
 				dirVector.setZ(dirVector.getZ() / 10);
-				Location newHitLoc = hitLoc.toVector().add(dirVector).toLocation(bukkitWorld);
+				Location newHitLoc = hitLoc.clone().toVector().add(dirVector).toLocation(bukkitWorld);
 				block = newHitLoc.getBlock();
 				mat = block.getType();
 				if (mat.equals(Material.AIR)) passTrough = true;
