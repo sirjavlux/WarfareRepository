@@ -215,15 +215,15 @@ public class EntityDamagedByBulletEvent extends Event implements Cancellable {
 		Vector dir = projectile.getVelocity().clone().normalize();
 		
 		int count = 0;
-		while (eLoc.clone().subtract(0, eLoc.getY(), 0).distance(loc.clone().subtract(0, loc.getY(), 0)) > 0.2) {
+		while (eLoc.clone().subtract(0, eLoc.getY(), 0).distance(loc.clone().subtract(0, loc.getY(), 0)) > 0.27) {
 			Location forward = loc.clone().add(dir.clone().multiply(0.03));
 			Location backward = loc.clone().subtract(dir.clone().multiply(0.03));
 			double dist1 = eLoc.clone().subtract(0, eLoc.getY(), 0).distance(forward.clone().subtract(0, forward.getY(), 0));
 			double dist2 = eLoc.clone().subtract(0, eLoc.getY(), 0).distance(backward.clone().subtract(0, backward.getY(), 0));
 			if (dist1 < dist2) {
-				loc.add(dir.clone().multiply(dist1 > 0.3 ? dist1 * 0.7 : 0.03));
-			} else loc.subtract(dir.clone().multiply(dist2 > 0.3 ? dist2 * 0.7 : 0.03));
-			if (count > 90) {
+				loc.add(dir.clone().multiply(dist1 * 0.3));
+			} else loc.subtract(dir.clone().multiply(dist2 * 0.3));
+			if (count > 40) {
 				break;
 			}
 			count++;
