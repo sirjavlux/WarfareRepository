@@ -11,9 +11,10 @@ public class Armor {
 	String name, displayName, hitArmor, headData;
 	List<String> lore;
 	Color color;
-	int durability, modelData, protection;
+	int durability, modelData;
+	double protection;
 	
-	public Armor(String name, String displayName, Material mat, List<String> lore, String hitArmor, Color color, String headData, int durability, int modelData, int protection) {
+	public Armor(String name, String displayName, Material mat, List<String> lore, String hitArmor, Color color, String headData, int durability, int modelData, double protection) {
 		this.displayName = displayName;
 		this.name = name;
 		this.mat = mat;
@@ -34,5 +35,5 @@ public class Armor {
 	public String getHeadData() { return headData; }
 	public int getDurability() { return durability; }
 	public int getModelData() { return modelData; }
-	public int getProtection() { return protection; }
+	public double getProtection() { return protection; }
 }

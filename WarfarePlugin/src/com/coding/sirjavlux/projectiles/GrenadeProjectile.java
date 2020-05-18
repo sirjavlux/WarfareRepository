@@ -112,7 +112,7 @@ public class GrenadeProjectile extends EntitySnowball {
 		//play bounce sound
 		hitLoc.getWorld().playSound(hitLoc, grenade.getBounceSound(), 0.68f, 1);
 		
-		if (speed < 0.25D) {
+		if (speed < 0.12D) {
             Item item = hitLoc.getWorld().dropItem(hitLoc, CraftItemStack.asBukkitCopy(this.item));  
             item.setVelocity(new Vector(0, 0, 0));
             item.setInvulnerable(true);

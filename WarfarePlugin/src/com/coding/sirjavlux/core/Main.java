@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.coding.sirjavlux.armors.ArmorLoader;
 import com.coding.sirjavlux.commands.CommandManager;
 import com.coding.sirjavlux.consumables.ConsumableListener;
 import com.coding.sirjavlux.consumables.ConsumableLoader;
@@ -58,6 +59,7 @@ public class Main extends JavaPlugin {
 		WeaponLoader.loadFiles();
 		ConsumableLoader.loadFiles();
 		GrenadeLoader.loadFiles();
+		ArmorLoader.loadFiles();
 		
 		//load config
 		ConfigManager.loadConfig(this.getConfig());

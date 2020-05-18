@@ -1,0 +1,22 @@
+name: 6b2
+material: DIAMOND_CHESTPLATE
+#placeholders %durability%
+lore:
+    - ""
+    - "&7A light russian body armor"
+    - "&7which has one of the lower"
+    - "&7armor ratings."
+    - ""
+    - "&7Teir &c1"
+    - ""
+    - "&7Durability &l[%durability%&7&l]"
+display-name: "&a&l6B2 Body Armor"
+hit-armor-sound: "block.anvil.land"
+head-data: ""
+durability: 75
+model-data: 0
+protection: 0.27
+color:
+    r: 255
+    g: 255
+    b: 255

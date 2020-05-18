@@ -148,20 +148,21 @@ public class ArmorManager {
 		int maxDurability = tagComp.getInt("max-durability");
 		int totalBarCount = 15;
 		for (int i = 0; i < totalBarCount; i++) {
-			ChatColor color = i > durability / maxDurability ? ChatColor.GREEN : ChatColor.GRAY;
-			builder.append(color + "" + ChatColor.BOLD + ":");
+			ChatColor color = (double) i / (double) totalBarCount > (double) durability / (double) maxDurability ? ChatColor.GRAY : ChatColor.GREEN;
+			builder.append(color + "" + ChatColor.BOLD + "|");
 		}
 		
 		return builder.toString();
 	}
 	
-	public static ItemStack setDurability(ItemStack item, int amount) {
+	public static ItemStack setDurability(ItemStack input, int amount) {
+		ItemStack item = input.clone();
 		if (isArmor(item)) {
 			net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(item);
 			NBTTagCompound tagComp = NMSItem.getTag();
-			int durability = tagComp.getInt("durability");
+			amount = amount < 0 ? 0 : amount;
 			int maxDurability = tagComp.getInt("max-durability");
-			int newDurability = durability + amount > maxDurability ? maxDurability : durability + amount;
+			int newDurability = amount > maxDurability ? maxDurability : amount;
 			tagComp.setInt("durability", newDurability);
 			NMSItem.setTag(tagComp);
 			item = CraftItemStack.asBukkitCopy(NMSItem);

@@ -13,6 +13,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
 import com.coding.sirjavlux.core.Main;
+import com.coding.sirjavlux.utils.FileManager;
 
 public class ArmorLoader extends ArmorManager{
 
@@ -26,14 +27,14 @@ public class ArmorLoader extends ArmorManager{
 			System.out.println("Loading armor presets...");
 			ammoFile.mkdir();
 			
-			//FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/armor/test.yml", "Armor/test.yml");
+			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/armor/6b2.yml", "Armor/6b2.yml");
 		}
 		loadArmorData();
 	}
 	
 	public static void loadArmorData() {
 		Plugin plugin = Main.getPlugin(Main.class);
-		File magsFile = new File(plugin.getDataFolder() + "/magazines");
+		File magsFile = new File(plugin.getDataFolder() + "/armor");
 
 		//loop trough files
 		List<String> goodMags = new ArrayList<>();
@@ -70,6 +71,7 @@ public class ArmorLoader extends ArmorManager{
 				lore.add("&cAdd 'lore: - something'");
 				lore.add("&cin the armor file");
 			}
+			//color
 			Color color = null;
 			if (conf.contains("color.r") && conf.contains("color.g") && conf.contains("color.b")) {
 				int r = conf.getInt("color.r");
@@ -88,7 +90,7 @@ public class ArmorLoader extends ArmorManager{
 			//model data
 			int modelData = conf.contains("model-data") ? conf.getInt("model-data") : 0;
 			//protection
-			int protection = conf.contains("protection") ? conf.getInt("protection") : 1;
+			double protection = conf.contains("protection") ? conf.getInt("protection") : 0.2;
 			
 			//add armor to map
 			Armor armor = new Armor(name, displayName, mat, lore, hitArmor, color, headData, durability, modelData, protection);
@@ -99,7 +101,7 @@ public class ArmorLoader extends ArmorManager{
 		}
 		
 		//print loaded magazines and finished message
-		printGoodBadFiles(goodMags, badMags, "Magazines");
+		printGoodBadFiles(goodMags, badMags, "Armors");
 	}
 	
 	private static void printGoodBadFiles(List<String> good, List<String> bad, String loadedName) {

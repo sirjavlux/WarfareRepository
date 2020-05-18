@@ -44,9 +44,17 @@ public class HealthEffects implements Listener {
 				HashMap<UUID, Integer> tempConcussionMap = new HashMap<>(concussionTime);
 				for (Entry<UUID, Integer> entry : tempConcussionMap.entrySet()) {
 					int time = entry.getValue();
+					UUID uuid = entry.getKey();
 					if (time > 0) {
 						Player p = Bukkit.getPlayer(entry.getKey());
-						if (p == null) continue;
+						if (p == null) {
+							brokenLegTime.remove(uuid);
+							continue;
+						}
+						else if (p.isDead()) {
+							brokenLegTime.remove(uuid);
+							continue;
+						}
 						boolean containsValidEffect = false;
 						PotionEffectType type = PotionEffectType.BLINDNESS;
 						if (p.hasPotionEffect(type)) {
@@ -74,10 +82,18 @@ public class HealthEffects implements Listener {
 				HashMap<UUID, Integer> newBrokenLegTime = new HashMap<>();
 				HashMap<UUID, Integer> tempBrokenLegMap = new HashMap<>(brokenLegTime);
 				for (Entry<UUID, Integer> entry: tempBrokenLegMap.entrySet()) {
+					UUID uuid = entry.getKey();
 					int time = entry.getValue();
 					if (time > 0) {
 						Player p = Bukkit.getPlayer(entry.getKey());
-						if (p == null) continue;
+						if (p == null) {
+							brokenLegTime.remove(uuid);
+							continue;
+						}
+						else if (p.isDead()) {
+							brokenLegTime.remove(uuid);
+							continue;
+						}
 						boolean containsValidEffect = false;
 						PotionEffectType type = PotionEffectType.SLOW;
 						if (p.hasPotionEffect(type)) {
@@ -108,7 +124,14 @@ public class HealthEffects implements Listener {
 					List<Bleeding> bleedingList = new ArrayList<>();
 					UUID uuid = entry.getKey();
 					LivingEntity entity = (LivingEntity) Bukkit.getEntity(uuid);
-					if (entity == null) continue;
+					if (entity == null) {
+						brokenLegTime.remove(uuid);
+						continue;
+					}
+					else if (entity.isDead()) {
+						brokenLegTime.remove(uuid);
+						continue;
+					}
 					double health = entity.getHealth();
 					double finalHealth = health;
 					for (Bleeding bleeding : entry.getValue()) {

@@ -9,6 +9,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.coding.sirjavlux.armors.Armor;
+import com.coding.sirjavlux.armors.ArmorManager;
 import com.coding.sirjavlux.consumables.Consumable;
 import com.coding.sirjavlux.consumables.ConsumableManager;
 import com.coding.sirjavlux.grenades.Grenade;
@@ -26,7 +28,8 @@ public class GiveCommand extends CommandManager {
 		WEAPON,
 		MAGAZINE,
 		GRENADE,
-		CONSUMABLE
+		CONSUMABLE,
+		ARMOR
 	}
 	
 	protected static void execute(CommandSender sender, Command cmd, String label, String[] args) {
@@ -118,6 +121,14 @@ public class GiveCommand extends CommandManager {
 			}
 			Consumable consumable = ConsumableManager.getStoredConsumable(name);
 			ConsumableManager.giveConsumable(target, consumable, amount);
+			break;
+		case ARMOR:
+			if (!ArmorManager.isArmor(name)) {
+				sender.sendMessage(ChatColor.GRAY + "The entered armor name " + ChatColor.RED + name + ChatColor.GRAY + " wasn't valid!");
+				return;
+			}
+			Armor armor = ArmorManager.getStoredArmor(name);
+			ArmorManager.giveArmor(target, armor, amount);
 			break;
 		}
 	}

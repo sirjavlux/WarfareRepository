@@ -62,6 +62,7 @@ public class EntityDamagedByBulletEvent extends Event implements Cancellable {
 		Vector pDir = projectile.getLocation().getDirection();
 		this.hitPart = isBodyPartRegistrable(damaged) ? getHitBodyPart(projectile.getLocation(), damaged.getLocation(), pDir, damaged) : BodyPart.Chest;
 		this.protectingPiece = getHitArmorPice();
+		System.out.println("hit area " + hitPart.name());
 		if (ArmorManager.isArmor(protectingPiece)) {
 			armor = ArmorManager.getArmorFromItem(protectingPiece);
 		}
@@ -93,7 +94,7 @@ public class EntityDamagedByBulletEvent extends Event implements Cancellable {
 		if (protectingPiece != null) {
 			this.armorProt = ConfigManager.getItemArmorProtection(protectingPiece);
 			if (armor != null) {
-				armorProt *= armor.getProtection() / 2.4; //calculate protectiopn depending on armor protection if custom armor item
+				armorProt = armor.getProtection(); //calculate protectiopn depending on armor protection if custom armor item
 				float durability = ArmorManager.getDurability(protectingPiece);
 				float maxDurability = ArmorManager.getMaxDurability(protectingPiece);
 				float differance = durability / maxDurability;
