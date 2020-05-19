@@ -1,4 +1,4 @@
-name: pm
+name: pist88
 #valid types are BoltAction, SemiAuto, Auto, Burst
 type: SemiAuto
 material: WOODEN_PICKAXE
@@ -9,27 +9,27 @@ damage: 2.0
 lore:
     - ""
     - "&7This weapon is a hand gun"
-    - "&7which uses 9x18mm Makarov"
+    - "&7which uses 9x19mm Parabellum"
     - "rounds as ammunition."
     - ""
-    - "&7Fire Rate &c4"
+    - "&7Fire Rate &c5"
     - "&7Reload Speed &c17"
-    - "&7Recoil Reduction &c0.06"
-    - "&7Knockback Reduction &c0.11"
+    - "&7Recoil Reduction &c0.13"
+    - "&7Knockback Reduction &c0.14"
     - ""
     - "&e%ammo% &7/ &e%max-ammo%"
-display-name: "&e&lPP-9 Klin"
+display-name: "&9&lGlock 88"
 loaded-by-default: true
 barrel-ammo-cap: 1
 require-mag: true
-default-magazine: "pmmag"
+default-magazine: "glockmag17"
 magazine-required:
-    - "pmmag"
-barrel-caliber: "9x18makarov"
-pre-load-ammo: "9x189pgzh"
-fire-rate: 3
-recoil-reduction: 0.06
-knockback-reduction: 0.11
+    - "glockmag17"
+barrel-caliber: "9x19parabellum"
+pre-load-ammo: "9x19pso"
+fire-rate: 5
+recoil-reduction: 0.13
+knockback-reduction: 0.14
 reload-speed: 17
 custom-model-data: 0
 scope-material: STONE_PICKAXE

@@ -1,0 +1,12 @@
+name: glockmag17
+material: GOLD_BLOCK
+caliber: "9x19parabellum"
+ammo-capasity: 17
+lore:
+    - ""
+    - "&7This magazine is mainly used"
+    - "&7for the Glock type hand guns."
+    - ""
+    - "&e%ammo% &7/ &e%max-ammo%"
+display-name: "&9&lGlock 17-round &7&l9x19 &9&lMagazine"
+custom-model-data: 0

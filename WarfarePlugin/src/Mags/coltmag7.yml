@@ -1,0 +1,12 @@
+name: coltmag7
+material: GOLD_BLOCK
+caliber: "45acp"
+ammo-capasity: 7
+lore:
+    - ""
+    - "&7This magazine is mainly used"
+    - "&7for the Colt type hand guns."
+    - ""
+    - "&e%ammo% &7/ &e%max-ammo%"
+display-name: "&9&lColt 7-round &7&l.45 ACP &9&lMagazine"
+custom-model-data: 0

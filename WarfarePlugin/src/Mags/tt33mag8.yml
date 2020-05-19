@@ -1,0 +1,12 @@
+name: tt33mag8
+material: GOLD_BLOCK
+caliber: "762x25tokarev"
+ammo-capasity: 8
+lore:
+    - ""
+    - "&7This magazine is mainly used"
+    - "&7for the hand gun TT-33."
+    - ""
+    - "&e%ammo% &7/ &e%max-ammo%"
+display-name: "&9&lTT-33 8-round &7&l7.62x25 Tokarev &9&lMagazine"
+custom-model-data: 0

@@ -1,6 +1,6 @@
-name: pm
+name: kpist
 #valid types are BoltAction, SemiAuto, Auto, Burst
-type: SemiAuto
+type: Auto
 material: WOODEN_PICKAXE
 smoke-enabled: true
 damage: 2.0
@@ -8,29 +8,30 @@ damage: 2.0
 #valid placeholders are %ammo% %max-ammo%
 lore:
     - ""
-    - "&7This weapon is a hand gun"
-    - "&7which uses 9x18mm Makarov"
-    - "rounds as ammunition."
+    - "&7This weapon is a submachine gun"
+    - "&7which uses 9x19mm Parabellum rounds as ammunition."
+    - "&7This weapon is the glory of Sweden,"
+    - "&don't get to excited though."
     - ""
-    - "&7Fire Rate &c4"
-    - "&7Reload Speed &c17"
-    - "&7Recoil Reduction &c0.06"
-    - "&7Knockback Reduction &c0.11"
+    - "&7Fire Rate &c10"
+    - "&7Reload Speed &c20"
+    - "&7Recoil Reduction &c0.9"
+    - "&7Knockback Reduction &c0.2"
     - ""
     - "&e%ammo% &7/ &e%max-ammo%"
-display-name: "&e&lPP-9 Klin"
+display-name: "&9&lK-pist m/45"
 loaded-by-default: true
 barrel-ammo-cap: 1
 require-mag: true
-default-magazine: "pmmag"
+default-magazine: "kpistmag36"
 magazine-required:
-    - "pmmag"
-barrel-caliber: "9x18makarov"
-pre-load-ammo: "9x189pgzh"
-fire-rate: 3
-recoil-reduction: 0.06
-knockback-reduction: 0.11
-reload-speed: 17
+    - "kpistmag36"
+barrel-caliber: "9x19parabellum"
+pre-load-ammo: "9x19pso"
+fire-rate: 10
+recoil-reduction: 0.9
+knockback-reduction: 0.2
+reload-speed: 20
 custom-model-data: 0
 scope-material: STONE_PICKAXE
 scope-custom-model-data: 0
