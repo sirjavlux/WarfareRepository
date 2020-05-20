@@ -14,6 +14,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.data.type.Gate;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -162,7 +163,8 @@ public class Projectile extends EntitySnowball {
 				}
 			}
 			if (hitEntity != null) {
-				if (!hitEntities.contains(hitEntity)) {
+				if (hitEntity instanceof ArmorStand) return; //check if armor stand and if so return
+				else if (!hitEntities.contains(hitEntity)) {
 					hitEntities.add(hitEntity);
 					CraftEntity craftEntity = this.getBukkitEntity();
 					org.bukkit.entity.Projectile projectile = (org.bukkit.entity.Projectile) craftEntity;
