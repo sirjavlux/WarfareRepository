@@ -174,11 +174,15 @@ public class Projectile extends EntitySnowball {
 					if (speed > 0) {
 						projectile.setVelocity(projectile.getVelocity().normalize().multiply(bulletSpeed));
 						return;
-					} 
+					} else {
+						projectileHitEvent(hitLoc, true);
+						this.killEntity();
+						return;
+					}
 				}
 			}
 		}
-		projectileHitEvent(hitLoc);
+		projectileHitEvent(hitLoc, false);
 		this.killEntity();
 		return;
     }
@@ -303,22 +307,24 @@ public class Projectile extends EntitySnowball {
 	/*///////////////////////////////////
 	 * Projectile hit event
 	 *///////////////////////////////////
-	private void projectileHitEvent(Location loc) {
+	private void projectileHitEvent(Location loc, boolean entity) {
 		CraftEntity craftEntity = this.getBukkitEntity();
 		org.bukkit.entity.Projectile projectile = (org.bukkit.entity.Projectile) craftEntity;
 		BulletHitEvent event = new BulletHitEvent(ammo, projectile);
 		Bukkit.getPluginManager().callEvent(event);
 		
 		if (!event.isCancelled()) {
-			Block block = getHitBlock(loc);
-			try {
-				if (!ammo.getHitGroundSound().isEmpty()) {
-					loc.getWorld().playSound(loc, ammo.getHitGroundSound(), 0.27f, 1);
-				} else {
-					Sound sound = SoundUtils.getBlockBreakSound(block);
-					loc.getWorld().playSound(loc, sound, 0.45f, 1);
-				}
-			} catch(Exception e) { }
+			if (!entity) {
+				Block block = getHitBlock(loc);
+				try {
+					if (!ammo.getHitGroundSound().isEmpty()) {
+						loc.getWorld().playSound(loc, ammo.getHitGroundSound(), 0.27f, 1);
+					} else {
+						Sound sound = SoundUtils.getBlockBreakSound(block);
+						loc.getWorld().playSound(loc, sound, 0.45f, 1);
+					}
+				} catch(Exception e) { }
+			}
 			Ammo eventAmmo = event.getAmmo();
 			AmmoType type = eventAmmo.getAmmoType();
 			switch (type) {
@@ -335,10 +341,10 @@ public class Projectile extends EntitySnowball {
 				effect.playEffect();
 				break;
 			case Regular: 
-				loc.getWorld().spawnParticle(Particle.BLOCK_CRACK, getHitParticleLocation(loc), 3, block.getBlockData());
+				if (!entity) loc.getWorld().spawnParticle(Particle.BLOCK_CRACK, getHitParticleLocation(loc), 3, block.getBlockData());
 				break;
 			case Split:
-				loc.getWorld().spawnParticle(Particle.BLOCK_CRACK, getHitParticleLocation(loc), 3, block.getBlockData());
+				if (!entity) loc.getWorld().spawnParticle(Particle.BLOCK_CRACK, getHitParticleLocation(loc), 3, block.getBlockData());
 				break;
 			}
 		}

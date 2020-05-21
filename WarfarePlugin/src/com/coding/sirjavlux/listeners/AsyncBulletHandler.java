@@ -263,35 +263,37 @@ public class AsyncBulletHandler implements Listener {
     		NBTTagCompound tagComp = NMSItem.getTag();
     		UUID wUUID = UUID.fromString(tagComp.getString("uuid"));
 			WeaponItem weaponItem = WeaponManager.getWeaponItem(wUUID);
-    		Weapon weapon = weaponItem.getWeapon();
-    		if (weapon != null) {
-        		double fireRate = 20 / weapon.getFireRate();
-        		long lastS = lastShot.get(uuid);
-        		//check fire rate against system time
-    			if (fireRate < (System.currentTimeMillis() - lastS) / 50) {
-    				//shoot weapon depending on type
-    				switch (weapon.getType()) {
-    				case Auto: 
-    					if (!activeWeapons.containsKey(uuid)) activeWeapons.put(uuid, weaponItem);
-    					break;
-    				case Burst:	
-    					if (!activeWeapons.containsKey(uuid)) activeWeapons.put(uuid, weaponItem);
-    					break;
-    				default:
-    					//get next ammo in barrel and shoot a single bullet
-    					Ammo ammo = weaponItem.getNextAmmo();
-    					if (ammo != null) {
-    						shootBullet(p, weaponItem, ammo);
-    						weaponItem.removeBullet();
-    						weaponItem.hardUpdate(item, p);
-    						weaponItem.saveData(item, p, p.getInventory().getHeldItemSlot());
-    					} else {
-    						p.sendMessage(ChatColor.RED + "Reload, ammunition empty!");
-    					}
-    					break;
-    				}
-    			}
-    		}
+			if (weaponItem != null) {
+	    		Weapon weapon = weaponItem.getWeapon();
+	    		if (weapon != null) {
+	        		double fireRate = 20 / weapon.getFireRate();
+	        		long lastS = lastShot.get(uuid);
+	        		//check fire rate against system time
+	    			if (fireRate < (System.currentTimeMillis() - lastS) / 50) {
+	    				//shoot weapon depending on type
+	    				switch (weapon.getType()) {
+	    				case Auto: 
+	    					if (!activeWeapons.containsKey(uuid)) activeWeapons.put(uuid, weaponItem);
+	    					break;
+	    				case Burst:	
+	    					if (!activeWeapons.containsKey(uuid)) activeWeapons.put(uuid, weaponItem);
+	    					break;
+	    				default:
+	    					//get next ammo in barrel and shoot a single bullet
+	    					Ammo ammo = weaponItem.getNextAmmo();
+	    					if (ammo != null) {
+	    						shootBullet(p, weaponItem, ammo);
+	    						weaponItem.removeBullet();
+	    						weaponItem.hardUpdate(item, p);
+	    						weaponItem.saveData(item, p, p.getInventory().getHeldItemSlot());
+	    					} else {
+	    						p.sendMessage(ChatColor.RED + "Reload, ammunition empty!");
+	    					}
+	    					break;
+	    				}
+	    			}
+	    		}	
+			}
 		}
 	}
 }

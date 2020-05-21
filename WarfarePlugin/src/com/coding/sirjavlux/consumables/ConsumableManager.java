@@ -20,7 +20,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.coding.sirjavlux.core.Main;
 import com.coding.sirjavlux.health.HealthEffects;
-import com.coding.sirjavlux.utils.inventoryHandler;
+import com.coding.sirjavlux.utils.InventoryHandler;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -75,7 +75,7 @@ public class ConsumableManager {
 		//give item
 		while (amount > 0) {
 			ItemStack conItem = generateConsumable(con);
-			inventoryHandler.giveToPlayer(p, conItem, p.getLocation());
+			InventoryHandler.giveToPlayer(p, conItem, p.getLocation());
 			amount--;
 		}
 	}

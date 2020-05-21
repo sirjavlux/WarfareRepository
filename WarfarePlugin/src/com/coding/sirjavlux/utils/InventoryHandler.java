@@ -6,7 +6,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class inventoryHandler {
+import com.coding.sirjavlux.weapons.WeaponManager;
+
+public class InventoryHandler {
 	public static void giveToPlayer(Player p, ItemStack item, Location bLoc) {
 		Inventory pIv = p.getInventory();
 	    //give items
@@ -24,6 +26,16 @@ public class inventoryHandler {
 	    } else {
 	    	p.getWorld().dropItemNaturally(bLoc, item);
 	    }
+	    //if weapon
+		if (WeaponManager.isWeapon(item)) {
+			//load data and set to weapon item obj
+			WeaponManager.loadWeaponData(item);
+		} 
+		//if magazine
+		else if (WeaponManager.isMagazine(item)) {
+			//load data and set to magazine item obj
+			WeaponManager.loadMagazineData(item);
+		}
 	}
 
 	private static boolean hasEmptySlot(Player p, ItemStack mat) {

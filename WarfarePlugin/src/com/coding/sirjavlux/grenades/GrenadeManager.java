@@ -23,7 +23,7 @@ import com.coding.sirjavlux.effects.ExplosiveEffect;
 import com.coding.sirjavlux.effects.FireEffect;
 import com.coding.sirjavlux.effects.FlashEffect;
 import com.coding.sirjavlux.effects.SmokeEffect;
-import com.coding.sirjavlux.utils.inventoryHandler;
+import com.coding.sirjavlux.utils.InventoryHandler;
 
 import net.minecraft.server.v1_15_R1.NBTTagCompound;
 
@@ -80,7 +80,7 @@ public class GrenadeManager {
 			int amountToAdd = amount > maxStack ? maxStack : amount;
 			amount -= amountToAdd;
 			grenadeItem.setAmount(amountToAdd);
-			inventoryHandler.giveToPlayer(p, grenadeItem, p.getLocation());
+			InventoryHandler.giveToPlayer(p, grenadeItem, p.getLocation());
 		}
 	}
 	

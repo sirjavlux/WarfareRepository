@@ -14,7 +14,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import com.coding.sirjavlux.utils.SkullUtils;
-import com.coding.sirjavlux.utils.inventoryHandler;
+import com.coding.sirjavlux.utils.InventoryHandler;
 
 import net.minecraft.server.v1_15_R1.NBTTagCompound;
 
@@ -75,7 +75,7 @@ public class ArmorManager {
 		//give item
 		while (amount > 0) {
 			ItemStack armorItem = generateArmor(armor);
-			inventoryHandler.giveToPlayer(p, armorItem, p.getLocation());
+			InventoryHandler.giveToPlayer(p, armorItem, p.getLocation());
 			amount--;
 		}
 	}

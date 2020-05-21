@@ -15,7 +15,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import com.coding.sirjavlux.types.Ammo;
 import com.coding.sirjavlux.types.Magazine;
 import com.coding.sirjavlux.types.Weapon;
-import com.coding.sirjavlux.utils.inventoryHandler;
+import com.coding.sirjavlux.utils.InventoryHandler;
 
 import net.minecraft.server.v1_15_R1.NBTTagCompound;
 
@@ -257,7 +257,7 @@ public class WeaponManager {
 	 *////////////////////////////////
 	public static void givePlayerWeapon(Player p, Weapon weapon) {
 		//give item
-		inventoryHandler.giveToPlayer(p, generateWeapon(weapon), p.getLocation());
+		InventoryHandler.giveToPlayer(p, generateWeapon(weapon), p.getLocation());
 	}
 	
 	public static ItemStack generateWeapon(Weapon weapon) {
@@ -290,7 +290,7 @@ public class WeaponManager {
 	
 	public static void givePlayerMagazine(Player p, Magazine mag) {
 		//give item
-		inventoryHandler.giveToPlayer(p, generateMagazine(mag), p.getLocation());
+		InventoryHandler.giveToPlayer(p, generateMagazine(mag), p.getLocation());
 	}
 	
 	public static ItemStack generateMagazine(Magazine mag) {
@@ -320,7 +320,7 @@ public class WeaponManager {
 			int amountToAdd = amount > maxStack ? maxStack : amount;
 			amount -= amountToAdd;
 			ammoItem.setAmount(amountToAdd);
-			inventoryHandler.giveToPlayer(p, ammoItem, p.getLocation());
+			InventoryHandler.giveToPlayer(p, ammoItem, p.getLocation());
 		}
 	}
 	
