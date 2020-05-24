@@ -31,8 +31,8 @@ public class ItemListener implements Listener {
 	public void inventoryCreativeClickEvent(InventoryCreativeEvent e) {
 		ItemStack cursor = e.getCursor();
 		Inventory iv = e.getClickedInventory();
-		ItemStack[] contents = iv.getContents();
 		if (iv != null) {
+			ItemStack[] contents = iv.getContents();
 			int slot = e.getSlot();
 			//check middle click copy item
 			if (cursor != null) {
