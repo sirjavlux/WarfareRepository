@@ -25,6 +25,7 @@ import com.coding.sirjavlux.armors.Armor;
 import com.coding.sirjavlux.armors.ArmorManager;
 import com.coding.sirjavlux.core.ConfigManager;
 import com.coding.sirjavlux.melee.Melee;
+import com.coding.sirjavlux.melee.MeleeManager;
 import com.coding.sirjavlux.projectiles.BodyPart;
 
 public class MeleeHitEvent extends Event implements Cancellable {
@@ -111,6 +112,17 @@ public class MeleeHitEvent extends Event implements Cancellable {
 				armorProt *= differance;
 			}
 			damage = damage - damage * armorProt;
+		}
+		//calculate sharpness damage
+		ItemStack hand = damager.getEquipment().getItemInMainHand();
+		if (hand != null) {
+			if (MeleeManager.isMelee(hand)) {
+				float durability = MeleeManager.getDurability(hand);
+				float maxDurability = MeleeManager.getMaxDurability(hand);
+				float differance = durability / maxDurability;
+				differance = differance < 0.1f ? 0.1f : differance;
+				damage *= differance;
+			}
 		}
 		this.damage = damage;
     }
