@@ -61,7 +61,6 @@ public class EntityDamagedByBulletEvent extends Event implements Cancellable {
 		//get other body part then chest if zombie, player or skeleton
 		this.hitPart = isBodyPartRegistrable(damaged) ? getCalculateHitBodyPart() : BodyPart.Chest;
 		this.protectingPiece = getHitArmorPice();
-		System.out.println("hit area " + hitPart.name());
 		if (ArmorManager.isArmor(protectingPiece)) {
 			armor = ArmorManager.getArmorFromItem(protectingPiece);
 		}

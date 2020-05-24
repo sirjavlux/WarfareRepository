@@ -18,6 +18,8 @@ import com.coding.sirjavlux.listeners.AsyncBulletHandler;
 import com.coding.sirjavlux.listeners.InventoryListener;
 import com.coding.sirjavlux.listeners.ItemListener;
 import com.coding.sirjavlux.listeners.PlayerListener;
+import com.coding.sirjavlux.melee.MeleeListener;
+import com.coding.sirjavlux.melee.MeleeLoader;
 import com.coding.sirjavlux.weapons.WeaponLoader;
 import com.coding.sirjavlux.weapons.WeaponReloadHandler;
 
@@ -49,6 +51,7 @@ public class Main extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new ItemListener(), this);
 		Bukkit.getPluginManager().registerEvents(new ConsumableListener(), this);
 		Bukkit.getPluginManager().registerEvents(new GrenadeListener(), this);
+		Bukkit.getPluginManager().registerEvents(new MeleeListener(), this);
 		Bukkit.getPluginManager().registerEvents(healthEffects, this);
 		Bukkit.getPluginManager().registerEvents(weaponReloadHandler, this);
 		
@@ -60,6 +63,7 @@ public class Main extends JavaPlugin {
 		ConsumableLoader.loadFiles();
 		GrenadeLoader.loadFiles();
 		ArmorLoader.loadFiles();
+		MeleeLoader.loadFiles();
 		
 		//load config
 		ConfigManager.loadConfig(this.getConfig());
