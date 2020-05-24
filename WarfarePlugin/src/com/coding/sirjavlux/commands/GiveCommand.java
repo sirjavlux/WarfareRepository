@@ -15,6 +15,8 @@ import com.coding.sirjavlux.consumables.Consumable;
 import com.coding.sirjavlux.consumables.ConsumableManager;
 import com.coding.sirjavlux.grenades.Grenade;
 import com.coding.sirjavlux.grenades.GrenadeManager;
+import com.coding.sirjavlux.melee.Melee;
+import com.coding.sirjavlux.melee.MeleeManager;
 import com.coding.sirjavlux.types.Ammo;
 import com.coding.sirjavlux.types.Magazine;
 import com.coding.sirjavlux.types.Weapon;
@@ -29,7 +31,8 @@ public class GiveCommand extends CommandManager {
 		MAGAZINE,
 		GRENADE,
 		CONSUMABLE,
-		ARMOR
+		ARMOR,
+		MELEE
 	}
 	
 	protected static void execute(CommandSender sender, Command cmd, String label, String[] args) {
@@ -129,6 +132,14 @@ public class GiveCommand extends CommandManager {
 			}
 			Armor armor = ArmorManager.getStoredArmor(name);
 			ArmorManager.giveArmor(target, armor, amount);
+			break;
+		case MELEE:
+			if (!MeleeManager.isMelee(name)) {
+				sender.sendMessage(ChatColor.GRAY + "The entered melee weapon name " + ChatColor.RED + name + ChatColor.GRAY + " wasn't valid!");
+				return;
+			}
+			Melee melee = MeleeManager.getStoredMelee(name);
+			MeleeManager.giveMelee(target, melee, amount);
 			break;
 		}
 	}

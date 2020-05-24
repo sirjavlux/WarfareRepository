@@ -31,37 +31,42 @@ public class MeleeListener implements Listener {
 						//damage armor if custom armor
 						ItemStack hitPiece = hitEvent.getHitArmorPiece();
 						Armor armor = hitEvent.getHitArmor();
-							if (hitPiece != null && armor == null) {
-								if (hitPiece.getItemMeta() instanceof Damageable) {
-									double armorDamage = melee.getArmorDamage();
-									Damageable damageableItem = ((Damageable) hitPiece.getItemMeta());
-									int maxDurability = hitPiece.getType().getMaxDurability();
-									int durability = maxDurability - damageableItem.getDamage();
-									int finalDurability = (int) (durability - armorDamage < 0 ? 0 : durability - armorDamage);
-									damageableItem.setDamage(maxDurability - finalDurability);
-									hitPiece.setItemMeta((ItemMeta) damageableItem);
-									switch(hitEvent.getHitBodyPart()) {
-									case Chest: ((LivingEntity) entity).getEquipment().setChestplate(hitPiece);
-										break;
-									case Head: ((LivingEntity) entity).getEquipment().setHelmet(hitPiece);
-										break;
-									case Leg: ((LivingEntity) entity).getEquipment().setLeggings(hitPiece);
-										break;
-									}
-								}	
-							} else if (hitPiece != null && armor != null) {
+						if (hitPiece != null && armor == null) {
+							if (hitPiece.getItemMeta() instanceof Damageable) {
 								double armorDamage = melee.getArmorDamage();
-								int durability = ArmorManager.getDurability(hitPiece);
+								Damageable damageableItem = ((Damageable) hitPiece.getItemMeta());
+								int maxDurability = hitPiece.getType().getMaxDurability();
+								int durability = maxDurability - damageableItem.getDamage();
 								int finalDurability = (int) (durability - armorDamage < 0 ? 0 : durability - armorDamage);
+								damageableItem.setDamage(maxDurability - finalDurability);
+								hitPiece.setItemMeta((ItemMeta) damageableItem);
 								switch(hitEvent.getHitBodyPart()) {
-								case Chest: ((LivingEntity) entity).getEquipment().setChestplate(MeleeManager.setDurability(hitPiece, finalDurability));
+								case Chest: ((LivingEntity) entity).getEquipment().setChestplate(hitPiece);
 									break;
-								case Head: ((LivingEntity) entity).getEquipment().setHelmet(MeleeManager.setDurability(hitPiece, finalDurability));
+								case Head: ((LivingEntity) entity).getEquipment().setHelmet(hitPiece);
 									break;
-								case Leg: ((LivingEntity) entity).getEquipment().setLeggings(MeleeManager.setDurability(hitPiece, finalDurability));
+								case Leg: ((LivingEntity) entity).getEquipment().setLeggings(hitPiece);
 									break;
 								}
+							}	
+						} else if (hitPiece != null && armor != null) {
+							double armorDamage = melee.getArmorDamage();
+							int durability = ArmorManager.getDurability(hitPiece);
+							int finalDurability = (int) (durability - armorDamage < 0 ? 0 : durability - armorDamage);
+							switch(hitEvent.getHitBodyPart()) {
+							case Chest: ((LivingEntity) entity).getEquipment().setChestplate(MeleeManager.setDurability(hitPiece, finalDurability));
+								break;
+							case Head: ((LivingEntity) entity).getEquipment().setHelmet(MeleeManager.setDurability(hitPiece, finalDurability));
+								break;
+							case Leg: ((LivingEntity) entity).getEquipment().setLeggings(MeleeManager.setDurability(hitPiece, finalDurability));
+								break;
 							}
+						}
+						//lower sharpness
+						int durability = MeleeManager.getDurability(hand);
+						int finalDurability = durability - 1 < 0 ? 0 : durability - 1;
+						ItemStack newItem = MeleeManager.setDurability(hand, finalDurability);
+						((LivingEntity) damager).getEquipment().setItemInMainHand(newItem);
 					}
 				}
 			}

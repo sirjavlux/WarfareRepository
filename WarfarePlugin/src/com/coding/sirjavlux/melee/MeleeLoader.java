@@ -45,14 +45,14 @@ public class MeleeLoader extends MeleeManager{
 			//name
 			String name = conf.contains("name") ? conf.getString("name") : null; 
 			if (name == null) {
-				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "The armor name in file " + file.getName() + " wasn't found!");
-				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "Add this to config 'name: <armor-name>'");
+				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "The melee name in file " + file.getName() + " wasn't found!");
+				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "Add this to config 'name: <melee-name>'");
 				continue;
 			}
 			//material
 			String matS = conf.contains("material") ? conf.getString("material") : null;
 			if (matS == null) {
-				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "The armor " + name + " didn't have any material selected!");
+				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "The melee " + name + " didn't have any material selected!");
 				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "Add this to config 'material: <material>'");
 				continue;
 			}
@@ -60,7 +60,7 @@ public class MeleeLoader extends MeleeManager{
 			try {
 				mat = Material.valueOf(matS.toUpperCase());
 			} catch (Exception e) {
-				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "The selected material " + matS + " in the armor " + name + " didn't exist!");
+				Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "The selected material " + matS + " in the melee " + name + " didn't exist!");
 				continue;
 			}
 			//lore
@@ -77,7 +77,7 @@ public class MeleeLoader extends MeleeManager{
 			//model data
 			int modelData = conf.contains("model-data") ? conf.getInt("model-data") : 0;
 			//damage
-			double damage = conf.contains("damage") ? conf.getDouble("damage") : 0.2;
+			double damage = conf.contains("damage") ? conf.getDouble("damage") : 1;
 			//armor damage
 			int armorDamage = conf.contains("armor-damage") ? conf.getInt("armor-damage") : 0;
 			
