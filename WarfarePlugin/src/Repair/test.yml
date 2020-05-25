@@ -4,7 +4,7 @@ material: STICK
 lore:
     - ""
     - "&7Repair &l[%durability%&7&l]"
-display-name: "test melee"
+display-name: "test repair"
 durability: 75
 model-data: 0
 repair-per-use: 8

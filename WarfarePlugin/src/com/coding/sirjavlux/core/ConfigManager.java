@@ -69,6 +69,8 @@ public class ConfigManager {
 	
 	private static boolean hideProjectiles;
 	
+	private static double foodBleedingRed, waterBleedingRed, waterRedSec, waterVelRed, waterHealthRed;
+	
 	public static void loadConfig(FileConfiguration conf) {
 		//armor protection data
 		leatherHelmetProt = conf.contains("armor.protection.helmet.leather") ? conf.getDouble("armor.protection.helmet.leather") : 0.15;
@@ -139,6 +141,13 @@ public class ConfigManager {
 		recoilYawModifier = (float) (conf.contains("shooting.recoil.yaw-modifier") ? conf.getDouble("shooting.recoil.yaw-modifier") : 0.2);
 		recoilEnabled = conf.contains("shooting.recoil.enabled") ? conf.getBoolean("shooting.recoil.enabled") : true;
 		knockbackEnabled = conf.contains("shooting.knockback.enabled") ? conf.getBoolean("shooting.knockback.enabled") : true;
+		
+		//water and food
+		foodBleedingRed = conf.contains("food.bleeding-reduction") ? conf.getDouble("food.bleeding-reduction") : 2;
+		waterBleedingRed = conf.contains("water.bleeding-reduction") ? conf.getDouble("water.bleeding-reduction") : 2;
+		waterRedSec = conf.contains("water.reduction-sec") ? conf.getDouble("water.reduction-sec") : 0.02;
+		waterVelRed = conf.contains("water.velocity-red") ? conf.getDouble("water.velocity-red") : 1.2;
+		waterHealthRed = conf.contains("water.health-red") ? conf.getDouble("water.health-red") : 0.8;
 	}
 	
 	public static float getRecoilYawModifier() { return recoilYawModifier; }
@@ -176,6 +185,12 @@ public class ConfigManager {
 	public static double getDamageReductionSpeed() { return damageRedSpeed; }
 	public static double getDamageReductionPenetration() { return damageRedPen; }
 	public static boolean getHideProjectile() { return hideProjectiles; }
+	
+	public static double getFoodBleedingRed() { return foodBleedingRed; }
+	public static double getWaterBleedingRed() { return waterBleedingRed; }
+	public static double getWaterRedSec() { return waterRedSec; }
+	public static double getWaterVelRed() { return waterVelRed; }
+	public static double getWaterHealthRed() { return waterHealthRed; }
 	
 	public static double getItemArmorProtection(ItemStack item) {
 		double armorProt = 0;

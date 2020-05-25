@@ -101,8 +101,12 @@ public class ConsumableLoader extends ConsumableManager {
 			String useSound = conf.contains("use-sound") ? conf.getString("use-sound") : "block.beacon.ambient";
 			//finish sound
 			String finishSound = conf.contains("finish-sound") ? conf.getString("finish-sound") : "block.anvil.use";
+			//water restoration
+			double waterRestoration = conf.contains("water-restoration") ? conf.getDouble("water-restoration") : 0;
+			//food restoration
+			double foodRestoration = conf.contains("food-restoration") ? conf.getDouble("food-restoration") : 0;
 			
-			Consumable consumable = new Consumable(mat, modelData, lore, displayName, name, heal, splint, bandage, concussion, uses, useTime, walkSpeed, useSound, finishSound);
+			Consumable consumable = new Consumable(mat, modelData, lore, displayName, name, heal, splint, bandage, concussion, uses, useTime, walkSpeed, useSound, finishSound, waterRestoration, foodRestoration);
 			ConsumableManager.consumables.put(name, consumable);
 			
 			badMags.remove(file.getName());

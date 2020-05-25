@@ -9,6 +9,7 @@ import com.coding.sirjavlux.commands.CommandManager;
 import com.coding.sirjavlux.consumables.ConsumableListener;
 import com.coding.sirjavlux.consumables.ConsumableLoader;
 import com.coding.sirjavlux.consumables.ConsumableManager;
+import com.coding.sirjavlux.consumables.WaterBarManager;
 import com.coding.sirjavlux.effectUtils.ParticleSpawner;
 import com.coding.sirjavlux.grenades.GrenadeListener;
 import com.coding.sirjavlux.grenades.GrenadeLoader;
@@ -38,6 +39,9 @@ public class Main extends JavaPlugin {
 		//create config if first launch
 		this.saveDefaultConfig();
 		
+		//load config
+		ConfigManager.loadConfig(this.getConfig());
+		
 		//create healtheffects and bullet handler instance
 		healthEffects = new HealthEffects();
 		bulletHandler = new AsyncBulletHandler();
@@ -55,6 +59,7 @@ public class Main extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new GrenadeListener(), this);
 		Bukkit.getPluginManager().registerEvents(new MeleeListener(), this);
 		Bukkit.getPluginManager().registerEvents(new RepairListener(), this);
+		Bukkit.getPluginManager().registerEvents(new WaterBarManager(), this);
 		Bukkit.getPluginManager().registerEvents(healthEffects, this);
 		Bukkit.getPluginManager().registerEvents(weaponReloadHandler, this);
 		
@@ -68,9 +73,6 @@ public class Main extends JavaPlugin {
 		ArmorLoader.loadFiles();
 		MeleeLoader.loadFiles();
 		RepairLoader.loadFiles();
-		
-		//load config
-		ConfigManager.loadConfig(this.getConfig());
 		
 		instance = this;
 		

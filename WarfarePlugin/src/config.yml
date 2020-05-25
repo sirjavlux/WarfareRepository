@@ -98,3 +98,15 @@ shooting:
         yaw-modifier: 0.35
     knockback:
         enabled: true
+        
+##################
+# FOOD AND WATER #
+##################
+
+food:
+    bleeding-reduction: 2
+water:
+    bleeding-reduction: 2
+    reduction-sec: 0.02
+    velocity-red: 1.9
+    health-red: 0.8

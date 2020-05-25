@@ -10,11 +10,11 @@ public class Consumable {
 	private int modelData, uses, useTime;
 	private List<String> lore;
 	private String displayName, name;
-	private double heal, walkSpeed;
+	private double heal, walkSpeed, waterRestoration, foodRestoration;
 	private boolean splint, bandage, concussion;
 	private String useSound, finishSound;
 	
-	public Consumable(Material mat, int modelData, List<String> lore, String displayName, String name, double heal, boolean splint, boolean bandage, boolean concussion, int uses, int useTime, double walkSpeed, String useSound, String finishSound) {
+	public Consumable(Material mat, int modelData, List<String> lore, String displayName, String name, double heal, boolean splint, boolean bandage, boolean concussion, int uses, int useTime, double walkSpeed, String useSound, String finishSound, double waterRestoration, double foodRestoration) {
 		this.mat = mat;
 		this.modelData = modelData;
 		this.lore = lore;
@@ -29,6 +29,8 @@ public class Consumable {
 		this.walkSpeed = walkSpeed;
 		this.useSound = useSound;
 		this.finishSound = finishSound;
+		this.waterRestoration = waterRestoration;
+		this.foodRestoration = foodRestoration;
 	}
 	
 	public Material getMaterial() { return mat; }
@@ -45,4 +47,6 @@ public class Consumable {
 	public double getWalkSpeed() { return walkSpeed; }
 	public String getUseSound() { return useSound; }
 	public String getFinishSound() { return finishSound; }
+	public double getWaterRestoration() { return waterRestoration; }
+	public double getFoodRestoration() { return foodRestoration; }
 }

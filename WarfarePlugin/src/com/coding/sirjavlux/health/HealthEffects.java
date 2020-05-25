@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffect;
@@ -33,6 +34,13 @@ public class HealthEffects implements Listener {
 	
 	public HealthEffects() {
 		startHealthReader();
+	}
+	
+	public static boolean isBleeding(UUID uuid) {
+		if (bleedingMap.containsKey(uuid)) {
+			if (bleedingMap.get(uuid) != null) if (!bleedingMap.get(uuid).isEmpty()) return true;
+		}
+		return false;
 	}
 	
 	private void startHealthReader() {
@@ -290,5 +298,18 @@ public class HealthEffects implements Listener {
 		public int getCooldown() { return cooldown; }
 		public void setCooldown(int cooldown) { this.cooldown = cooldown; }
 		public UUID getUniqueID() { return uuid; }
+	}
+	
+	@EventHandler
+	public void foodLevelChangeEvent(FoodLevelChangeEvent e) {
+		if (e.getEntity() instanceof Player) {
+			Player p = (Player) e.getEntity();
+			int level = e.getFoodLevel();
+			int oldLevel = p.getFoodLevel();
+			if (oldLevel > level) {
+				level = (int) (oldLevel - (double) (oldLevel - level) * (double) ConfigManager.getFoodBleedingRed());
+				e.setFoodLevel(level);
+			}
+		}
 	}
 }

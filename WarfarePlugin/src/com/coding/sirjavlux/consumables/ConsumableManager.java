@@ -215,6 +215,8 @@ public class ConsumableManager {
 							p.setHealth(finalHealth);
 							reduceUses(con.item, con.slot, p);
 						}
+						if (consumable.getFoodRestoration() > 0) p.setFoodLevel((int) (p.getFoodLevel() + consumable.getFoodRestoration() > 20 ? 20 : p.getFoodLevel() + consumable.getFoodRestoration()));
+						if (consumable.getWaterRestoration() > 0) WaterBarManager.addWater(p, consumable.getWaterRestoration());
 						p.setWalkSpeed(0.2f);
 						removableUUIDs.add(uuid);
 						p.playSound(p.getLocation(), consumable.getFinishSound(), 1, 1);
