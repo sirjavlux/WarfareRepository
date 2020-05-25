@@ -17,6 +17,8 @@ import com.coding.sirjavlux.grenades.Grenade;
 import com.coding.sirjavlux.grenades.GrenadeManager;
 import com.coding.sirjavlux.melee.Melee;
 import com.coding.sirjavlux.melee.MeleeManager;
+import com.coding.sirjavlux.repair.Repair;
+import com.coding.sirjavlux.repair.RepairManager;
 import com.coding.sirjavlux.types.Ammo;
 import com.coding.sirjavlux.types.Magazine;
 import com.coding.sirjavlux.types.Weapon;
@@ -32,7 +34,8 @@ public class GiveCommand extends CommandManager {
 		GRENADE,
 		CONSUMABLE,
 		ARMOR,
-		MELEE
+		MELEE,
+		REPAIR
 	}
 	
 	protected static void execute(CommandSender sender, Command cmd, String label, String[] args) {
@@ -140,6 +143,14 @@ public class GiveCommand extends CommandManager {
 			}
 			Melee melee = MeleeManager.getStoredMelee(name);
 			MeleeManager.giveMelee(target, melee, amount);
+			break;
+		case REPAIR:
+			if (!RepairManager.isRepair(name)) {
+				sender.sendMessage(ChatColor.GRAY + "The entered repair item name " + ChatColor.RED + name + ChatColor.GRAY + " wasn't valid!");
+				return;
+			}
+			Repair repair = RepairManager.getStoredRepair(name);
+			RepairManager.giveRepair(target, repair, amount);
 			break;
 		}
 	}
