@@ -2,8 +2,6 @@ name: bandage
 material: BOWL
 #placeholders %uses%
 lore:
-    - "&7Uses left &e%uses%"
-    - ""
     - "&7This is a regular bandage"
     - "&7which can be used to stop bleeding."
 display-name: "&8&lBandage"
@@ -12,6 +10,6 @@ heal: 0
 splint: false
 bandage: true
 concussion: false
-uses: 2
+max-stack-size: 6
 use-time: 50
 walk-speed: 0.12

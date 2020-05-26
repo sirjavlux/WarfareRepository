@@ -105,8 +105,10 @@ public class ConsumableLoader extends ConsumableManager {
 			double waterRestoration = conf.contains("water-restoration") ? conf.getDouble("water-restoration") : 0;
 			//food restoration
 			double foodRestoration = conf.contains("food-restoration") ? conf.getDouble("food-restoration") : 0;
+			//max stack size
+			int maxStack = conf.contains("max-stack-size") ? conf.getInt("max-stack-size") : 1;
 			
-			Consumable consumable = new Consumable(mat, modelData, lore, displayName, name, heal, splint, bandage, concussion, uses, useTime, walkSpeed, useSound, finishSound, waterRestoration, foodRestoration);
+			Consumable consumable = new Consumable(mat, modelData, lore, displayName, name, heal, splint, bandage, concussion, uses, useTime, walkSpeed, useSound, finishSound, waterRestoration, foodRestoration, maxStack);
 			ConsumableManager.consumables.put(name, consumable);
 			
 			badMags.remove(file.getName());

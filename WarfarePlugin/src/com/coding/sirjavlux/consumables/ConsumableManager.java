@@ -213,10 +213,16 @@ public class ConsumableManager {
 							double maxHealth = p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
 							double finalHealth = health + conHealth > maxHealth ? maxHealth : health + conHealth;
 							p.setHealth(finalHealth);
-							reduceUses(con.item, con.slot, p);
 						}
 						if (consumable.getFoodRestoration() > 0) p.setFoodLevel((int) (p.getFoodLevel() + consumable.getFoodRestoration() > 20 ? 20 : p.getFoodLevel() + consumable.getFoodRestoration()));
 						if (consumable.getWaterRestoration() > 0) WaterBarManager.addWater(p, consumable.getWaterRestoration());
+						if (consumable.getMaxStackSize() > 1) {
+							if (con.item.getAmount() > 1) {
+								ItemStack finalItem = con.item.clone();
+								finalItem.setAmount(con.item.getAmount() - 1);
+								p.getInventory().setItem(con.slot, finalItem);
+							} else p.getInventory().setItem(con.slot, new ItemStack(Material.AIR));
+						} else reduceUses(con.item, con.slot, p);
 						p.setWalkSpeed(0.2f);
 						removableUUIDs.add(uuid);
 						p.playSound(p.getLocation(), consumable.getFinishSound(), 1, 1);

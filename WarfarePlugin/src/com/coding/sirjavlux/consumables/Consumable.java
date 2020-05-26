@@ -7,14 +7,14 @@ import org.bukkit.Material;
 public class Consumable {
 
 	private Material mat;
-	private int modelData, uses, useTime;
+	private int modelData, uses, useTime, maxStack;
 	private List<String> lore;
 	private String displayName, name;
 	private double heal, walkSpeed, waterRestoration, foodRestoration;
 	private boolean splint, bandage, concussion;
 	private String useSound, finishSound;
 	
-	public Consumable(Material mat, int modelData, List<String> lore, String displayName, String name, double heal, boolean splint, boolean bandage, boolean concussion, int uses, int useTime, double walkSpeed, String useSound, String finishSound, double waterRestoration, double foodRestoration) {
+	public Consumable(Material mat, int modelData, List<String> lore, String displayName, String name, double heal, boolean splint, boolean bandage, boolean concussion, int uses, int useTime, double walkSpeed, String useSound, String finishSound, double waterRestoration, double foodRestoration, int maxStack) {
 		this.mat = mat;
 		this.modelData = modelData;
 		this.lore = lore;
@@ -31,6 +31,7 @@ public class Consumable {
 		this.finishSound = finishSound;
 		this.waterRestoration = waterRestoration;
 		this.foodRestoration = foodRestoration;
+		this.maxStack = maxStack;
 	}
 	
 	public Material getMaterial() { return mat; }
@@ -49,4 +50,5 @@ public class Consumable {
 	public String getFinishSound() { return finishSound; }
 	public double getWaterRestoration() { return waterRestoration; }
 	public double getFoodRestoration() { return foodRestoration; }
+	public int getMaxStackSize() { return maxStack; }
 }
