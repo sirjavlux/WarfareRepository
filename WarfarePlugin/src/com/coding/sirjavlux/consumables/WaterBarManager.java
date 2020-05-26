@@ -1,5 +1,6 @@
 package com.coding.sirjavlux.consumables;
 
+import java.util.HashMap;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -9,15 +10,19 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.coding.sirjavlux.core.ConfigManager;
 import com.coding.sirjavlux.core.Main;
 import com.coding.sirjavlux.health.HealthEffects;
+import com.coding.sirjavlux.projectiles.MoveListener;
 
 public class WaterBarManager implements Listener {
 
+	private static HashMap<UUID, Double> levels = new HashMap<>();
+	
 	public WaterBarManager() {
 		startWaterBarReducer();
 	}
@@ -25,10 +30,19 @@ public class WaterBarManager implements Listener {
 	@EventHandler
 	public void playerJoinEvent(PlayerJoinEvent e) {
 		Player p = e.getPlayer();
+		UUID uuid = p.getUniqueId();
 		if (!p.hasPlayedBefore()) {
 			p.setLevel(100);
-			p.setExp(1);
+			p.setExp(0);
 		}
+		if (!levels.containsKey(uuid)) levels.put(uuid, p.getLevel() + 0.9d);
+	}
+	
+	@EventHandler 
+	public void leaveEvent(PlayerQuitEvent e) {
+		Player p = e.getPlayer();
+		UUID uuid = p.getUniqueId();
+		if (levels.containsKey(uuid)) levels.remove(uuid);
 	}
 	
 	@EventHandler
@@ -44,20 +58,19 @@ public class WaterBarManager implements Listener {
 	@EventHandler
 	public void playerRespawnEvent(PlayerRespawnEvent e) {
 		Player p = e.getPlayer();
+		UUID uuid = p.getUniqueId();
 		p.setLevel(100);
-		p.setExp(1);
+		p.setExp(0);
+		levels.replace(uuid, 100.9d);
 	}
 	
 	public static void addWater(Player p, double amount) {
-		int level = (int) amount;
-		double exp = amount - level;
-		int pLevels = p.getLevel();
-		double pExp = p.getExp();
-		exp += pExp;
-		level += (int) exp;
-		exp = exp > 1 ? exp - 1 : exp;
-		p.setExp((float) exp);
-		p.setLevel(level + pLevels > 100 ? 100 : level + pLevels);
+		UUID uuid = p.getUniqueId();
+		double currentExp = levels.get(uuid);
+		double finalExp = currentExp + amount > 100.9 ? 100.9 : currentExp + amount;
+		levels.replace(uuid, finalExp);
+		p.setExp(0);
+		p.setLevel((int) levels.get(uuid).doubleValue());
 	}
 	
 	private void startWaterBarReducer() {
@@ -71,29 +84,22 @@ public class WaterBarManager implements Listener {
 				for (Player p : Bukkit.getOnlinePlayers()) {
 					UUID uuid = p.getUniqueId();
 					double red = waterSecRed;
-					double velLenght = p.getVelocity().lengthSquared();
+					double speed = MoveListener.getPlayerSpeed(uuid) * 3;
 					red += HealthEffects.isBleeding(uuid) ? red * bleedingRed : 0;
-					red += (red * velRed) * velLenght;
-					//reduce exp and levels
-					int pLevels = p.getLevel();
-					double exp = p.getExp();
-					int redLevels = (int) Math.round(red);
-					double expRed = red - redLevels;
-					double finalExp = exp - expRed;
-					if (finalExp < 0) {
-						redLevels++;
-						finalExp = 1 + finalExp;
-					}
+					red += (red * velRed) * speed;
+					double currentExp = levels.get(uuid);
 					//damage player
-					if (pLevels < redLevels) {
+					if (red > currentExp) {
+						levels.replace(uuid, 0d);
 						p.setLevel(0);
 						p.setExp(0);
 						p.damage(ConfigManager.getWaterHealthRed());
 					}
 					//reduce exp and level
 					else {
-						p.setLevel(pLevels - redLevels);
-						p.setExp((float) finalExp);
+						levels.replace(uuid, currentExp - red);
+						p.setLevel((int) levels.get(uuid).doubleValue());
+						p.setExp(0);
 					}
 				}
 			}

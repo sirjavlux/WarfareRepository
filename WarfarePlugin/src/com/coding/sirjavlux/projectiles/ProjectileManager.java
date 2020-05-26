@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -39,6 +40,7 @@ public class ProjectileManager {
 		ItemStack item = new ItemStack(ammo.getShootMaterial());
 		BulletFireEvent event = new BulletFireEvent(ammo, p);
 		Bukkit.getPluginManager().callEvent(event);
+		UUID uuid = p.getUniqueId();
 		
 		if (!event.isCancelled()) {
 			//shoot projectile
@@ -68,9 +70,12 @@ public class ProjectileManager {
 				float yawAdd = -yawModifier + r.nextFloat() * (yawRecMod - -yawModifier);
 				float pitchAdd = (float) (finalRecoil - yawAdd) * -1f;
 				if (ScopeUtils.isScoped(p)) {
-					yawAdd *= 0.62;
-					pitchAdd *= 0.62;
+					yawAdd *= 0.23;
+					pitchAdd *= 0.23;
 				}
+				double speed = MoveListener.getPlayerSpeed(uuid) * 3;
+				yawAdd += yawAdd * speed;
+				pitchAdd += pitchAdd * speed;
 				PacketPlayOutPosition packet = new PacketPlayOutPosition(0.0, 0.0, 0.0, yawAdd, pitchAdd, teleportFlags, 0);
 			    ((CraftPlayer) p).getHandle().playerConnection.sendPacket(packet);
 			}

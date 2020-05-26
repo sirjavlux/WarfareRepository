@@ -21,6 +21,7 @@ import com.coding.sirjavlux.listeners.ItemListener;
 import com.coding.sirjavlux.listeners.PlayerListener;
 import com.coding.sirjavlux.melee.MeleeListener;
 import com.coding.sirjavlux.melee.MeleeLoader;
+import com.coding.sirjavlux.projectiles.MoveListener;
 import com.coding.sirjavlux.repair.RepairListener;
 import com.coding.sirjavlux.repair.RepairLoader;
 import com.coding.sirjavlux.weapons.WeaponLoader;
@@ -60,6 +61,7 @@ public class Main extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new MeleeListener(), this);
 		Bukkit.getPluginManager().registerEvents(new RepairListener(), this);
 		Bukkit.getPluginManager().registerEvents(new WaterBarManager(), this);
+		Bukkit.getPluginManager().registerEvents(new MoveListener(), this);
 		Bukkit.getPluginManager().registerEvents(healthEffects, this);
 		Bukkit.getPluginManager().registerEvents(weaponReloadHandler, this);
 		
