@@ -73,10 +73,19 @@ public class ConsumableManager {
 	
 	public static void giveConsumable(Player p, Consumable con, int amount) {
 		//give item
+		int maxStack = con.getMaxStackSize();
 		while (amount > 0) {
-			ItemStack conItem = generateConsumable(con);
-			InventoryHandler.giveToPlayer(p, conItem, p.getLocation());
-			amount--;
+			if (maxStack > 1) {
+				ItemStack conItem = generateConsumable(con);
+				int amountToAdd = amount > maxStack ? maxStack : amount;
+				amount -= amountToAdd;
+				conItem.setAmount(amountToAdd);
+				InventoryHandler.giveToPlayer(p, conItem, p.getLocation());
+			} else {
+				ItemStack conItem = generateConsumable(con);
+				InventoryHandler.giveToPlayer(p, conItem, p.getLocation());
+				amount--;	
+			}
 		}
 	}
 	
