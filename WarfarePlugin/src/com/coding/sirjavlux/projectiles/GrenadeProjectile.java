@@ -33,6 +33,7 @@ public class GrenadeProjectile extends EntitySnowball {
 
 	private World bukkitWorld;
 	private double speed;
+	private Location playerLoc;
 	private Grenade grenade;
 	private Player p;
 	private UUID timerUUID;
@@ -47,6 +48,7 @@ public class GrenadeProjectile extends EntitySnowball {
 		this.speed = grenade.getSpeed();
 		this.grenade = grenade;
 		this.item = item;
+		this.playerLoc = p.getLocation();
 		entity.setVelocity(p.getEyeLocation().getDirection().normalize().multiply(speed));
 		entity.setCustomNameVisible(false);
 		timerUUID = GrenadeManager.addGrenadeTimer(entity.getUniqueId(), grenade, p);
@@ -58,49 +60,64 @@ public class GrenadeProjectile extends EntitySnowball {
 		Vector dir = this.getBukkitEntity().getVelocity();
 		Block block = hitLoc.clone().add(dir.clone().normalize().multiply(0.5)).getBlock();
 		Material mat = block.getType();
-		//check if block should be ignored
-		if (ConfigManager.getIgnoredBlocks().contains(mat)) return;
+		boolean passTrough = false;
+		//if block is air check block in front
+		org.bukkit.util.Vector dirVector = hitLoc.clone().toVector().subtract(playerLoc.toVector());
+		if (mat.equals(Material.AIR)) {
+			dirVector.normalize();
+			dirVector.setX(dirVector.getX() / 10);
+			dirVector.setY(dirVector.getY() / 10);
+			dirVector.setZ(dirVector.getZ() / 10);
+			Location newHitLoc = hitLoc.clone().toVector().add(dirVector).toLocation(bukkitWorld);
+			block = newHitLoc.getBlock();
+			mat = block.getType();
+			if (mat.equals(Material.AIR)) passTrough = true;
+		}
+		if (ConfigManager.getIgnoredBlocks().contains(mat)) passTrough = true;
 		//check if open fence gate
 		else if (block.getBlockData() instanceof Gate) {
 			Gate gate = (Gate) block.getBlockData();
-			if (gate.isOpen()) return;
+			if (gate.isOpen()) passTrough = true;
 		} 
-		//bounce or detonate grenades
-		switch (grenade.getType()) {
-		case Fire: 
-			hitLoc.getWorld().playSound(hitLoc, grenade.getExplodeSound(), 5, 1);
-			Effect effect = new FireEffect(hitLoc, grenade.getDuration(), grenade.getExplosionDamage(), grenade.getExplosionRange(), 0.2, grenade.getFireTicks(), (int) (4d * grenade.getExplosionRange()), grenade.getExplosionDamageDrop(), p, this.getBukkitEntity().getVelocity());
-			effect.playEffect();
-			break;
-		case Flash: 
-			hitLoc.getWorld().playSound(hitLoc, grenade.getExplodeSound(), 5, 1);
-			effect = new FlashEffect(hitLoc, grenade.getDuration(), grenade.getExplosionDamage(), grenade.getExplosionRange(), grenade.getExplosionRange(), grenade.getFireTicks(), (int) (4d * grenade.getExplosionRange()), this.getBukkitEntity().getVelocity());
-			effect.playEffect();
-			break;
-		case Smoke: 
-			hitLoc.getWorld().playSound(hitLoc, grenade.getExplodeSound(), 5, 1);
-			effect = new SmokeEffect(hitLoc, grenade.getDuration(), grenade.getExplosionDamage(), grenade.getExplosionRange(), grenade.getExplosionRange() * 0.72, grenade.getFireTicks(), this.getBukkitEntity().getVelocity());
-			effect.playEffect();
-			break;
-		case Explosion:
-			hitLoc.getWorld().playSound(hitLoc, grenade.getExplodeSound(), 5, 1);
-			effect = new ExplosiveEffect(hitLoc, grenade.getExplosionDamage(), grenade.getExplosionRange(), grenade.getExplosionRange(), grenade.getFireTicks(), grenade.getExplosionDamageDrop(), p);
-			effect.playEffect();
-			break;
-		case Explosion_Delayed:
-			bounceEntity(hitLoc);
-			return;
-		case Fire_Delayed:
-			bounceEntity(hitLoc);
-			return;
-		case Flash_Delayed:
-			bounceEntity(hitLoc);
-			return;
-		case Smoke_Delayed:
-			bounceEntity(hitLoc);
-			return;
+		//check if entity inside block
+		if (!passTrough) {
+			//bounce or detonate grenades
+			switch (grenade.getType()) {
+			case Fire: 
+				hitLoc.getWorld().playSound(hitLoc, grenade.getExplodeSound(), 5, 1);
+				Effect effect = new FireEffect(hitLoc, grenade.getDuration(), grenade.getExplosionDamage(), grenade.getExplosionRange(), 0.2, grenade.getFireTicks(), (int) (4d * grenade.getExplosionRange()), grenade.getExplosionDamageDrop(), p, this.getBukkitEntity().getVelocity());
+				effect.playEffect();
+				break;
+			case Flash: 
+				hitLoc.getWorld().playSound(hitLoc, grenade.getExplodeSound(), 5, 1);
+				effect = new FlashEffect(hitLoc, grenade.getDuration(), grenade.getExplosionDamage(), grenade.getExplosionRange(), grenade.getExplosionRange(), grenade.getFireTicks(), (int) (4d * grenade.getExplosionRange()), this.getBukkitEntity().getVelocity());
+				effect.playEffect();
+				break;
+			case Smoke: 
+				hitLoc.getWorld().playSound(hitLoc, grenade.getExplodeSound(), 5, 1);
+				effect = new SmokeEffect(hitLoc, grenade.getDuration(), grenade.getExplosionDamage(), grenade.getExplosionRange(), grenade.getExplosionRange() * 0.72, grenade.getFireTicks(), this.getBukkitEntity().getVelocity());
+				effect.playEffect();
+				break;
+			case Explosion:
+				hitLoc.getWorld().playSound(hitLoc, grenade.getExplodeSound(), 5, 1);
+				effect = new ExplosiveEffect(hitLoc, grenade.getExplosionDamage(), grenade.getExplosionRange(), grenade.getExplosionRange(), grenade.getFireTicks(), grenade.getExplosionDamageDrop(), p);
+				effect.playEffect();
+				break;
+			case Explosion_Delayed:
+				bounceEntity(hitLoc);
+				return;
+			case Fire_Delayed:
+				bounceEntity(hitLoc);
+				return;
+			case Flash_Delayed:
+				bounceEntity(hitLoc);
+				return;
+			case Smoke_Delayed:
+				bounceEntity(hitLoc);
+				return;
+			}
+			this.killEntity();	
 		}
-		this.killEntity();
 		return;
     }
 	
