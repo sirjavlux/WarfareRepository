@@ -1,0 +1,17 @@
+name: test
+material: BOWL
+#placeholders %fill%
+lore:
+    - ""
+    - "&7This is a splint which can"
+    - "&7be used to speed up things"
+    - "&7filled amount &l[%fill%&7&l]"
+display-name: "test refillable"
+custom-model-data: 0
+use-time: 50
+fill-time: 100
+walk-speed: 0.07
+use-amount: 0.6
+#types Water
+type: Water
+fill: 6

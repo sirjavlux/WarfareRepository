@@ -17,6 +17,8 @@ import com.coding.sirjavlux.grenades.Grenade;
 import com.coding.sirjavlux.grenades.GrenadeManager;
 import com.coding.sirjavlux.melee.Melee;
 import com.coding.sirjavlux.melee.MeleeManager;
+import com.coding.sirjavlux.refillable.Refillable;
+import com.coding.sirjavlux.refillable.RefillableManager;
 import com.coding.sirjavlux.repair.Repair;
 import com.coding.sirjavlux.repair.RepairManager;
 import com.coding.sirjavlux.types.Ammo;
@@ -35,7 +37,8 @@ public class GiveCommand extends CommandManager {
 		CONSUMABLE,
 		ARMOR,
 		MELEE,
-		REPAIR
+		REPAIR,
+		REFILLABLE
 	}
 	
 	protected static void execute(CommandSender sender, Command cmd, String label, String[] args) {
@@ -151,6 +154,14 @@ public class GiveCommand extends CommandManager {
 			}
 			Repair repair = RepairManager.getStoredRepair(name);
 			RepairManager.giveRepair(target, repair, amount);
+			break;
+		case REFILLABLE:
+			if (!RefillableManager.isRefillable(name)) {
+				sender.sendMessage(ChatColor.GRAY + "The entered refillable item name " + ChatColor.RED + name + ChatColor.GRAY + " wasn't valid!");
+				return;
+			}
+			Refillable refillable = RefillableManager.getStoredRefillable(name);
+			RefillableManager.giveRefillable(target, refillable, amount);
 			break;
 		}
 	}
