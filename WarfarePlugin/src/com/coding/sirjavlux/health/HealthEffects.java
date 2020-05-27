@@ -56,11 +56,11 @@ public class HealthEffects implements Listener {
 					if (time > 0) {
 						Player p = Bukkit.getPlayer(entry.getKey());
 						if (p == null) {
-							brokenLegTime.remove(uuid);
+							concussionTime.remove(uuid);
 							continue;
 						}
 						else if (p.isDead()) {
-							brokenLegTime.remove(uuid);
+							concussionTime.replace(uuid, 0);
 							continue;
 						}
 						boolean containsValidEffect = false;
@@ -99,7 +99,7 @@ public class HealthEffects implements Listener {
 							continue;
 						}
 						else if (p.isDead()) {
-							brokenLegTime.remove(uuid);
+							brokenLegTime.replace(uuid, 0);
 							continue;
 						}
 						boolean containsValidEffect = false;
@@ -133,11 +133,11 @@ public class HealthEffects implements Listener {
 					UUID uuid = entry.getKey();
 					LivingEntity entity = (LivingEntity) Bukkit.getEntity(uuid);
 					if (entity == null) {
-						brokenLegTime.remove(uuid);
+						bleedingMap.remove(uuid);
 						continue;
 					}
 					else if (entity.isDead()) {
-						brokenLegTime.remove(uuid);
+						bleedingMap.replace(uuid, new ArrayList<>());
 						continue;
 					}
 					double health = entity.getHealth();
