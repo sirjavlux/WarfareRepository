@@ -1,0 +1,7 @@
+name: testpack
+material: LEATHER
+lore:
+    - "test"
+display-name: "test backpack"
+model-data: 0
+spaces: 11

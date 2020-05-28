@@ -15,6 +15,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -83,7 +84,8 @@ public class AsyncBulletHandler implements Listener {
 	public void playerInteractEvent(PlayerInteractEvent e) {
 		Player p = e.getPlayer();
 		Action action = e.getAction();
-		ItemStack item = e.getItem();
+		ItemStack item = p.getInventory().getItemInMainHand();
+		if (e.getHand() == EquipmentSlot.OFF_HAND) return;
 		//check if weapon
 		if (WeaponManager.isWeapon(item)) {
     		net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(item);

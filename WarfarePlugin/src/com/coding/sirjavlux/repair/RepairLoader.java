@@ -31,7 +31,7 @@ public class RepairLoader extends RepairManager{
 		loadRepairData();
 	}
 	
-	public static void loadRepairData() {
+	private static void loadRepairData() {
 		Plugin plugin = Main.getPlugin(Main.class);
 		File magsFile = new File(plugin.getDataFolder() + "/repair");
 

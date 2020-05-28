@@ -28,10 +28,10 @@ public class RefillableLoader extends RefillableManager{
 			
 			FileManager.writeFileFromResources(plugin, plugin.getDataFolder() + "/refillable/test.yml", "Refillable/test.yml");
 		}
-		loadMeleeData();
+		loadRefillableData();
 	}
 	
-	public static void loadMeleeData() {
+	private static void loadRefillableData() {
 		Plugin plugin = Main.getPlugin(Main.class);
 		File refillableFile = new File(plugin.getDataFolder() + "/refillable");
 
@@ -111,7 +111,7 @@ public class RefillableLoader extends RefillableManager{
 		}
 		
 		//print loaded magazines and finished message
-		printGoodBadFiles(goodRefillable, badRefillable, "Melees");
+		printGoodBadFiles(goodRefillable, badRefillable, "Refillable");
 	}
 	
 	private static void printGoodBadFiles(List<String> good, List<String> bad, String loadedName) {

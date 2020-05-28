@@ -11,6 +11,8 @@ import org.bukkit.entity.Player;
 
 import com.coding.sirjavlux.armors.Armor;
 import com.coding.sirjavlux.armors.ArmorManager;
+import com.coding.sirjavlux.backpacks.Backpack;
+import com.coding.sirjavlux.backpacks.BackpackManager;
 import com.coding.sirjavlux.consumables.Consumable;
 import com.coding.sirjavlux.consumables.ConsumableManager;
 import com.coding.sirjavlux.grenades.Grenade;
@@ -38,7 +40,8 @@ public class GiveCommand extends CommandManager {
 		ARMOR,
 		MELEE,
 		REPAIR,
-		REFILLABLE
+		REFILLABLE,
+		BACKPACK
 	}
 	
 	protected static void execute(CommandSender sender, Command cmd, String label, String[] args) {
@@ -162,6 +165,14 @@ public class GiveCommand extends CommandManager {
 			}
 			Refillable refillable = RefillableManager.getStoredRefillable(name);
 			RefillableManager.giveRefillable(target, refillable, amount);
+			break;
+		case BACKPACK:
+			if (!BackpackManager.isBackpack(name)) {
+				sender.sendMessage(ChatColor.GRAY + "The entered refillable item name " + ChatColor.RED + name + ChatColor.GRAY + " wasn't valid!");
+				return;
+			}
+			Backpack backpack = BackpackManager.getStoredBackpack(name);
+			BackpackManager.giveBackpack(target, backpack, amount);
 			break;
 		}
 	}

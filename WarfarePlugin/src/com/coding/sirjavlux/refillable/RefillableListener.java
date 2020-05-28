@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
@@ -20,10 +21,11 @@ import net.md_5.bungee.api.chat.TextComponent;
 public class RefillableListener implements Listener {
 
 	@EventHandler
-	public void damageEvent(PlayerInteractEvent e) {
-		ItemStack item = e.getItem();
+	public void interactEvent(PlayerInteractEvent e) {
 		Action action = e.getAction();
 		Player p = e.getPlayer();
+		ItemStack item = p.getInventory().getItemInMainHand();
+		if (e.getHand() == EquipmentSlot.OFF_HAND) return;
 		if (RefillableManager.isRefillable(item)) {
 			Refillable ref = RefillableManager.getRefillableFromItem(item);
 			if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {

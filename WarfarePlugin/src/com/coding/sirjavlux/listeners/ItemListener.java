@@ -156,7 +156,7 @@ public class ItemListener implements Listener {
 					}
 				}
 				//unload 
-				else if (click.equals(ClickType.RIGHT)) {
+				else if (click.equals(ClickType.RIGHT) && cursor.getType() == Material.AIR) {
 					//if has mag
 					if (weaponItem.getMagazineItem() != null) {
 						ItemStack mag = WeaponManager.generateMagazine(weaponItem.getMagazineItem().getMagazine());

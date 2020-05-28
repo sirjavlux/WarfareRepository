@@ -5,6 +5,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.coding.sirjavlux.armors.ArmorLoader;
+import com.coding.sirjavlux.backpacks.BackpackListener;
+import com.coding.sirjavlux.backpacks.BackpackLoader;
 import com.coding.sirjavlux.commands.CommandManager;
 import com.coding.sirjavlux.consumables.ConsumableListener;
 import com.coding.sirjavlux.consumables.ConsumableLoader;
@@ -67,6 +69,7 @@ public class Main extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new WaterBarManager(), this);
 		Bukkit.getPluginManager().registerEvents(new MoveListener(), this);
 		Bukkit.getPluginManager().registerEvents(new RefillableListener(), this);
+		Bukkit.getPluginManager().registerEvents(new BackpackListener(), this);
 		Bukkit.getPluginManager().registerEvents(healthEffects, this);
 		Bukkit.getPluginManager().registerEvents(weaponReloadHandler, this);
 		
@@ -81,6 +84,7 @@ public class Main extends JavaPlugin {
 		MeleeLoader.loadFiles();
 		RepairLoader.loadFiles();
 		RefillableLoader.loadFiles();
+		BackpackLoader.loadFiles();
 		
 		instance = this;
 		

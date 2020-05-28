@@ -41,17 +41,17 @@ public class RefillableManager {
 	}
 	
 	public static boolean isRefillable(ItemStack item) {
-		boolean melee = false;
+		boolean refillable = false;
 		net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(item);
 		if (NMSItem.hasTag()) {
 			NBTTagCompound tagComp = NMSItem.getTag();
 			if (tagComp.hasKey("name")) {
 				if (refillables.containsKey(tagComp.getString("name"))) {
-					melee = true;
+					refillable = true;
 				}
 			}
 		}
-		return melee;
+		return refillable;
 	}
 	
 	public static Refillable getRefillableFromItem(ItemStack item) {
