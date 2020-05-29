@@ -66,7 +66,14 @@ public class BackpackListener implements Listener {
 								BackpackManager.updateItemInInstance(p, uuid, updateItem == null ? new ItemStack(Material.AIR) : updateItem.clone(), size - i - 1);
 							} else {
 								//on swap action
-								if (action == InventoryAction.SWAP_WITH_CURSOR || action == InventoryAction.PLACE_ALL || action == InventoryAction.PICKUP_ALL) BackpackManager.updateItemInInstance(p, uuid, cursor.clone(), slot - 9 - (18 - size));
+								if (action == InventoryAction.SWAP_WITH_CURSOR || action == InventoryAction.PLACE_ALL || action == InventoryAction.PICKUP_ALL || action == InventoryAction.PLACE_SOME) {
+									if (cursor.isSimilar(clicked)) {
+										int cursorAmount = cursor.getAmount();
+										ItemStack finalItem = clicked.clone();
+										finalItem.setAmount(clicked.getAmount() + cursorAmount > clicked.getMaxStackSize() ? clicked.getMaxStackSize() : clicked.getAmount() + cursorAmount);
+										BackpackManager.updateItemInInstance(p, uuid, finalItem.clone(), slot - 9 - (18 - size));
+									} else BackpackManager.updateItemInInstance(p, uuid, cursor.clone(), slot - 9 - (18 - size));
+								}
 								//on place some
 								else if (action == InventoryAction.PLACE_ONE) {
 									ItemStack finalItem = cursor.clone();

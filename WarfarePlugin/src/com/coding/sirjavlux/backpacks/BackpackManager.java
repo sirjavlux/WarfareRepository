@@ -223,7 +223,7 @@ public class BackpackManager {
 	
 	public static void updateItemInInstance(Player p, UUID uuid, ItemStack item, int slot) {
 		if (!packs.containsKey(uuid)) {
-			loadBackpackData(p, item);
+			loadBackpackData(p, p.getInventory().getItemInOffHand());
 		}
 		BackpackInstance instance = packs.get(uuid);
 		ItemStack[] items = instance.getItems();
