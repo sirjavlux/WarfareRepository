@@ -2,11 +2,14 @@ package com.coding.sirjavlux.core;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.coding.sirjavlux.armors.ArmorLoader;
 import com.coding.sirjavlux.backpacks.BackpackListener;
 import com.coding.sirjavlux.backpacks.BackpackLoader;
+import com.coding.sirjavlux.backpacks.BackpackManager;
 import com.coding.sirjavlux.commands.CommandManager;
 import com.coding.sirjavlux.consumables.ConsumableListener;
 import com.coding.sirjavlux.consumables.ConsumableLoader;
@@ -95,6 +98,14 @@ public class Main extends JavaPlugin {
 	
 	@Override
 	public void onDisable() {
+		//save backpacks
+		for (Player p : Bukkit.getOnlinePlayers()) {
+			int count = 0;
+			for (ItemStack item : p.getInventory().getContents()) {
+				if (BackpackManager.isBackpack(item)) p.getInventory().setItem(count, BackpackManager.saveBackpackData(p, item));
+				count++;
+			}
+		}
 		Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.RED + "Warfare disabled!");
 	}
 	

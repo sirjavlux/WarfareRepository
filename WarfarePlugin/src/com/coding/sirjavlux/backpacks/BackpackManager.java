@@ -139,44 +139,76 @@ public class BackpackManager {
 	
 	public static void loadBackPackItemsToPlayer(Player p, ItemStack item) {
 		if (isBackpack(item)) {
+			net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(item);
+			NBTTagCompound tagComp = NMSItem.getTag();
+			UUID uuid = UUID.fromString(tagComp.getString("uuid"));
+			if (!packs.containsKey(uuid)) {
+				loadBackpackData(p, item);
+			}
+			BackpackInstance instance = packs.get(uuid);
+			ItemStack[] items = instance.getItems();
+			int size = instance.getBackpack().getPackSpace();
+			PlayerInventory iv = p.getInventory();
+			for (int i = 0; i < size; i++) {
+				int slot = 8 + 18 - i;
+				int instSlot = items.length - i - 1;
+				ItemStack itemT = instSlot >= 0 ? items[instSlot] : new ItemStack(Material.AIR);
+				iv.setItem(slot, itemT);
+			}
+		}
+	}
+	
+	public static void unloadBackPackItemsFromPlayer(Player p) {		
+		PlayerInventory iv = p.getInventory();
+		for (int i = 0; i < 18; i++) {
+			int slot = 9 + i;
+			iv.setItem(slot, getSlotBlockItem());
+		}
+	}
+	
+	public static void loadBackpackData(Player p, ItemStack item) {
+		if (isBackpack(item)) {
 			String base64 = getSavedBase64Items(item);
 			Backpack pack = getBackpackFromItem(item);
+			net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(item);
+			NBTTagCompound tagComp = NMSItem.getTag();
+			UUID uuid = UUID.fromString(tagComp.getString("uuid"));
 			int size = pack.getPackSpace();
-			PlayerInventory iv = p.getInventory();
 			List<ItemStack> oldItems = new ArrayList<>();
+			ItemStack[] items = new ItemStack[size];
 			if (!base64.isEmpty()) {
 				String[] base64s = base64.split(",");
 				for (String base : base64s) { try { oldItems.add(Base64Utils.fromBase64(base)); } catch (IOException e) { oldItems.add(new ItemStack(Material.AIR)); } }
 			}	
 			for (int i = 0; i < size; i++) {
-				int slot = 9 + 18 - size + i;
-				iv.setItem(slot, oldItems.size() > i ? oldItems.get(i).clone() : new ItemStack(Material.AIR));
+				items[i] = oldItems.size() > i ? oldItems.get(i).clone() : new ItemStack(Material.AIR);
 			}
+			if (!packs.containsKey(uuid)) packs.put(uuid, new BackpackInstance(items, uuid, pack));
 		}
 	}
 	
-	public static ItemStack unloadBackPackItemsFromPlayer(Player p, ItemStack item) {		
+	public static ItemStack saveBackpackData(Player p, ItemStack item) {
 		if (isBackpack(item)) {
-			StringBuilder base64Builder = new StringBuilder();
-			PlayerInventory iv = p.getInventory();
-			Backpack pack = getBackpackFromItem(item);
-			int size = pack.getPackSpace();
-			for (int i = 0; i < 18; i++) {
-				int slot = 9 + i;
-				if (i >= 18 - size) {
-					ItemStack bItem = iv.getItem(slot);
+			net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(item);
+			NBTTagCompound tagComp = NMSItem.getTag();
+			UUID uuid = UUID.fromString(tagComp.getString("uuid"));
+			if (packs.containsKey(uuid)) {
+				BackpackInstance instance = packs.get(uuid);
+				StringBuilder base64Builder = new StringBuilder();
+				Backpack pack = getBackpackFromItem(item);
+				int size = pack.getPackSpace();
+				ItemStack[] items = instance.getItems();
+				for (int i = 0; i < size; i++) {
+					ItemStack bItem = i >= 0 ? items[i] : new ItemStack(Material.AIR);
 					String base64 = "null";
 					try { base64 = Base64Utils.toBase64(bItem); } catch (IOException e) { }
 					base64Builder.append(base64Builder.length() > 0 ? "," + base64 : base64);
 				}
-				iv.setItem(slot, getSlotBlockItem());
+				tagComp.setString("items", base64Builder.toString());
+				NMSItem.setTag(tagComp);
+				ItemStack newItem = CraftItemStack.asBukkitCopy(NMSItem);
+				return newItem;	
 			}
-			net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(item);
-			NBTTagCompound tagComp = NMSItem.getTag();
-			tagComp.setString("items", base64Builder.toString());
-			NMSItem.setTag(tagComp);
-			ItemStack newItem = CraftItemStack.asBukkitCopy(NMSItem);
-			return newItem;
 		}	
 		return item;
 	}
@@ -187,5 +219,38 @@ public class BackpackManager {
 		meta.setDisplayName(ChatColor.RED + "" + ChatColor.BOLD + "Backpack slot");
 		item.setItemMeta(meta);
 		return item;
+	}
+	
+	public static void updateItemInInstance(Player p, UUID uuid, ItemStack item, int slot) {
+		if (!packs.containsKey(uuid)) {
+			loadBackpackData(p, item);
+		}
+		BackpackInstance instance = packs.get(uuid);
+		ItemStack[] items = instance.getItems();
+		if (items.length > slot) {
+			items[slot] = item.clone();
+		}
+		instance.setItems(items);
+	}
+	
+	private static HashMap<UUID, BackpackInstance> packs = new HashMap<>();
+	
+	public static class BackpackInstance {
+		
+		private ItemStack[] items;
+		private UUID uuid;
+		private Backpack pack;
+		
+		public BackpackInstance(ItemStack[] items, UUID uuid, Backpack pack) {
+			this.items = items;
+			this.uuid = uuid;
+			this.pack = pack;
+		}
+		
+		public ItemStack[] getItems() { return items; }
+		public UUID getUniqueId() { return uuid; }
+		public Backpack getBackpack() { return pack; }
+		
+		public void setItems(ItemStack[] items) { this.items = items; }
 	}
 }
