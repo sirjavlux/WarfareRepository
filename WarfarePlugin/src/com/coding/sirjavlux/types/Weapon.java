@@ -30,8 +30,9 @@ public class Weapon {
 	private Mechanic right, shiftRight, left, shiftLeft, shift;
 	private float scope;
 	private String scopeSound, shootSound, reloadSound, afterShotSound, finishedReloadSound;
+	private int equipTime;
 	
-	public Weapon (WeaponType type, Material mat, Magazine[] magReq, String name, double[] smokeOffset, boolean smokeEnabled, double smokeIntensity, double damage, String[] lore, String displayName, Magazine defaultMag, boolean loadedByDefault, boolean reqMag, int barrelAmmoCap, String caliber, double fireRate, Ammo preloadAmmo, int burstAmount, double burstSpeed, double recoilRed, double knockbackRed, int reloadSpeed, int customModel, Mechanic right, Mechanic shiftRight, Mechanic left, Mechanic shiftLeft, Mechanic shift, float scope, Material scopeMat, int scopeModelData, String scopeSound, String shootSound, String reloadSound, String afterShotSound, String finishedReloadSound) {
+	public Weapon (WeaponType type, Material mat, Magazine[] magReq, String name, double[] smokeOffset, boolean smokeEnabled, double smokeIntensity, double damage, String[] lore, String displayName, Magazine defaultMag, boolean loadedByDefault, boolean reqMag, int barrelAmmoCap, String caliber, double fireRate, Ammo preloadAmmo, int burstAmount, double burstSpeed, double recoilRed, double knockbackRed, int reloadSpeed, int customModel, Mechanic right, Mechanic shiftRight, Mechanic left, Mechanic shiftLeft, Mechanic shift, float scope, Material scopeMat, int scopeModelData, String scopeSound, String shootSound, String reloadSound, String afterShotSound, String finishedReloadSound, int equipTime) {
 		this.type = type;
 		this.mat = mat;
 		this.magReq = magReq;
@@ -68,6 +69,7 @@ public class Weapon {
 		this.reloadSound = reloadSound;
 		this.afterShotSound = afterShotSound;
 		this.finishedReloadSound = finishedReloadSound;
+		this.equipTime = equipTime;
 	}
 	
 	public WeaponType getType() { return type; }
@@ -106,4 +108,5 @@ public class Weapon {
 	public String getReloadSound() { return reloadSound; }
 	public String getFinishedReloadSound() { return finishedReloadSound; }
 	public String getAfterShotSound() { return afterShotSound; }
+	public int getEquipTime() { return equipTime; }
 }

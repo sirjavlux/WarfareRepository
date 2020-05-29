@@ -18,6 +18,7 @@ import com.coding.sirjavlux.grenades.GrenadeLoader;
 import com.coding.sirjavlux.grenades.GrenadeManager;
 import com.coding.sirjavlux.health.HealthEffects;
 import com.coding.sirjavlux.listeners.AsyncBulletHandler;
+import com.coding.sirjavlux.listeners.EquipListener;
 import com.coding.sirjavlux.listeners.InventoryListener;
 import com.coding.sirjavlux.listeners.ItemListener;
 import com.coding.sirjavlux.listeners.PlayerListener;
@@ -70,6 +71,7 @@ public class Main extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new MoveListener(), this);
 		Bukkit.getPluginManager().registerEvents(new RefillableListener(), this);
 		Bukkit.getPluginManager().registerEvents(new BackpackListener(), this);
+		Bukkit.getPluginManager().registerEvents(new EquipListener(), this);
 		Bukkit.getPluginManager().registerEvents(healthEffects, this);
 		Bukkit.getPluginManager().registerEvents(weaponReloadHandler, this);
 		

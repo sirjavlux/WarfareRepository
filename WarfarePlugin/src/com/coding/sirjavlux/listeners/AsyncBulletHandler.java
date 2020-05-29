@@ -94,6 +94,10 @@ public class AsyncBulletHandler implements Listener {
 			UUID uuid = p.getUniqueId();
 			lastClickInput.replace(uuid, System.currentTimeMillis());
 			WeaponItem weaponItem = WeaponManager.getWeaponItem(UUID.fromString(tagComp.getString("uuid")));
+	    	//return if equiping
+    		if (weaponItem.isEquiping()) {
+    			return;
+    		}
 			if (!Main.getWeaponReloadHandler().isReloading(p)) {
 				if ((action.equals(Action.LEFT_CLICK_AIR) || action.equals(Action.LEFT_CLICK_BLOCK)) && p.isSneaking()) {
 					Mechanic mec = weapon.getShiftLeftMechanic();
@@ -144,7 +148,7 @@ public class AsyncBulletHandler implements Listener {
 			@Override
 			public void run() {
     			//run trough all active fireing weapons
-    			for (Entry<UUID, WeaponItem> entry : activeWeapons.entrySet()) {
+    			for (Entry<UUID, WeaponItem> entry : new HashMap<>(activeWeapons).entrySet()) {
     				UUID uuid = entry.getKey();
     				WeaponItem activeWeapon = entry.getValue();
     	    		Weapon weapon = activeWeapon.getWeapon();

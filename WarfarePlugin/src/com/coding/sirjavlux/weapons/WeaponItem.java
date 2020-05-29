@@ -23,6 +23,7 @@ public class WeaponItem {
 	private List<Ammo> barrelAmmo;
 	private Ammo nextAmmo;
 	private int burstBulletsLeft;
+	private int equipTime;
 	
 	public WeaponItem(Weapon weapon, UUID uuid) {
 		
@@ -32,6 +33,7 @@ public class WeaponItem {
 		this.barrelAmmo = new ArrayList<>();
 		this.nextAmmo = null;
 		this.burstBulletsLeft = weapon.getBurstAmount();
+		this.equipTime = 0;
 		
 		//pre load if is loaded by default
 		if (weapon.isLoadedByDefault()) {
@@ -46,6 +48,22 @@ public class WeaponItem {
 			}
 		}
 		updateNextAmmo();
+	}
+	
+	public boolean isEquiping() {
+		return equipTime > 0;
+	}
+	
+	public void resetEquipTime() {
+		equipTime = weapon.getEquipTime();
+	}
+	
+	public void setEquipTime(int time) {
+		equipTime = time;
+	}
+	
+	public int getEquipTime() {
+		return equipTime;
 	}
 	
 	public boolean removeBullet() {

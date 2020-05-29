@@ -279,9 +279,11 @@ public class WeaponLoader extends WeaponManager{
 			String afterShotSound = conf.contains("after-shot-sound") ? conf.getString("after-shot-sound") : null;
 			//after reload sound
 			String finishedReloadSound = conf.contains("finished-reload-sound") ? conf.getString("finished-reload-sound") : "block.stone_button.click_on";
+			//equip time 
+			int equipTime = conf.contains("equip-time") ? conf.getInt("equip-time") : 30;
 			
 			//create weapon
-			Weapon weapon = new Weapon(type, mat, magReq, name, smokeOffset, smokeEnabled, smokeIntensity, damage, lore, displayName, defaultMag, loadedByDefault, reqMag, barrelAmmoCap, caliber, fireRate, preLoadAmmo, burstAmount, burstSpeed, recoilRed, knockbackRed, reloadSpeed, customModel, right, shiftRight, left, shiftLeft, shift, scope, scopeMat, scopeModelData, scopeSound, shootSound, reloadSound, afterShotSound, finishedReloadSound);
+			Weapon weapon = new Weapon(type, mat, magReq, name, smokeOffset, smokeEnabled, smokeIntensity, damage, lore, displayName, defaultMag, loadedByDefault, reqMag, barrelAmmoCap, caliber, fireRate, preLoadAmmo, burstAmount, burstSpeed, recoilRed, knockbackRed, reloadSpeed, customModel, right, shiftRight, left, shiftLeft, shift, scope, scopeMat, scopeModelData, scopeSound, shootSound, reloadSound, afterShotSound, finishedReloadSound, equipTime);
 			weaponStored.put(name, weapon);
 			badWeapons.remove(file.getName());
 			goodWeapons.add(file.getName());
