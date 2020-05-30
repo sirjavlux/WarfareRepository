@@ -23,6 +23,9 @@ import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import com.coding.sirjavlux.core.Main;
 
 import net.minecraft.server.v1_15_R1.NBTTagCompound;
 
@@ -35,17 +38,39 @@ public class BackpackListener implements Listener {
 			int slot = e.getSlot();
 			InventoryAction action = e.getAction();
 			Player p = (Player) e.getWhoClicked();
+			ItemStack clicked = e.getCurrentItem();
 			if (iv.getType() == InventoryType.PLAYER) {
-				ItemStack clicked = e.getCurrentItem();
 				ItemStack cursor = e.getCursor();
 				if (slot == 40) {
 					//if clicked is backpack
 					if (BackpackManager.isBackpack(clicked)) {
+						PlayerInventory pIv = p.getInventory();
+						ItemStack offHand = pIv.getItemInOffHand();
+						if (BackpackManager.isBackpack(offHand)) {
+							net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(offHand);
+							NBTTagCompound tagComp = NMSItem.getTag();
+							UUID uuid = UUID.fromString(tagComp.getString("uuid"));
+							Backpack pack = BackpackManager.getBackpackFromItem(offHand);
+							int size = pack.getPackSpace();
+							for (int i = 0; i < size; i++) {
+								int bSlot = 8 + 18 - i;
+								ItemStack updateItem = pIv.getItem(bSlot);
+								if (updateItem == null) BackpackManager.updateItemInInstance(p, uuid, new ItemStack(Material.AIR), size - i - 1);
+								else if (!updateItem.isSimilar(BackpackManager.getSlotBlockItem())) BackpackManager.updateItemInInstance(p, uuid, updateItem.clone(), size - i - 1);
+								else break;
+							}
+						}
 						BackpackManager.unloadBackPackItemsFromPlayer(p);
 					}
 					//if cursor is backpack
 					if (BackpackManager.isBackpack(cursor)) {
 						BackpackManager.loadBackPackItemsToPlayer(p, cursor);
+						new BukkitRunnable() {
+							@Override
+							public void run() {
+								updateInventory(p);
+							}
+						}.runTaskLater(Main.getPlugin(Main.class), 2);
 					}	
 				} else if (slot > 8 && slot < 27) {
 					int size = 0;
@@ -97,6 +122,10 @@ public class BackpackListener implements Listener {
 									finalItem.setAmount(amountLeft);
 									BackpackManager.updateItemInInstance(p, uuid, finalItem.clone(), slot - 9 - (18 - size));
 								}
+								//if move to other iv
+								else if (action == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
+									updateInventoryAsync(p);
+								}
 								//if no click matches cancel event
 								else if (action != InventoryAction.CLONE_STACK) e.setCancelled(true);
 							}
@@ -105,7 +134,7 @@ public class BackpackListener implements Listener {
 				}
 			}
 			if (action == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
-				e.setCancelled(true);
+				updateInventoryAsync(p);
 			}
 		}
 	}
@@ -169,6 +198,28 @@ public class BackpackListener implements Listener {
 				iv.setItem(slot, BackpackManager.getSlotBlockItem());
 			}
 		}
+	}
+	
+	public void updateInventoryAsync(Player p) {
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				PlayerInventory iv = p.getInventory();
+				ItemStack offHand = iv.getItemInOffHand();
+				if (BackpackManager.isBackpack(offHand)) {
+					net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(offHand);
+					NBTTagCompound tagComp = NMSItem.getTag();
+					UUID uuid = UUID.fromString(tagComp.getString("uuid"));
+					Backpack pack = BackpackManager.getBackpackFromItem(offHand);
+					int size = pack.getPackSpace();
+					for (int i = 0; i < size; i++) {
+						int bSlot = 8 + 18 - i;
+						ItemStack updateItem = iv.getItem(bSlot);
+						BackpackManager.updateItemInInstance(p, uuid, updateItem == null ? new ItemStack(Material.AIR) : updateItem.clone(), size - i - 1);
+					}
+				}
+			}
+		}.runTaskLater(Main.getPlugin(Main.class), 2);
 	}
 	
 	@EventHandler
