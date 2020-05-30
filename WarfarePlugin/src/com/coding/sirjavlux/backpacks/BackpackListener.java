@@ -1,5 +1,6 @@
 package com.coding.sirjavlux.backpacks;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import org.bukkit.Material;
@@ -8,13 +9,16 @@ import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -55,6 +59,9 @@ public class BackpackListener implements Listener {
 					} else if (BackpackManager.isBackpack(e.getCursor())) {
 						e.setCancelled(true);
 						p.playSound(p.getLocation(), Sound.ENTITY_VILLAGER_NO, 1, 1);
+					} else if (BackpackManager.getSlotBlockItem().isSimilar(clicked)) {
+						e.setCancelled(true);
+						updateInventory(p);
 					} else {
 						net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(iv.getItem(40));
 						NBTTagCompound tagComp = NMSItem.getTag();
@@ -95,9 +102,17 @@ public class BackpackListener implements Listener {
 							}
 						}
 					}
-				}	
+				}
+			}
+			if (action == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
+				e.setCancelled(true);
 			}
 		}
+	}
+	
+	@EventHandler
+	public void itemDragEvent(InventoryDragEvent e) {
+		e.setCancelled(true);
 	}
 	
 	@EventHandler 
@@ -119,6 +134,23 @@ public class BackpackListener implements Listener {
 	public void onJoin(PlayerJoinEvent e) {
 		Player p = e.getPlayer();
 		updateInventory(p);
+	}
+	
+	@EventHandler 
+	public void respawnEvent(PlayerRespawnEvent e) {
+		Player p = e.getPlayer();
+		updateInventory(p);
+	}
+	
+	@EventHandler 
+	public void playerDeathEvent(PlayerDeathEvent e) {
+		int i = 0;
+		for (ItemStack item : new ArrayList<>(e.getDrops())) {
+			if (item != null) {
+				if (item.isSimilar(BackpackManager.getSlotBlockItem())) e.getDrops().set(i, new ItemStack(Material.AIR));
+			}
+			i++;
+		}
 	}
 	
 	public void updateInventory(Player p) {

@@ -11,8 +11,10 @@ import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -46,6 +48,36 @@ public class EquipListener implements Listener {
 			if (weaponItem == null) WeaponManager.loadWeaponData(item);
 			weaponItem.resetEquipTime();
 			equipingWeapons.put(p.getUniqueId(), wUUID);
+		}
+	}
+	
+	@EventHandler
+	public void clickEvent(InventoryClickEvent e) {
+		ItemStack cursor = e.getCursor();
+		ItemStack current = e.getCurrentItem();
+		Inventory iv = e.getClickedInventory();
+		Player p = (Player) e.getWhoClicked();
+		if (iv != null) {
+			if (e.getSlot() == p.getInventory().getHeldItemSlot()) {
+				if (WeaponManager.isWeapon(current)) {
+					net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(current);
+		    		NBTTagCompound tagComp = NMSItem.getTag();
+					UUID wUUID = UUID.fromString(tagComp.getString("uuid"));
+					WeaponItem weaponItem = WeaponManager.getWeaponItem(wUUID);
+					if (weaponItem == null) WeaponManager.loadWeaponData(current);
+					weaponItem.resetEquipTime();
+					equipingWeapons.remove(p.getUniqueId());
+				}
+				if (WeaponManager.isWeapon(cursor)) {
+		    		net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(cursor);
+		    		NBTTagCompound tagComp = NMSItem.getTag();
+					UUID wUUID = UUID.fromString(tagComp.getString("uuid"));
+					WeaponItem weaponItem = WeaponManager.getWeaponItem(wUUID);
+					if (weaponItem == null) WeaponManager.loadWeaponData(cursor);
+					weaponItem.resetEquipTime();
+					equipingWeapons.put(p.getUniqueId(), wUUID);
+				} 
+			}
 		}
 	}
 	
