@@ -10,6 +10,8 @@ import com.coding.sirjavlux.armors.ArmorLoader;
 import com.coding.sirjavlux.backpacks.BackpackListener;
 import com.coding.sirjavlux.backpacks.BackpackLoader;
 import com.coding.sirjavlux.backpacks.BackpackManager;
+import com.coding.sirjavlux.bossbar.BossbarListener;
+import com.coding.sirjavlux.bossbar.BossbarManager;
 import com.coding.sirjavlux.commands.CommandManager;
 import com.coding.sirjavlux.consumables.ConsumableListener;
 import com.coding.sirjavlux.consumables.ConsumableLoader;
@@ -43,6 +45,7 @@ public class Main extends JavaPlugin {
 	private static HealthEffects healthEffects;
 	private static WeaponReloadHandler weaponReloadHandler;
 	private ParticleSpawner particleSpawner;
+	private BossbarManager bossbarManager;
 	
 	@Override
 	public void onEnable() {
@@ -75,6 +78,7 @@ public class Main extends JavaPlugin {
 		Bukkit.getPluginManager().registerEvents(new RefillableListener(), this);
 		Bukkit.getPluginManager().registerEvents(new BackpackListener(), this);
 		Bukkit.getPluginManager().registerEvents(new EquipListener(), this);
+		Bukkit.getPluginManager().registerEvents(new BossbarListener(), this);
 		Bukkit.getPluginManager().registerEvents(healthEffects, this);
 		Bukkit.getPluginManager().registerEvents(weaponReloadHandler, this);
 		
@@ -91,6 +95,8 @@ public class Main extends JavaPlugin {
 		RefillableLoader.loadFiles();
 		BackpackLoader.loadFiles();
 		
+		bossbarManager = new BossbarManager();
+		
 		instance = this;
 		
 		Bukkit.getServer().getConsoleSender().sendMessage(ChatColor.GREEN + "Warfare successfully enabled!");
@@ -98,6 +104,8 @@ public class Main extends JavaPlugin {
 	
 	@Override
 	public void onDisable() {
+		//remove bossbars
+		bossbarManager.getBars().forEach((player, barInstance) -> barInstance.getBar().removePlayer(player));
 		//save backpacks
 		for (Player p : Bukkit.getOnlinePlayers()) {
 			int count = 0;
@@ -127,5 +135,9 @@ public class Main extends JavaPlugin {
 	
 	public ParticleSpawner getParticleSpawner() {
 		return particleSpawner;
+	}
+	
+	public BossbarManager getBossbarManager() {
+		return bossbarManager;
 	}
 }

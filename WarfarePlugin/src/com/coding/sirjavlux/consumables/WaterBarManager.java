@@ -73,6 +73,11 @@ public class WaterBarManager implements Listener {
 		p.setLevel((int) levels.get(uuid).doubleValue());
 	}
 	
+	public static double getPlayerWater(Player p) {
+		UUID uuid = p.getUniqueId();
+		return levels.containsKey(uuid) ? levels.get(uuid) : 0;
+	}
+	
 	private void startWaterBarReducer() {
 		final int runnableSpeed = 80;
 		new BukkitRunnable() {

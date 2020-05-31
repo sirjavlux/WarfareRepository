@@ -43,6 +43,20 @@ public class HealthEffects implements Listener {
 		return false;
 	}
 	
+	public static boolean isBrokenLeg(UUID uuid) {
+		if (brokenLegTime.containsKey(uuid)) {
+			if (brokenLegTime.get(uuid) > 0) return true;
+		}
+		return false;
+	}
+	
+	public static boolean isConcussion(UUID uuid) {
+		if (concussionTime.containsKey(uuid)) {
+			if (concussionTime.get(uuid) > 0) return true;
+		}
+		return false;
+	}
+	
 	private void startHealthReader() {
 		new BukkitRunnable() {
 			@Override
