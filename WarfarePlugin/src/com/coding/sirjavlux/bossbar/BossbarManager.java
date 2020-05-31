@@ -33,6 +33,7 @@ public class BossbarManager {
 		if (!bars.containsKey(p)) {
 			BossBar bar = createBar();
 			bar.addPlayer(p);
+			bar.setVisible(false);
 			bars.put(p, new BarInstance(bar));
 		}
 	}
@@ -59,7 +60,7 @@ public class BossbarManager {
 						BarInstance instance = entry.getValue();
 						BossBar bar = instance.getBar();
 						//if bar progress is not empty
-						if (bar.getProgress() > 0.09) {
+						if (bar.getProgress() > 0.09 && bar.isVisible()) {
 							double newProg = bar.getProgress() - 0.1 < 0 ? 0 : bar.getProgress() - 0.1;
 							bar.setProgress(newProg);
 						}
@@ -69,36 +70,22 @@ public class BossbarManager {
 							for (int i = 0; i < Message.values().length; i++) {
 								Message testMessage = instance.getNextMessage();
 								switch (testMessage) {
-								case Bleeding: if (HealthEffects.isBleeding(uuid) && instance.prevMess != testMessage) {
-									emergancyMessage = testMessage;
-									instance.prevMess = testMessage;
-								}
+								case Bleeding: if (HealthEffects.isBleeding(uuid)) emergancyMessage = testMessage;
 									break;
-								case BrokenLeg: if (HealthEffects.isBrokenLeg(uuid) && instance.prevMess != testMessage) {
-									emergancyMessage = testMessage;
-									instance.prevMess = testMessage;
-								}
+								case BrokenLeg: if (HealthEffects.isBrokenLeg(uuid)) emergancyMessage = testMessage;
 									break;
-								case Concussion: if (HealthEffects.isConcussion(uuid) && instance.prevMess != testMessage) {
-									emergancyMessage = testMessage;
-									instance.prevMess = testMessage;
-								}
+								case Concussion: if (HealthEffects.isConcussion(uuid)) emergancyMessage = testMessage;
 									break;
-								case Hunger: if (p.getFoodLevel() < 4 && instance.prevMess != testMessage) {
-									emergancyMessage = testMessage;
-									instance.prevMess = testMessage;
-								}
+								case Hunger: if (p.getFoodLevel() < 4) emergancyMessage = testMessage;
 									break;
-								case Thirst: if (WaterBarManager.getPlayerWater(p) < 5d && instance.prevMess != testMessage) {
-									emergancyMessage = testMessage;
-									instance.prevMess = testMessage;
-								}
+								case Thirst: if (WaterBarManager.getPlayerWater(p) < 5d) emergancyMessage = testMessage;
 									break;
 								}
 								if (emergancyMessage != null) break;
 							}
 							//if emargancy message
 							if (emergancyMessage != null) {
+								bar.setVisible(true);
 								bar.setColor(BarColor.RED);
 								switch (emergancyMessage) {
 								case Bleeding: bar.setTitle(ChatColor.RED + "You are bleeding, use a bandage to stop the bleeding!");
@@ -115,9 +102,7 @@ public class BossbarManager {
 							}
 							//if not emergency
 							else {
-								bar.setColor(BarColor.BLUE);
-								bar.setTitle("set text");
-								instance.prevMess = null;
+								bar.setVisible(false);
 							}
 							bar.setProgress(1);
 						}
@@ -131,7 +116,6 @@ public class BossbarManager {
 		
 		private BossBar bar;
 		private int messageNr = 0;
-		public Message prevMess;
 		
 		public BarInstance(BossBar bar) {
 			this.bar = bar;
