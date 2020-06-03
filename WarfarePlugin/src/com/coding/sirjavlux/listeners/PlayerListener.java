@@ -4,12 +4,14 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
 import org.bukkit.entity.NPC;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -18,7 +20,11 @@ import org.bukkit.inventory.ItemStack;
 
 import com.coding.sirjavlux.core.ConfigManager;
 import com.coding.sirjavlux.health.HealthEffects;
+import com.coding.sirjavlux.utils.ScopeUtils;
+import com.coding.sirjavlux.weapons.WeaponItem;
 import com.coding.sirjavlux.weapons.WeaponManager;
+
+import net.minecraft.server.v1_15_R1.NBTTagCompound;
 
 public class PlayerListener implements Listener {
 
@@ -76,6 +82,20 @@ public class PlayerListener implements Listener {
 				HealthEffects.breakLeg(p);
 			}
 			playersInAir.replace(uuid, null);
+		}
+	}
+	
+	@EventHandler
+	public void switchSlotEvent(PlayerItemHeldEvent e) {
+		Player p = e.getPlayer();
+		if (ScopeUtils.isScoped(p)) ScopeUtils.unscope(p);		
+		//check if weapon
+		ItemStack item = p.getInventory().getItem(e.getPreviousSlot());
+		if (WeaponManager.isWeapon(item)) {
+    		net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(item);
+    		NBTTagCompound tagComp = NMSItem.getTag();
+			WeaponItem weaponItem = WeaponManager.getWeaponItem(UUID.fromString(tagComp.getString("uuid")));
+			weaponItem.hardUpdate(item, p);
 		}
 	}
 }

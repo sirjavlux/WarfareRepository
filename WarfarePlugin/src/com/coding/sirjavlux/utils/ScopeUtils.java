@@ -30,8 +30,10 @@ public class ScopeUtils {
 	}
 	
 	public static void unscope(Player p) {
-		p.setWalkSpeed(0.2f);
-		scopedPlayers.remove(p.getUniqueId());
+		if (scopedPlayers.contains(p.getUniqueId())) {
+			p.setWalkSpeed(0.2f);
+			scopedPlayers.remove(p.getUniqueId());
+		}
 	}
 	
 	public static boolean isScoped(Player p) {
