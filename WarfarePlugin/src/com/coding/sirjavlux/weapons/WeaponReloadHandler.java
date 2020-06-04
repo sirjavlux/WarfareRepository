@@ -245,7 +245,7 @@ public class WeaponReloadHandler implements Listener {
 				}
 				e.setCancelled(true);
 				return;
-			}		
+			}	
 		}
 	}
 	

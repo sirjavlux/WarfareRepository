@@ -11,11 +11,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCreativeEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import com.coding.sirjavlux.types.Ammo;
 import com.coding.sirjavlux.utils.ScopeUtils;
@@ -26,6 +28,30 @@ import com.coding.sirjavlux.weapons.WeaponManager;
 import net.minecraft.server.v1_15_R1.NBTTagCompound;
 
 public class ItemListener implements Listener {
+	
+	@EventHandler 
+	public void ivClickEvent(InventoryClickEvent e) {
+		Inventory iv = e.getClickedInventory();
+		InventoryAction action = e.getAction();
+		if (iv != null) {
+			if (action.name().contains("DROP")) {
+				ItemStack item = e.getCurrentItem();
+				if (WeaponManager.isWeapon(item)) {
+					Player p = (Player) e.getWhoClicked();
+					PlayerInventory pIv = p.getInventory();
+					if (WeaponManager.isWeapon(pIv.getItemInMainHand()) && ScopeUtils.isScoped(p)) {
+						ScopeUtils.unscope(p);
+						net.minecraft.server.v1_15_R1.ItemStack NMSItem = CraftItemStack.asNMSCopy(item);
+						NBTTagCompound tagComp = NMSItem.getTag();
+						UUID uuid = UUID.fromString(tagComp.getString("uuid"));
+						WeaponItem weaponItem = WeaponManager.getWeaponItem(uuid);
+						weaponItem.hardUpdate(item, p);
+						e.setCurrentItem(item);
+					}
+				}
+			}
+		}
+	}
 	
 	@EventHandler
 	public void inventoryCreativeClickEvent(InventoryCreativeEvent e) {
