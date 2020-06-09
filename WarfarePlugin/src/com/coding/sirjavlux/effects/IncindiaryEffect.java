@@ -17,6 +17,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import com.coding.sirjavlux.core.Main;
 import com.coding.sirjavlux.effectUtils.EffectParticle;
 import com.coding.sirjavlux.events.EntityDamagedByEffectEvent;
+import com.coding.sirjavlux.events.WarfareDeathEvent;
+import com.coding.sirjavlux.events.WarfareDeathEvent.WarfareDeathCause;
 
 import net.minecraft.server.v1_15_R1.PacketPlayOutEntityStatus;
 
@@ -100,6 +102,11 @@ public class IncindiaryEffect implements Effect {
 						damage = event.getDamage();
 						double finalHealth = entity.getHealth() - damage < 0 ? 0 : entity.getHealth() - damage;
 						entity.setHealth(finalHealth);
+						if (finalHealth <= 0) {
+							WarfareDeathEvent wEvent = new WarfareDeathEvent((LivingEntity) entity, (LivingEntity) event.getDamager(), WarfareDeathCause.Effect);
+							Bukkit.getPluginManager().callEvent(wEvent);
+							if (!wEvent.isCancelled() && !wEvent.getDeathMessage().isEmpty()) for (Player p : Bukkit.getOnlinePlayers()) p.sendMessage(wEvent.getDeathMessage());
+						}
 						entity.setFireTicks(fireTicks);
 						//fire status packet
 						net.minecraft.server.v1_15_R1.Entity ce = ((CraftEntity) entity).getHandle();

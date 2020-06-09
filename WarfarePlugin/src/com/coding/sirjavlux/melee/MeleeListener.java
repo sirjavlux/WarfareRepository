@@ -1,7 +1,9 @@
 package com.coding.sirjavlux.melee;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -12,6 +14,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import com.coding.sirjavlux.armors.Armor;
 import com.coding.sirjavlux.armors.ArmorManager;
 import com.coding.sirjavlux.events.MeleeHitEvent;
+import com.coding.sirjavlux.events.WarfareDeathEvent;
+import com.coding.sirjavlux.events.WarfareDeathEvent.WarfareDeathCause;
 
 public class MeleeListener implements Listener {
 
@@ -69,6 +73,11 @@ public class MeleeListener implements Listener {
 						((LivingEntity) damager).getEquipment().setItemInMainHand(newItem);
 					}
 				}
+			}
+			if (e.getDamage() >= ((LivingEntity) entity).getHealth()) {
+				WarfareDeathEvent wEvent = new WarfareDeathEvent((LivingEntity) entity, (LivingEntity) damager, WarfareDeathCause.Melee);
+				Bukkit.getPluginManager().callEvent(wEvent);
+				if (!wEvent.isCancelled() && !wEvent.getDeathMessage().isEmpty()) for (Player p : Bukkit.getOnlinePlayers()) p.sendMessage(wEvent.getDeathMessage());
 			}
 		}
 	}

@@ -11,6 +11,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -46,6 +47,7 @@ public class PlayerListener implements Listener {
 				WeaponManager.loadMagazineData(item);
 			}
 		}
+		p.setWalkSpeed(0.2f);
 	}
 	
 	@EventHandler
@@ -97,5 +99,10 @@ public class PlayerListener implements Listener {
 			WeaponItem weaponItem = WeaponManager.getWeaponItem(UUID.fromString(tagComp.getString("uuid")));
 			weaponItem.hardUpdate(item, p);
 		}
+	}
+	
+	@EventHandler
+	public void playerDeathEvent(PlayerDeathEvent e) {
+		e.setDeathMessage("");
 	}
 }

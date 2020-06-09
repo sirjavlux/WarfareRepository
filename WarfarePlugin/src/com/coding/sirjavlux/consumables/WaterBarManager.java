@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,6 +17,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.coding.sirjavlux.core.ConfigManager;
 import com.coding.sirjavlux.core.Main;
+import com.coding.sirjavlux.events.WarfareDeathEvent;
+import com.coding.sirjavlux.events.WarfareDeathEvent.WarfareDeathCause;
 import com.coding.sirjavlux.health.HealthEffects;
 import com.coding.sirjavlux.projectiles.MoveListener;
 
@@ -99,6 +102,11 @@ public class WaterBarManager implements Listener {
 						p.setLevel(0);
 						p.setExp(0);
 						p.damage(ConfigManager.getWaterHealthRed());
+						if (p.getHealth() <= 0 || p.isDead()) {
+							WarfareDeathEvent wEvent = new WarfareDeathEvent((LivingEntity) p, null, WarfareDeathCause.Thirst);
+							Bukkit.getPluginManager().callEvent(wEvent);
+							if (!wEvent.isCancelled() && !wEvent.getDeathMessage().isEmpty()) for (Player t : Bukkit.getOnlinePlayers()) t.sendMessage(wEvent.getDeathMessage());
+						}
 					}
 					//reduce exp and level
 					else {

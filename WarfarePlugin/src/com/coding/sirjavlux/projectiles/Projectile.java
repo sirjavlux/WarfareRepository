@@ -30,6 +30,8 @@ import com.coding.sirjavlux.effects.ExplosiveEffect;
 import com.coding.sirjavlux.effects.IncindiaryEffect;
 import com.coding.sirjavlux.events.BulletHitEvent;
 import com.coding.sirjavlux.events.EntityDamagedByBulletEvent;
+import com.coding.sirjavlux.events.WarfareDeathEvent;
+import com.coding.sirjavlux.events.WarfareDeathEvent.WarfareDeathCause;
 import com.coding.sirjavlux.health.HealthEffects;
 import com.coding.sirjavlux.types.Ammo;
 import com.coding.sirjavlux.types.AmmoType;
@@ -203,6 +205,11 @@ public class Projectile extends EntitySnowball {
 				double startHealth = entity.getHealth();
 				double finalHealth = startHealth - event.damage() < 0 ? 0 : startHealth - event.damage();
 				entity.setHealth(finalHealth);
+				if (finalHealth <= 0) {
+					WarfareDeathEvent wEvent = new WarfareDeathEvent((LivingEntity) entity, (LivingEntity) event.getShooter(), WarfareDeathCause.Bullet);
+					Bukkit.getPluginManager().callEvent(wEvent);
+					if (!wEvent.isCancelled() && !wEvent.getDeathMessage().isEmpty()) for (Player p : Bukkit.getOnlinePlayers()) p.sendMessage(wEvent.getDeathMessage());
+				}
 				//fire status packet
 				net.minecraft.server.v1_15_R1.Entity ce = ((CraftEntity) entity).getHandle();
 				PacketPlayOutEntityStatus statusPacket = new PacketPlayOutEntityStatus(ce, (byte) 2);
